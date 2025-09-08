@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { MapPinned, Phone, Mail } from "lucide-react";
+import { MapPinned } from "lucide-react";
 import Button from "@/app/components/ui/Button";
 
 export default function Contact() {

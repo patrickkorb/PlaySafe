@@ -1,4 +1,3 @@
-import Navigation from "@/app/sections/Navigation";
 import Hero from "@/app/sections/Hero";
 import About from "@/app/sections/About";
 import Stories from "@/app/sections/Stories";

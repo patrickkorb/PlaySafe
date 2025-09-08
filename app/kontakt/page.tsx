@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, User, Mail, Phone, MessageSquare } from "lucide-react";
+import Image from "next/image";
 
 interface FormData {
     vorname: string;
@@ -219,10 +220,11 @@ export default function Kontakt() {
                     >
                         {/* Mike's Photo */}
                         <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto mb-4">
-                            <img 
+                            <Image 
                                 src="/images/mike.png" 
                                 alt="Mike Allmendinger" 
-                                className="absolute inset-0 w-full h-full object-cover"
+                                fill
+                                className="object-cover"
                             />
                         </div>
                         

@@ -111,7 +111,7 @@ export default function Hero() {
                                 ))}
                             </div>
                             <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-bold text-gray-800 text-center sm:text-left">
-                                "Beratung auf Augenhöhe"
+                                &ldquo;Beratung auf Augenhöhe&rdquo;
                             </p>
                         </div>
                     </motion.div>

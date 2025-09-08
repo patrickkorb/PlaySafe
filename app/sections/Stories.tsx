@@ -1,5 +1,5 @@
 "use client"
-import CarouselItem, {CarouselItemProps} from "@/app/components/CarouselItem";
+import {CarouselItemProps} from "@/app/components/CarouselItem";
 import Carousel from "@/app/components/Carousel";
 import { motion } from "framer-motion";
 

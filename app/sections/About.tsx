@@ -2,6 +2,7 @@
 import { Award, TrendingUp, Heart } from "lucide-react";
 import Button from "@/app/components/ui/Button";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function About() {
     return (
@@ -70,7 +71,7 @@ export default function About() {
                             Unkomplizierte Hilfe
                         </h3>
                         <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-                            Im Schadenfall findest du das "Schmerzensgeld" in der Regel innerhalb von einer Woche auf deinem Konto!
+                            Im Schadenfall findest du das &ldquo;Schmerzensgeld&rdquo; in der Regel innerhalb von einer Woche auf deinem Konto!
                         </p>
                     </div>
                     <div className="flex flex-col gap-3 md:gap-4 p-4 md:p-6 rounded-xl bg-gray-50/50">
@@ -137,10 +138,11 @@ export default function About() {
                         {/* Image section */}
                         <div className="flex-1 lg:max-w-lg xl:max-w-xl">
                             <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] md:min-h-[600px]">
-                                <img 
+                                <Image 
                                     src="/images/mike.png" 
                                     alt="Mike Allmendinger - Dein persönlicher Berater" 
-                                    className="absolute inset-0 w-full h-full object-cover lg:rounded-r-2xl xl:rounded-r-3xl"
+                                    fill
+                                    className="object-cover lg:rounded-r-2xl xl:rounded-r-3xl"
                                 />
                             </div>
                         </div>

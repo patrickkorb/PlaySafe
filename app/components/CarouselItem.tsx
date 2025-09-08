@@ -53,7 +53,7 @@ export default function CarouselItem({
                 {/* Story Text */}
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 md:p-6">
                     <p className="text-white text-sm md:text-base leading-relaxed italic">
-                        "{story}"
+                        &ldquo;{story}&rdquo;
                     </p>
                 </div>
             </div>

@@ -8,7 +8,7 @@ import { Instagram, MapPin, X, Home, Users, Award, Settings, Heart, DollarSign, 
 interface NavItem {
     title: string;
     href: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<{ className?: string; size?: number | string }>;
     delay: number;
 }
 
