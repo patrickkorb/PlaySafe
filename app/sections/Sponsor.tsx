@@ -28,7 +28,7 @@ export default function Sponsor() {
                                 src="/images/sponsor.png"
                                 alt="Sponsoring - Wir auf deinem Trikot" 
                                 fill
-                                className="object-contain"
+                                className="object-cover"
                             />
                         </div>
                     </div>

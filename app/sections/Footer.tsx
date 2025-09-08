@@ -27,7 +27,7 @@ export default function Footer() {
                     <div className="lg:col-span-1">
                         <div className="flex items-center gap-3 mb-6">
                             <Image 
-                                src="/images/placeholder.png" 
+                                src="/images/logo.png" 
                                 alt="PlaySafe Logo" 
                                 width={50} 
                                 height={50}
