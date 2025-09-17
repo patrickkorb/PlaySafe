@@ -16,7 +16,7 @@ export default function FAQ() {
     const faqItems: FAQItem[] = [
         {
             question: "Greift der Versicherungsschutz nur bei Verletzungen, die während sportlicher Aktivitäten entstehen?",
-            answer: "Nein, unsere Sportschutz-Verträge/Produkte decken alle Risiken in deiner kompletten Freizeit ab. Egal ob beim Sport, im Urlaub oder Zuhause."
+            answer: "Nein, unsere PlaySafe-Verträge/Produkte decken alle Risiken in deiner kompletten Freizeit ab. Egal ob beim Sport, im Urlaub oder Zuhause."
         },
         {
             question: "Wie schnell erhalte ich mein Schmerzensgeld?",
@@ -27,9 +27,31 @@ export default function FAQ() {
             answer: "Ja, unser Versicherungsschutz gilt weltweit. Egal ob du in Deutschland oder im Ausland unterwegs bist - du bist rundum geschützt."
         },
         {
-            question: "Was kostet der Sportschutz?",
+            question: "Was kostet PlaySafe?",
             answer: "Die Kosten sind individuell und hängen von verschiedenen Faktoren ab. Kontaktiere uns für ein persönliches Angebot, das genau auf deine Bedürfnisse zugeschnitten ist."
-        }
+        },
+        {
+            question: "Welche Unterlagen muss ich zur Auszahlung des Schmerzensgeldes einreichen?",
+            answer: "Eine Bescheinigung mit der Diagnose von deinem behandelnden Arzt reicht uns vollkommen aus.",
+        },
+        {
+            question: "Was ist, wenn ich bereits eine Unfallversicherung habe?",
+            answer: "Schick uns einfach den Versicherungsschein deiner bestehenden Unfallversicherung zu. Wir prüfen deinen Schutz und bieten Dir eine kombinierte Unfallversicherung inkl./ mit Sportschutz an.\n" +
+                "So sparst du Geld und hast beide Absicherungen in einer Police.",
+        },
+        {
+            question: "Wie finanziert sich PlaySafe?",
+            answer: "Die SIGNAL IDUNA Versicherung steht als großer und erfolgreicher Partner hinter uns.",
+        },
+        {
+            question: "Zahle ich höhere Beiträge, wenn ich im Handwerk tätig bin?",
+            answer: "Nein, jeder Berufstätige zahlt bei uns den gleichen Beitrag. Bist du im öffentlichen Dienst beschäftigt, profitierst du sogar noch von weiteren Ersparnissen.",
+        },
+        {
+            question: "Kann unsere Mannschaft auch über Sportschutz informiert werden?",
+            answer: "Sehr gerne, wir halten regelmäßig Vorträge bei Sportvereinen. Meldet euch einfach und wir kommen nach Eurem Training mit Kaltgetränken zu einem 10-minütigen Infogespräch zum Thema Sportschutz vorbei.",
+        },
+
     ];
 
     const toggleFAQ = (index: number) => {

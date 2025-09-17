@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PlaySafe - Deine Absicherung bei Freizeit-Verletzungen",
-  description: "Sportschutz für Freizeitaktivitäten. Schmerzensgeld, Invaliditätsleistung und mehr. Persönliche Beratung statt Callcenter.",
+  description: "PlaySafe für Freizeitaktivitäten. Schmerzensgeld, Invaliditätsleistung und mehr. Persönliche Beratung statt Callcenter.",
   icons: {
     icon: "/images/logo.png",
     apple: "/images/logo.png",

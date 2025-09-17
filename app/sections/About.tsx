@@ -27,11 +27,11 @@ export default function About() {
                         <div className="flex flex-col gap-1 sm:gap-2 md:gap-3 mb-6 md:mb-8">
                             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-none">Play.</h2>
                             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-none">Safe.</h2>
-                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-none text-primary">Playsafe!</h2>
+                            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-none text-primary">PlaySafe!</h2>
                         </div>
                         <div className="space-y-4 md:space-y-6">
                             <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-700">
-                                Hey, wir sind das Team von Sportschutz.de und haben es uns zur Aufgabe gemacht, Sportlern den bestmöglichen Schutz zu bieten.
+                                Hey, wir sind das Team von PlaySafe.de und haben es uns zur Aufgabe gemacht, Sportlern den bestmöglichen Schutz zu bieten.
                             </p>
                             <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-700">
                                 Seit mehreren Jahren widmen wir uns mit voller Leidenschaft diesem Thema und stehen im engen Austausch mit zahlreichen Sportlern und Vereinen, um ihre Bedürfnisse wirklich zu verstehen und optimal abzusichern.
@@ -107,7 +107,7 @@ export default function About() {
                             </h2>
                             <p className="text-gray-300 text-base md:text-lg lg:text-xl leading-relaxed mb-8 md:mb-10 lg:mb-12">
                                 Ich bin regelmäßig bei Mannschaften vor Ort, halte Vorträge, beantworte Fragen und begleite euch langfristig.
-                                Mein Produkt Sportschutz wurde speziell für die Bedürfnisse von Sportlern entwickelt – von mir, für euch.
+                                Mein Produkt PlaySafe wurde speziell für die Bedürfnisse von Sportlern entwickelt – von mir, für euch.
                             </p>
                             
                             {/* Credentials list */}

@@ -35,7 +35,7 @@ export default function Footer() {
                             />
                             <div>
                                 <h3 className="text-xl font-bold text-primary">PlaySafe</h3>
-                                <p className="text-sm text-gray-400">Sportschutz.de</p>
+                                <p className="text-sm text-gray-400">PlaySafe.de</p>
                             </div>
                         </div>
                         <p className="text-gray-300 leading-relaxed">
@@ -97,8 +97,8 @@ export default function Footer() {
                                 <MapPinned className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p className="text-gray-300 leading-relaxed">
-                                        Friedrich-Weick-Strasse 39<br />
-                                        76189 Karlsruhe<br />
+                                        Friedrichsplatz 6<br />
+                                        76133 Karlsruhe<br />
                                         Deutschland
                                     </p>
                                 </div>
@@ -111,7 +111,7 @@ export default function Footer() {
                 <div className="border-t border-gray-800 pt-8 md:pt-12">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-gray-400 text-sm text-center md:text-left">
-                            {new Date().getFullYear()} PlaySafe - Sportschutz.de. Alle Rechte vorbehalten.
+                            {new Date().getFullYear()} PlaySafe - PlaySafe.de. Alle Rechte vorbehalten.
                         </p>
                         <div className="flex items-center gap-6">
                             <Link 
@@ -121,7 +121,7 @@ export default function Footer() {
                                 Instagram
                             </Link>
                             <Link 
-                                href="https://wa.me/" 
+                                href="https://api.whatsapp.com/send/?phone=4972179180110&text=Hallo+Mike%2C+ich+habe+Interesse+an+PlaySafe.+Lass+uns+bitte+einen+Termin+vereinbaren.+Viele+Gr%C3%BC%C3%9Fe&type=phone_number&app_absent=0"
                                 className="text-gray-400 hover:text-white transition-colors duration-200"
                             >
                                 WhatsApp

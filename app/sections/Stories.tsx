@@ -20,7 +20,7 @@ export default function Stories() {
             userImage: "/images/mike.png",
             userName: "Mike Allmendinger",
             userAge: 26,
-            story: "Sportschutz ist das beste was mir je passiert ist"
+            story: "PlaySafe ist das beste was mir je passiert ist"
         },
         {
             id: 3,
@@ -29,7 +29,7 @@ export default function Stories() {
             userName: "Joel Müller",
             userAge: 22,
             story: "Ich habe mich bereits 2x an der linken Schulter verletzt & habe beide male innerhalb von wenigen Tagen die 1.000€ Schmerzensgeld auf dem Konto gehabt. Schneller und unkomplizierter Ablauf.\n" +
-                "Danke @Sportschutz.de"
+                "Danke @PlaySafe.de"
         },
         {
             id: 4,
@@ -38,7 +38,7 @@ export default function Stories() {
             userName: "Joel Müller",
             userAge: 22,
             story: "Ich habe mich bereits 2x an der linken Schulter verletzt & habe beide male innerhalb von wenigen Tagen die 1.000€ Schmerzensgeld auf dem Konto gehabt. Schneller und unkomplizierter Ablauf.\n" +
-                "Danke @Sportschutz.de"
+                "Danke @PlaySafe.de"
         },
 
 

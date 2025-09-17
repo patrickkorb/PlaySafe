@@ -4,7 +4,7 @@ import { MapPinned } from "lucide-react";
 import Button from "@/app/components/ui/Button";
 
 export default function Contact() {
-    const address = "Friedrich-Weick-Strasse 39, 76189 Karlsruhe, Deutschland";
+    const address = "Friedrichsplatz 6, 76133 Karlsruhe, Deutschland";
     const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
     return (
@@ -53,7 +53,7 @@ export default function Contact() {
                     <div className="flex-1 w-full lg:w-auto">
                         <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] lg:min-h-[500px] rounded-xl overflow-hidden shadow-2xl">
                             <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(address)}&zoom=15`}
+                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(address)}&zoom=15`}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

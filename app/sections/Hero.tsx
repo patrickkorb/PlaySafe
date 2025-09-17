@@ -67,7 +67,7 @@ export default function Hero() {
                 {/* Content container */}
                 <div className="relative z-20 w-full h-full flex items-start justify-center px-2 py-4 sm:px-3 sm:py-6 md:p-6 lg:p-8">
                     <motion.div 
-                        className="bg-white/95 backdrop-blur-sm mt-2 lg:mt-10 p-3 sm:p-4 md:p-8 lg:p-12 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl w-full max-w-[280px] sm:max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto"
+                        className="bg-white/95 backdrop-blur-sm mt-2 lg:mt-10 p-3 sm:p-4 md:p-8 lg:p-12 rounded-lg sm:rounded-xl shadow-2xl w-full max-w-[280px] sm:max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto"
                         initial={{ opacity: 0, y: 50, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
@@ -84,7 +84,7 @@ export default function Hero() {
                         
                         {/* Extended description - hidden on small mobile */}
                         <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl mb-5 sm:mb-6 md:mb-8 lg:mb-10 leading-relaxed hidden sm:block">
-                            Gerade in dieser herausfordernden Zeit möchten wir dir mit unserem Sportschutz.de-Trostpflaster zur Seite stehen und dich finanziell unterstützen.
+                            Gerade in dieser herausfordernden Zeit möchten wir dir mit unserem PlaySafe.de-Trostpflaster zur Seite stehen und dich finanziell unterstützen.
                         </p>
                         
                         {/* CTA Button */}

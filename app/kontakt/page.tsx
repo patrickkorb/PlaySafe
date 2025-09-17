@@ -27,7 +27,7 @@ export default function Kontakt() {
     const interessenOptionen = [
         "Unsere Pakete",
         "Sponsoring",
-        "Frage zu unseren Leistungen",
+        "Leistungen",
         "Signal Iduna",
         "Sonstiges"
     ];
@@ -202,7 +202,7 @@ export default function Kontakt() {
                         <div className="pt-2 sm:pt-4">
                             <button
                                 type="submit"
-                                className="w-full bg-primary text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 text-sm sm:text-base"
+                                className="w-full bg-primary text-white hover:cursor-pointer font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 text-sm sm:text-base"
                             >
                                 <Send className="w-5 h-5" />
                                 Nachricht senden
@@ -237,14 +237,16 @@ export default function Kontakt() {
                                 Dein persönlicher Berater
                             </p>
                             <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                                Persönliche Beratung statt Callcenter. Ich bin für dich da und beantworte alle deine Fragen zum Sportschutz.
+                                Persönliche Beratung statt Callcenter. Ich bin für dich da und beantworte alle deine Fragen zu PlaySafe.
                             </p>
                             <div className="space-y-2">
-                                <a href="tel:+49" className="block text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
-                                    📞 +49 (0) 123 456789
+                                <a href="tel:072179180110" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
+                                    <Phone size={20}/>
+                                    <span>0721 79180110</span>
                                 </a>
-                                <a href="mailto:info@sportschutz.de" className="block text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
-                                    ✉️ info@sportschutz.de
+                                <a href="mailto:mike.allmendinger@signal-iduna.de" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
+                                    <Mail size={20}/>
+                                    <span>mike.allmendinger@signal-iduna.de</span>
                                 </a>
                             </div>
                         </div>
