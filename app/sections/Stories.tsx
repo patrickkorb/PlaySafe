@@ -202,7 +202,7 @@ export default function Stories() {
                                         
                                         {/* Story Text */}
                                         <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-light leading-relaxed mb-8 md:mb-12">
-                                            "{stories[currentIndex].story}"
+                                            &quot;{stories[currentIndex].story}&quot;
                                         </p>
 
                                         {/* Rating */}
