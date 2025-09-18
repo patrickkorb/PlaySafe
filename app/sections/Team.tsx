@@ -14,27 +14,22 @@ export default function Team() {
         {
             firstname: "Mike",
             lastname: "Allmendinger",
-            image: "/images/mike.png"
+            image: "/images/mike.jpg"
         },
         {
-            firstname: "Mike",
-            lastname: "Allmendinger",
-            image: "/images/mike.png"
+            firstname: "Yasmin",
+            lastname: "Ates",
+            image: "/images/yasmin_ates.png"
         },
         {
-            firstname: "Mike",
-            lastname: "Allmendinger",
-            image: "/images/mike.png"
+            firstname: "Ethem",
+            lastname: "Gökce",
+            image: "/images/ethem_gökce.jpg"
         },
-        {
-            firstname: "Mike",
-            lastname: "Allmendinger",
-            image: "/images/mike.png"
-        }
     ]
 
-    // Duplicate the array for seamless infinite scroll
-    const duplicatedMembers = [...teamMembers, ...teamMembers];
+    // Create multiple copies for seamless infinite scroll
+    const duplicatedMembers = [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
 
     if (!isMounted) {
         return <div className="w-full h-96 bg-gray-100 animate-pulse"></div>;

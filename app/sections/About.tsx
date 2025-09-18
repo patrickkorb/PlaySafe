@@ -31,7 +31,7 @@ export default function About() {
                         </div>
                         <div className="space-y-4 md:space-y-6">
                             <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-700">
-                                Hey, wir sind das Team von PlaySafe.de und haben es uns zur Aufgabe gemacht, Sportlern den bestmöglichen Schutz zu bieten.
+                                Hey, wir sind das Team von PlaySafe.fit und haben es uns zur Aufgabe gemacht, Sportlern den bestmöglichen Schutz zu bieten.
                             </p>
                             <p className="text-base md:text-lg lg:text-xl leading-relaxed text-gray-700">
                                 Seit mehreren Jahren widmen wir uns mit voller Leidenschaft diesem Thema und stehen im engen Austausch mit zahlreichen Sportlern und Vereinen, um ihre Bedürfnisse wirklich zu verstehen und optimal abzusichern.
@@ -93,7 +93,7 @@ export default function About() {
                 </motion.div>
                 {/* Mike section - Personal introduction with image */}
                 <motion.div 
-                    className="bg-gradient-to-br from-gray-900 via-gray-800 to-black mt-16 md:mt-20 lg:mt-24 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-gray-700"
+                    className="bg-gradient-to-br from-gray-500 via-gra-400 to-white mt-16 md:mt-20 lg:mt-24 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-gray-700"
                     initial={{ opacity: 0, y: 60 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -101,11 +101,11 @@ export default function About() {
                 >
                     <div className="flex flex-col lg:flex-row">
                         <div className="flex-1 p-6 md:p-8 lg:p-12 xl:p-16">
-                            <h2 className="text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-6 md:mb-8">
+                            <h2 className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-6 md:mb-8">
                                 Ich bin Mike Allmendinger. <br className="hidden md:block"/>
                                 <span className="text-primary">Teil eures Teams</span>, nicht nur Berater.
                             </h2>
-                            <p className="text-gray-300 text-base md:text-lg lg:text-xl leading-relaxed mb-8 md:mb-10 lg:mb-12">
+                            <p className="text-black/80 text-base md:text-lg lg:text-xl leading-relaxed mb-8 md:mb-10 lg:mb-12">
                                 Ich bin regelmäßig bei Mannschaften vor Ort, halte Vorträge, beantworte Fragen und begleite euch langfristig.
                                 Mein Produkt PlaySafe wurde speziell für die Bedürfnisse von Sportlern entwickelt – von mir, für euch.
                             </p>
@@ -114,15 +114,15 @@ export default function About() {
                             <ul className="space-y-4 md:space-y-6 mb-8 md:mb-10 lg:mb-12">
                                 <li className="flex items-start gap-4">
                                     <Award className="w-6 h-6 md:w-7 md:h-7 text-primary flex-shrink-0 mt-1" />
-                                    <span className="text-white text-base md:text-lg lg:text-xl font-semibold">Zertifizierter Experte für Absicherung</span>
+                                    <span className=" text-base md:text-lg lg:text-xl font-semibold">Zertifizierter Experte für Absicherung</span>
                                 </li>
                                 <li className="flex items-start gap-4">
                                     <TrendingUp className="w-6 h-6 md:w-7 md:h-7 text-primary flex-shrink-0 mt-1" />
-                                    <span className="text-white text-base md:text-lg lg:text-xl font-semibold break-words">Hunderte echte Erfolgsgeschichten</span>
+                                    <span className="text-base md:text-lg lg:text-xl font-semibold break-words">Hunderte echte Erfolgsgeschichten</span>
                                 </li>
                                 <li className="flex items-start gap-4">
                                     <Heart className="w-6 h-6 md:w-7 md:h-7 text-primary flex-shrink-0 mt-1" />
-                                    <span className="text-white text-base md:text-lg lg:text-xl font-semibold">100% zufriedene Kunden</span>
+                                    <span className=" text-base md:text-lg lg:text-xl font-semibold">100% zufriedene Kunden</span>
                                 </li>
                             </ul>
                             
@@ -139,7 +139,7 @@ export default function About() {
                         <div className="flex-1 lg:max-w-lg xl:max-w-xl">
                             <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] md:min-h-[600px]">
                                 <Image 
-                                    src="/images/mike.png" 
+                                    src="/images/mike.jpg"
                                     alt="Mike Allmendinger - Dein persönlicher Berater" 
                                     fill
                                     className="object-cover lg:rounded-r-2xl xl:rounded-r-3xl"

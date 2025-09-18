@@ -18,9 +18,8 @@ export default function Index() {
                 <Stories />
                 <Pricing />
                 <Services />
-                <Team />
-                <Sponsor />
                 <FAQ />
+                <Sponsor />
                 <Contact />
             </div>
       </>

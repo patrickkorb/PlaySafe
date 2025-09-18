@@ -11,6 +11,7 @@ export default function Contact() {
         <section className="py-16 md:py-20 lg:py-28">
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
                 <div className="flex flex-col lg:flex-row items-stretch gap-8 md:gap-12 lg:gap-16">
+
                     {/* Text section */}
                     <div className="flex-1 w-full lg:w-auto flex flex-col justify-center">
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 md:mb-8">
@@ -20,10 +21,10 @@ export default function Contact() {
                             Im Normalfall kommen wir zu dir oder zu deinem Verein.
                             Wir freuen uns aber natürlich auch, wenn du einfach mal auf eine Tasse Kaffee oder ein Kaltgetränk vorbeischaust! 😀
                         </p>
-                        
+
                         {/* Contact info */}
                         <div className="space-y-4 md:space-y-6 mb-8 md:mb-10 lg:mb-12">
-                            <Link 
+                            <Link
                                 href={googleMapsUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -40,20 +41,20 @@ export default function Contact() {
                                 </div>
                             </Link>
                         </div>
-                        
-                        <Button 
-                            text="Jetzt Kontakt aufnehmen" 
-                            href="/kontakt" 
+
+                        <Button
+                            text="Jetzt Kontakt aufnehmen"
+                            href="/kontakt"
                             size="lg"
                             className="w-full md:w-auto"
                         />
                     </div>
-                    
+
                     {/* Map section */}
                     <div className="flex-1 w-full lg:w-auto">
                         <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] lg:min-h-[500px] rounded-xl overflow-hidden shadow-2xl">
                             <iframe
-                                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(address)}&zoom=15`}
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2617.114694811474!2d8.398982312485128!3d49.00840289001779!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479706458f4d092b%3A0xfd82c06bcc285158!2sFriedrichspl.%206%2C%2076133%20Karlsruhe!5e0!3m2!1sde!2sde!4v1758179699018!5m2!1sde!2sde"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
@@ -63,21 +64,6 @@ export default function Contact() {
                                 title="Unser Standort"
                                 className="absolute inset-0 w-full h-full"
                             />
-                            {/* Fallback for when Google Maps doesn't work */}
-                            <div className="absolute inset-0 w-full h-full bg-gray-200 flex items-center justify-center">
-                                <div className="text-center">
-                                    <MapPinned className="w-16 h-16 md:w-20 md:h-20 text-gray-400 mx-auto mb-4" />
-                                    <p className="text-gray-600 mb-4">Karte wird geladen...</p>
-                                    <Link 
-                                        href={googleMapsUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-primary hover:underline font-semibold"
-                                    >
-                                        In Google Maps öffnen
-                                    </Link>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

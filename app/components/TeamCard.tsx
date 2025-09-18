@@ -15,7 +15,7 @@ export default function TeamCard( {firstname, lastname, image = "/images/placeho
                 fill 
                 className="object-cover"
             />
-            <div className="absolute bottom-4 left-4 text-white">
+            <div className="absolute bottom-4 left-4 text-white text-left">
                 <h3 className="text-xl font-bold drop-shadow-lg">{firstname}</h3>
                 <h3 className="text-xl font-bold drop-shadow-lg">{lastname}</h3>
             </div>

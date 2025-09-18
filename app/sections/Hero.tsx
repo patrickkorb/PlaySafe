@@ -84,7 +84,7 @@ export default function Hero() {
                         
                         {/* Extended description - hidden on small mobile */}
                         <p className="text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl mb-5 sm:mb-6 md:mb-8 lg:mb-10 leading-relaxed hidden sm:block">
-                            Gerade in dieser herausfordernden Zeit möchten wir dir mit unserem PlaySafe.de-Trostpflaster zur Seite stehen und dich finanziell unterstützen.
+                            Gerade in dieser herausfordernden Zeit möchten wir dir mit unserem PlaySafe.fit-Trostpflaster zur Seite stehen und dich finanziell unterstützen.
                         </p>
                         
                         {/* CTA Button */}
