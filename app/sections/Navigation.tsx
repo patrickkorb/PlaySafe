@@ -38,7 +38,7 @@ export default function Navigation() {
                             <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Instagram color={"black"}/>
                             </Link>
-                            <Link href="https://wa.me/01629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={22} height={22} />
                             </Link>
                             <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
@@ -69,7 +69,7 @@ export default function Navigation() {
                             <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Instagram size={18} color={"black"}/>
                             </Link>
-                            <Link href="https://wa.me/01629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={18} height={18} />
                             </Link>
                             <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" target="_blank" className="text-sm text-gray-600 hover:text-primary transition-colors">
