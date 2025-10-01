@@ -14,7 +14,7 @@ export default function Index() {
       <>
             <div>
                 <Hero />
-                <About />
+                {/*<About /> - Video muss noch hinzugefügt werden*/}
                 <Stories />
                 <Pricing />
                 <Services />
