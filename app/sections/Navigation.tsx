@@ -13,7 +13,6 @@ export default function Navigation() {
         { title: "Über uns", href: "/#about" },
         { title: "Referenzen", href: "/#stories" },
         { title: "Unsere Leistungen", href: "/#services" },
-        { title: "Das Team", href: "/#team" },
         { title: "Sponsoring", href: "/#sponsor" },
         { title: "FAQ", href: "/#faq" },
     ];

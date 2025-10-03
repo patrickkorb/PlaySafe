@@ -92,7 +92,17 @@ export default function About() {
                 {/*    </div>*/}
                 {/*</motion.div>*/}
                 {/* Mike section - Personal introduction with image */}
-                <motion.div 
+                <motion.div
+                    className={"text-center mb-16 md:mb-20"}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                    <h1 className={"text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 md:mb-8"}>Der Mann hinter PlaySafe</h1>
+                    <p className={"text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto"}>Zertifizierte und ehrliche Hilfe</p>
+                </motion.div>
+                <motion.div
                     className="bg-gradient-to-br from-gray-500 via-gra-400 to-white mt-16 md:mt-20 lg:mt-24 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-gray-700"
                     initial={{ opacity: 0, y: 60 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -107,9 +117,9 @@ export default function About() {
                             </h2>
                             <p className="text-black/80 text-base md:text-lg lg:text-xl leading-relaxed mb-8 md:mb-10 lg:mb-12">
                                 Ich bin regelmäßig bei Mannschaften vor Ort, halte Vorträge, beantworte Fragen und begleite euch langfristig.
-                                Mein Produkt PlaySafe wurde speziell für die Bedürfnisse von Sportlern entwickelt – von mir, für euch.
+                                Mein Produkt PlaySafe wurde speziell für die Bedürfnisse von Sportlern entwickelt.
                             </p>
-                            
+
                             {/* Credentials list */}
                             <ul className="space-y-4 md:space-y-6 mb-8 md:mb-10 lg:mb-12">
                                 <li className="flex items-start gap-4">

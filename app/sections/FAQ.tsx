@@ -80,9 +80,7 @@ export default function FAQ() {
                         Häufig gestellte Fragen
                     </h1>
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 max-w-3xl mx-auto">
-                        Natürlich macht es am meisten Sinn, deine Fragen in einem persönlichen Gespräch zu beantworten. 
-                        Dennoch möchten wir hier auf eine Reihe von Fragen eingehen, die wir immer wieder hören und deren 
-                        Antworten somit auch für dich interessant sein könnten.
+                        Du hast Fragen? Hier findest du die wichtigsten Antworten. Für alles andere sind wir gerne persönlich da.
                     </p>
                 </motion.div>
 
