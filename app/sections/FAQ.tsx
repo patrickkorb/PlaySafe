@@ -48,7 +48,7 @@ export default function FAQ() {
             answer: "Nein, jeder Berufstätige zahlt bei uns den gleichen Beitrag. Bist du im öffentlichen Dienst beschäftigt, profitierst du sogar noch von weiteren Ersparnissen.",
         },
         {
-            question: "Kann unsere Mannschaft auch über Sportschutz informiert werden?",
+            question: "Kann unsere Mannschaft auch über PlaySafe informiert werden?",
             answer: "Sehr gerne, wir halten regelmäßig Vorträge bei Sportvereinen. Meldet euch einfach und wir kommen nach Eurem Training mit Kaltgetränken zu einem 10-minütigen Infogespräch zum Thema Sportschutz vorbei.",
         },
 

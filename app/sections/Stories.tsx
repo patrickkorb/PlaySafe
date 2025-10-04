@@ -23,48 +23,48 @@ export default function Stories() {
     const stories: Story[] = [
         {
             id: 1,
-            userName: "Oliver",
-            userAge: 54,
-            story: "Druch PlaySafe habe ich 2000€ bekommen und das innerhalb einer Woche. Das ist für jeden Sportler ein Muss!",
+            userName: "Markus B.",
+            userAge: 34,
+            story: "Schnell, freundlich, klar und kompetent. Besser geht's nicht!",
             rating: 5,
             backgroundImage: "/images/herobg.png",
             sport: "Fußball"
         },
         {
             id: 2,
-            userName: "Jessica",
-            userAge: 26,
-            story: "Absolut top, sehr junger kompententer Mann, hier wird noch viel Wert auf Kundenzufriedenheit gelegt.",
+            userName: "Ethem G.",
+            userAge: 28,
+            story: "Sehr kompetente und freundliche Beratung. Alles wurde verständlich erklärt, ohne Druck oder aufdringliche Verkaufsversuche. Ich habe mich gut aufgehoben gefühlt und kann Herrn Allmendinger uneingeschränkt weiterempfehlen.",
             rating: 5,
             backgroundImage: "/images/herobg.png",
             sport: "Basketball"
         },
         {
             id: 3,
-            userName: "Micheal",
-            userAge: 22,
-            story: "Handballverletzung am Sprunggelenk. PlaySafe hat alles perfekt abgewickelt. Schnelle Bearbeitung und faire Entschädigung!",
+            userName: "Christian A.",
+            userAge: 31,
+            story: "Sehr gute Beratung. Sehr freundlich und hilfsbereit, kann man nur weiterempfehlen.",
             rating: 5,
             backgroundImage: "/images/herobg.png",
             sport: "Handball"
         },
         {
             id: 4,
-            userName: "Sarah",
-            userAge: 29,
-            story: "Nach meiner Knieverletzung beim Volleyball war PlaySafe sofort da. Unkomplizierte Abwicklung und schnelle Auszahlung genau wie versprochen!",
+            userName: "Michaela",
+            userAge: 26,
+            story: "Super Beratung, alle Fragen sehr gut beantwortet und haben ein super Angebot bekommen. Mike Allmendinger ist ein guter Berater!",
             rating: 5,
             backgroundImage: "/images/herobg.png",
             sport: "Volleyball"
         },
         {
             id: 5,
-            userName: "Alex",
-            userAge: 31,
-            story: "Beim Klettern den Finger verletzt und dank PlaySafe war das kein finanzielles Problem. Professioneller Service!",
+            userName: "Juditta G.",
+            userAge: 42,
+            story: "Ich danke Herrn Allmendinger für seine Hilfe bei der Bearbeitung der ausstehenden Rechnungen über die ich bereits Mahnungen erhalten habe.",
             rating: 5,
             backgroundImage: "/images/herobg.png",
-            sport: "Klettern"
+            sport: "Fitness"
         },
     ];
 

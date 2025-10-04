@@ -103,7 +103,7 @@ export default function About() {
                     <p className={"text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto"}>Zertifizierte und ehrliche Hilfe</p>
                 </motion.div>
                 <motion.div
-                    className="bg-gradient-to-br from-gray-500 via-gra-400 to-white mt-16 md:mt-20 lg:mt-24 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-gray-700"
+                    className="bg-gradient-to-br from-primary/10 via-primary/5 to-gray-50 mt-16 md:mt-20 lg:mt-24 rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl border border-primary/20"
                     initial={{ opacity: 0, y: 60 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -113,11 +113,11 @@ export default function About() {
                         <div className="flex-1 p-6 md:p-8 lg:p-12 xl:p-16">
                             <h2 className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-6 md:mb-8">
                                 Ich bin Mike Allmendinger. <br className="hidden md:block"/>
-                                <span className="text-primary">Teil eures Teams</span>, nicht nur Berater.
+                                <span className="text-primary">An deiner Seite, in jedem Spiel.</span>
                             </h2>
                             <p className="text-black/80 text-base md:text-lg lg:text-xl leading-relaxed mb-8 md:mb-10 lg:mb-12">
-                                Ich bin regelmäßig bei Mannschaften vor Ort, halte Vorträge, beantworte Fragen und begleite euch langfristig.
-                                Mein Produkt PlaySafe wurde speziell für die Bedürfnisse von Sportlern entwickelt.
+                                Als dein persönlicher Ansprechpartner stehe ich dir mit Fachwissen und Leidenschaft zur Seite.
+                                PlaySafe ist mehr als eine Versicherung – es ist ein maßgeschneidertes Schutzkonzept, das genau auf deine sportlichen Anforderungen zugeschnitten ist.
                             </p>
 
                             {/* Credentials list */}

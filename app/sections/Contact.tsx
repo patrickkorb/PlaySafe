@@ -18,8 +18,8 @@ export default function Contact() {
                             Besuch uns!
                         </h1>
                         <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 mb-8 md:mb-10 lg:mb-12">
-                            Im Normalfall kommen wir zu dir oder zu deinem Verein.
-                            Wir freuen uns aber natürlich auch, wenn du einfach mal auf eine Tasse Kaffee oder ein Kaltgetränk vorbeischaust! 😀
+                            Normalerweise kommen wir direkt zu dir oder zu deinem Verein.
+                            Aber du bist auch jederzeit herzlich willkommen, einfach auf eine Tasse Kaffee oder ein Kaltgetränk bei uns vorbeizuschauen!
                         </p>
 
                         {/* Contact info */}

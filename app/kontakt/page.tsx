@@ -306,7 +306,7 @@ export default function Kontakt() {
                                 Dein persönlicher Berater
                             </p>
                             <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                                Persönliche Beratung statt Callcenter. Ich bin für dich da und beantworte alle deine Fragen zu PlaySafe.
+                                Direkter Kontakt statt anonymer Hotline. Ich nehme mir Zeit für deine Fragen und berate dich ehrlich und kompetent.
                             </p>
                             <div className="space-y-2">
                                 <a href="tel:072179180110" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
