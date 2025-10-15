@@ -38,7 +38,7 @@ export default function RootLayout({
                 (function() {
                   var script = document.createElement('script');
                   script.src = 'https://lead-fuchs.vercel.app/track.js';
-                  script.dataset.siteId = 'test-brand-playsafe-123';
+                  script.dataset.siteId = 'playsafefit-41n8wx9';
                   script.async = true;
                   document.head.appendChild(script);
                 })();
