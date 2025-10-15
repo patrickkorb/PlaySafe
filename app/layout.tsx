@@ -39,6 +39,7 @@ export default function RootLayout({
                   var script = document.createElement('script');
                   script.src = 'https://lead-fuchs.vercel.app/track.js';
                   script.dataset.siteId = 'playsafefit-41n8wx9';
+                  script.dataset.apiUrl = 'https://lead-fuchs.vercel.app';
                   script.async = true;
                   document.head.appendChild(script);
                 })();
