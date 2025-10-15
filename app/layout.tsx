@@ -30,6 +30,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+    <head>
+        {/* Regular tracking code from modal works here too */}
+        <script
+            dangerouslySetInnerHTML={{
+                __html: `
+                (function() {
+                  var script = document.createElement('script');
+                  script.src = 'https://lead-fuchs.vercel.app/track.js';
+                  script.dataset.siteId = 'test-brand-playsafe-123';
+                  script.async = true;
+                  document.head.appendChild(script);
+                })();
+              `
+            }}
+        />
+    </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
