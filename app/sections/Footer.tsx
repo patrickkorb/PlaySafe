@@ -35,7 +35,7 @@ export default function Footer() {
                             />
                             <div>
                                 <h3 className="text-xl font-bold text-primary">PlaySafe</h3>
-                                <p className="text-sm text-gray-400">PlaySafe.de</p>
+                                <p className="text-sm text-gray-400">PlaySafe.fit</p>
                             </div>
                         </div>
                         <p className="text-gray-300 leading-relaxed">
@@ -84,13 +84,13 @@ export default function Footer() {
                             <li className="flex items-start gap-3">
                                 <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="text-gray-300">+49 123 456 789</p>
+                                    <p className="text-gray-300">0162 9436375</p>
                                 </div>
                             </li>
                             <li className="flex items-start gap-3">
                                 <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="text-gray-300">info@playsafe.de</p>
+                                    <p className="text-gray-300">mike.allmendinger@signal-iduna.net</p>
                                 </div>
                             </li>
                             <li className="flex items-start gap-3">
@@ -111,18 +111,19 @@ export default function Footer() {
                 <div className="border-t border-gray-800 pt-8 md:pt-12">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <p className="text-gray-400 text-sm text-center md:text-left">
-                            {new Date().getFullYear()} PlaySafe - PlaySafe.de. Alle Rechte vorbehalten.
+                            {new Date().getFullYear()} PlaySafe - PlaySafe.fit. Alle Rechte vorbehalten.
                         </p>
                         <div className="flex items-center gap-6">
                             <Link 
-                                href="https://instagram.com/" 
+                                href="https://instagram.com/playsafe.fit"
                                 className="text-gray-400 hover:text-white transition-colors duration-200"
                             >
                                 Instagram
                             </Link>
                             <Link 
-                                href="https://api.whatsapp.com/send/?phone=4972179180110&text=Hallo+Mike%2C+ich+habe+Interesse+an+PlaySafe.+Lass+uns+bitte+einen+Termin+vereinbaren.+Viele+Gr%C3%BC%C3%9Fe&type=phone_number&app_absent=0"
+                                href="https://api.whatsapp.com/send/?phone=491629436375&text=Hallo+Mike%2C+ich+habe+Interesse+an+PlaySafe.+Lass+uns+bitte+einen+Termin+vereinbaren.+Viele+Gr%C3%BC%C3%9Fe&type=phone_number&app_absent=0"
                                 className="text-gray-400 hover:text-white transition-colors duration-200"
+                                target={"_blank"}
                             >
                                 WhatsApp
                             </Link>

@@ -48,7 +48,7 @@ export default function FAQ() {
             answer: "Nein, jeder Berufstätige zahlt bei uns den gleichen Beitrag. Bist du im öffentlichen Dienst beschäftigt, profitierst du sogar noch von weiteren Ersparnissen.",
         },
         {
-            question: "Kann unsere Mannschaft auch über Sportschutz informiert werden?",
+            question: "Kann unsere Mannschaft auch über PlaySafe informiert werden?",
             answer: "Sehr gerne, wir halten regelmäßig Vorträge bei Sportvereinen. Meldet euch einfach und wir kommen nach Eurem Training mit Kaltgetränken zu einem 10-minütigen Infogespräch zum Thema Sportschutz vorbei.",
         },
 
@@ -80,9 +80,7 @@ export default function FAQ() {
                         Häufig gestellte Fragen
                     </h1>
                     <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 max-w-3xl mx-auto">
-                        Natürlich macht es am meisten Sinn, deine Fragen in einem persönlichen Gespräch zu beantworten. 
-                        Dennoch möchten wir hier auf eine Reihe von Fragen eingehen, die wir immer wieder hören und deren 
-                        Antworten somit auch für dich interessant sein könnten.
+                        Du hast Fragen? Hier findest du die wichtigsten Antworten. Für alles andere sind wir gerne persönlich da.
                     </p>
                 </motion.div>
 

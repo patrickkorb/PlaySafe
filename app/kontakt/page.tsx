@@ -48,11 +48,49 @@ export default function Kontakt() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
-        // Hier würdest du die Formulardaten verarbeiten
-        alert('Vielen Dank für Ihre Nachricht! Wir melden uns bald bei Ihnen.');
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: `${formData.vorname} ${formData.nachname}`.trim(),
+                    email: formData.email,
+                    phone: formData.telefon,
+                    message: formData.interessen.length > 0 || formData.bemerkungen 
+                        ? `${formData.interessen.length > 0 ? `Interessen: ${formData.interessen.join(', ')}\n\n` : ''}${formData.bemerkungen || 'Keine weiteren Bemerkungen'}`
+                        : 'Kontaktanfrage ohne spezifische Nachricht'
+                }),
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setFormData({
+                    vorname: "",
+                    nachname: "",
+                    email: "",
+                    telefon: "",
+                    interessen: [],
+                    bemerkungen: ""
+                });
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error('Fehler beim Senden:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -198,14 +236,45 @@ export default function Kontakt() {
                             />
                         </div>
 
+                        {/* Status Messages */}
+                        {submitStatus === 'success' && (
+                            <div className="p-4 bg-green-800 border border-green-600 rounded-lg">
+                                <p className="text-green-100 text-sm">
+                                    ✅ Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns bald bei Ihnen.
+                                </p>
+                            </div>
+                        )}
+                        
+                        {submitStatus === 'error' && (
+                            <div className="p-4 bg-red-800 border border-red-600 rounded-lg">
+                                <p className="text-red-100 text-sm">
+                                    ❌ Entschuldigung, beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.
+                                </p>
+                            </div>
+                        )}
+
                         {/* Submit Button */}
                         <div className="pt-2 sm:pt-4">
                             <button
                                 type="submit"
-                                className="w-full bg-primary text-white hover:cursor-pointer font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 text-sm sm:text-base"
+                                disabled={isSubmitting}
+                                className={`w-full font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-300 flex items-center justify-center gap-2 text-sm sm:text-base ${
+                                    isSubmitting 
+                                        ? 'bg-gray-600 cursor-not-allowed' 
+                                        : 'bg-primary text-white hover:cursor-pointer hover:bg-primary/90 hover:scale-105 active:scale-95'
+                                }`}
                             >
-                                <Send className="w-5 h-5" />
-                                Nachricht senden
+                                {isSubmitting ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                        Wird gesendet...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Send className="w-5 h-5" />
+                                        Nachricht senden
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>
@@ -221,7 +290,7 @@ export default function Kontakt() {
                         {/* Mike's Photo */}
                         <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg mx-auto mb-4">
                             <Image 
-                                src="/images/mike.png" 
+                                src="/images/mike.jpg"
                                 alt="Mike Allmendinger" 
                                 fill
                                 className="object-cover"
@@ -237,16 +306,16 @@ export default function Kontakt() {
                                 Dein persönlicher Berater
                             </p>
                             <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                                Persönliche Beratung statt Callcenter. Ich bin für dich da und beantworte alle deine Fragen zu PlaySafe.
+                                Direkter Kontakt statt anonymer Hotline. Ich nehme mir Zeit für deine Fragen und berate dich ehrlich und kompetent.
                             </p>
                             <div className="space-y-2">
                                 <a href="tel:072179180110" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
                                     <Phone size={20}/>
-                                    <span>0721 79180110</span>
+                                    <span>0162 9436375</span>
                                 </a>
-                                <a href="mailto:mike.allmendinger@signal-iduna.de" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
+                                <a href="mailto:mike.allmendinger@signal-iduna.net" className="flex justify-center gap-2 text-sm text-primary font-semibold hover:text-primary/80 transition-colors">
                                     <Mail size={20}/>
-                                    <span>mike.allmendinger@signal-iduna.de</span>
+                                    <span>mike.allmendinger@signal-iduna.net</span>
                                 </a>
                             </div>
                         </div>

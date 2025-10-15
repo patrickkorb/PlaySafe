@@ -14,7 +14,7 @@ export default function Sponsor() {
             transition={{ duration: 0.8 }}
         >
             <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-                <motion.div 
+                <motion.div
                     className="flex flex-col lg:flex-row items-center gap-8 md:gap-12 lg:gap-16"
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -22,27 +22,26 @@ export default function Sponsor() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
                     {/* Image section */}
-                    <div className="flex-1 w-full lg:w-auto">
+                    <div className="flex-1 w-full lg:w-auto order-2 lg:order-1">
                         <div className="relative h-64 md:h-80 lg:h-96 xl:h-[500px] rounded-xl overflow-hidden shadow-2xl">
-                            <Image 
+                            <Image
                                 src="/images/sponsor.png"
-                                alt="Sponsoring - Wir auf deinem Trikot" 
+                                alt="Sponsoring - Wir auf deinem Trikot"
                                 fill
                                 className="object-cover"
                             />
                         </div>
                     </div>
-                    
+
                     {/* Text section */}
-                    <div className="flex-1 w-full lg:w-auto">
+                    <div className="flex-1 w-full lg:w-auto order-1 lg:order-2">
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-6 md:mb-8">
                             Wir auf deinem Trikot
                         </h1>
                         <p className="text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 mb-8 md:mb-10 lg:mb-12">
-                            Wir sponsorn nicht nur deine Gesundheit, sondern auch deinen Verein.
-                            Ganz egal ob beim Fußball, Handball oder anderen Sportarten.
-                            Wenn du im Geschehen bist, sind wir dabei!
-                            Sprich uns einfach an und wir klären alles weitere!
+                            Gemeinsam stark, auf und neben dem Platz. Wir unterstützen nicht nur deine Absicherung,
+                            sondern auch deinen Verein mit einem Trikot-Sponsoring. Ob Fußball, Handball oder andere Sportarten,
+                            wo du deine Leidenschaft lebst, sind wir an deiner Seite. Lass uns gemeinsam dein Team nach vorne bringen!
                         </p>
                         <Button 
                             text="Jetzt Sponsoring anfragen" 

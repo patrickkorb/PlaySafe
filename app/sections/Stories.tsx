@@ -8,10 +8,8 @@ interface Story {
     id: number;
     userName: string;
     userAge: number;
-    userImage: string;
     story: string;
     rating: number;
-    location?: string;
     backgroundImage: string;
     sport: string;
 }
@@ -25,58 +23,48 @@ export default function Stories() {
     const stories: Story[] = [
         {
             id: 1,
-            userName: "Dave Hell",
-            userAge: 54,
-            userImage: "/images/placeholder.png",
-            story: "Bester Mann! PlaySafe hat mir in einer schwierigen Zeit wirklich geholfen. Nach meiner Fußballverletzung war die Unterstützung unbezahlbar.",
+            userName: "Markus B.",
+            userAge: 34,
+            story: "Schnell, freundlich, klar und kompetent. Besser geht's nicht!",
             rating: 5,
-            location: "München",
             backgroundImage: "/images/herobg.png",
             sport: "Fußball"
         },
         {
             id: 2,
-            userName: "Mike Allmendinger",
-            userAge: 26,
-            userImage: "/images/mike.png",
-            story: "PlaySafe ist das beste was mir je passiert ist. Schnelle Abwicklung und fairer Service nach meiner Basketballverletzung.",
+            userName: "Ethem G.",
+            userAge: 28,
+            story: "Sehr kompetente und freundliche Beratung. Alles wurde verständlich erklärt, ohne Druck oder aufdringliche Verkaufsversuche. Ich habe mich gut aufgehoben gefühlt und kann Herrn Allmendinger uneingeschränkt weiterempfehlen.",
             rating: 5,
-            location: "Stuttgart",
             backgroundImage: "/images/herobg.png",
             sport: "Basketball"
         },
         {
             id: 3,
-            userName: "Joel Müller",
-            userAge: 22,
-            userImage: "/images/placeholder.png",
-            story: "Ich habe mich bereits 2x an der linken Schulter verletzt & habe beide male innerhalb von wenigen Tagen die 1.000€ Schmerzensgeld auf dem Konto gehabt. Schneller und unkomplizierter Ablauf. Danke @PlaySafe.de",
+            userName: "Christian A.",
+            userAge: 31,
+            story: "Sehr gute Beratung. Sehr freundlich und hilfsbereit, kann man nur weiterempfehlen.",
             rating: 5,
-            location: "Berlin",
             backgroundImage: "/images/herobg.png",
             sport: "Handball"
         },
         {
             id: 4,
-            userName: "Sarah Weber",
-            userAge: 29,
-            userImage: "/images/placeholder.png",
-            story: "Nach meiner Knieverletzung beim Volleyball war PlaySafe sofort da. Unkomplizierte Abwicklung und schnelle Auszahlung - genau wie versprochen!",
+            userName: "Michaela",
+            userAge: 26,
+            story: "Super Beratung, alle Fragen sehr gut beantwortet und haben ein super Angebot bekommen. Mike Allmendinger ist ein guter Berater!",
             rating: 5,
-            location: "Hamburg",
             backgroundImage: "/images/herobg.png",
             sport: "Volleyball"
         },
         {
             id: 5,
-            userName: "Alex Schmidt",
-            userAge: 31,
-            userImage: "/images/placeholder.png",
-            story: "Beim Klettern passiert schnell mal was. PlaySafe war meine Rettung - professionell, schnell und zuverlässig!",
+            userName: "Juditta G.",
+            userAge: 42,
+            story: "Ich danke Herrn Allmendinger für seine Hilfe bei der Bearbeitung der ausstehenden Rechnungen über die ich bereits Mahnungen erhalten habe.",
             rating: 5,
-            location: "Frankfurt",
             backgroundImage: "/images/herobg.png",
-            sport: "Klettern"
+            sport: "Fitness"
         },
     ];
 
@@ -183,8 +171,9 @@ export default function Stories() {
                                         src={stories[currentIndex].backgroundImage}
                                         alt={`${stories[currentIndex].userName} background`}
                                         fill
-                                        className="object-cover"
+                                        className="object-cover w-full h-full"
                                         priority
+                                        style={{ objectPosition: 'center' }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
                                 </div>
@@ -216,26 +205,13 @@ export default function Stories() {
                                         </div>
 
                                         {/* User Info */}
-                                        <div className="flex items-center justify-center gap-4 md:gap-6">
-                                            <div className="relative w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-4 border-white/30">
-                                                <Image
-                                                    src={stories[currentIndex].userImage}
-                                                    alt={stories[currentIndex].userName}
-                                                    fill
-                                                    className="object-cover"
-                                                />
-                                            </div>
-                                            <div className="text-left">
-                                                <h4 className="text-xl md:text-2xl font-bold text-white">
-                                                    {stories[currentIndex].userName}
-                                                </h4>
-                                                <p className="text-white/80 text-sm md:text-base">
-                                                    {stories[currentIndex].userAge} Jahre • {stories[currentIndex].sport}
-                                                </p>
-                                                <p className="text-white/60 text-xs md:text-sm">
-                                                    {stories[currentIndex].location}
-                                                </p>
-                                            </div>
+                                        <div className="text-center">
+                                            <h4 className="text-xl md:text-2xl font-bold text-white">
+                                                {stories[currentIndex].userName}
+                                            </h4>
+                                            <p className="text-white/80 text-sm md:text-base">
+                                                {stories[currentIndex].userAge} Jahre • {stories[currentIndex].sport}
+                                            </p>
                                         </div>
                                     </motion.div>
                                 </div>

@@ -27,7 +27,7 @@ html {
 }
 
 .animate-scroll {
-    animation: scroll 20s linear infinite;
+    animation: scroll 7s linear infinite;
 }
 
 /* Mobile navigation animations */

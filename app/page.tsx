@@ -14,13 +14,12 @@ export default function Index() {
       <>
             <div>
                 <Hero />
-                <About />
-                <Stories />
                 <Pricing />
                 <Services />
-                <Team />
-                <Sponsor />
+                <Stories />
                 <FAQ />
+                <About />
+                <Sponsor />
                 <Contact />
             </div>
       </>

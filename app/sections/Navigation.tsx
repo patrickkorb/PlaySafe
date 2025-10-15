@@ -13,7 +13,6 @@ export default function Navigation() {
         { title: "Über uns", href: "/#about" },
         { title: "Referenzen", href: "/#stories" },
         { title: "Unsere Leistungen", href: "/#services" },
-        { title: "Das Team", href: "/#team" },
         { title: "Sponsoring", href: "/#sponsor" },
         { title: "FAQ", href: "/#faq" },
     ];
@@ -35,10 +34,10 @@ export default function Navigation() {
                     <div className="flex items-center gap-2 md:gap-4">
                         <Image src="/images/logo.png" alt="Logo" width={40} height={40} className="md:w-[50px] md:h-[50px]" />
                         <div className="flex items-center gap-2">
-                            <Link href="https://instagram.com/" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Instagram color={"black"}/>
                             </Link>
-                            <Link href="https://wa.me/4972179180110?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={22} height={22} />
                             </Link>
                             <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
@@ -66,10 +65,10 @@ export default function Navigation() {
                             <p className="text-lg font-bold">PlaySafe</p>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Link href="https://instagram.com/" className="text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Instagram size={18} color={"black"}/>
                             </Link>
-                            <Link href="https://wa.me/4972179180110?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-sm text-gray-600 hover:text-primary transition-colors">
+                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={18} height={18} />
                             </Link>
                             <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" target="_blank" className="text-sm text-gray-600 hover:text-primary transition-colors">
