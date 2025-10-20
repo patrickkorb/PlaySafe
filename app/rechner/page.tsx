@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from "next/link";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -374,12 +375,12 @@ export default function Rechner() {
                                     vertrauen auf diesen Unfallschutz
                                 </p>
                             </div>
-                            <a
+                            <Link
                                 href="/#services"
                                 className="inline-block bg-white hover:bg-gray-50 text-[#1a3691] font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 shadow-md hover:shadow-lg border-2 border-[#1a3691]"
                             >
                                 Überzeug dich selbst →
-                            </a>
+                            </Link>
                         </div>
                     </motion.div>
                 )}
