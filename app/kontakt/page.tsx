@@ -114,7 +114,7 @@ export default function Kontakt() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
-                    <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                    <form onSubmit={handleSubmit} data-leadstream-form="true" className="space-y-5 sm:space-y-6">
                         {/* Name Fields */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
@@ -131,6 +131,7 @@ export default function Kontakt() {
                                     required
                                     className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-sm sm:text-base placeholder-gray-400"
                                     placeholder="Dein Vorname"
+                                    data-leadstream="name"
                                 />
                             </div>
                             <div>
@@ -167,6 +168,7 @@ export default function Kontakt() {
                                     required
                                     className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-sm sm:text-base placeholder-gray-400"
                                     placeholder="deine.email@beispiel.de"
+                                    data-leadstream="email"
                                 />
                             </div>
                             <div>
@@ -182,6 +184,7 @@ export default function Kontakt() {
                                     onChange={handleInputChange}
                                     className="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-600 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 text-sm sm:text-base placeholder-gray-400"
                                     placeholder="0123 456789"
+                                    data-leadstream="phone"
                                 />
                             </div>
                         </div>
