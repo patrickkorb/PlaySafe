@@ -68,7 +68,7 @@ export default function Rechner() {
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="text-center mb-12"
+                        className="text-center mb-12 pt-8"
                     >
                         <h1 className="text-4xl font-bold text-gray-900 mb-4">
                             Finde deinen perfekten Tarif
@@ -85,7 +85,7 @@ export default function Rechner() {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="flex justify-center mb-12"
+                        className={`flex justify-center mb-12 ${step >= 2 ? 'pt-8' : ''}`}
                     >
                         <div className="flex items-center gap-4">
                             <motion.div
