@@ -15,11 +15,72 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PlaySafe - Deine Absicherung bei Freizeit-Verletzungen",
-  description: "PlaySafe für Freizeitaktivitäten. Schmerzensgeld, Invaliditätsleistung und mehr. Persönliche Beratung statt Callcenter.",
+  metadataBase: new URL('https://playsafe.fit'),
+  title: {
+    default: "PlaySafe - Sportverletzung Versicherung | Unfallschutz für Freizeitsportler",
+    template: "%s | PlaySafe"
+  },
+  description: "Sportverletzung Versicherung für Freizeitaktivitäten. Schnelle Auszahlung bei Sportverletzungen: Schmerzensgeld bis 2.000€, Invaliditätsleistung bis 1.000.000€. Persönliche Beratung statt Callcenter.",
+  keywords: [
+    "Sportverletzung Versicherung",
+    "Unfallversicherung Sport",
+    "Freizeitunfall Versicherung",
+    "Schmerzensgeld Sportverletzung",
+    "Invaliditätsversicherung Sport",
+    "Fußball Versicherung",
+    "Ski Versicherung",
+    "Unfallschutz Sportler",
+    "PlaySafe Versicherung",
+    "Signal Iduna Unfallversicherung"
+  ],
+  authors: [{ name: "PlaySafe - Mike Allmendinger" }],
+  creator: "PlaySafe",
+  publisher: "PlaySafe",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/images/logo.png",
     apple: "/images/logo.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    url: "https://playsafe.fit",
+    title: "PlaySafe - Sportverletzung Versicherung | Unfallschutz für Freizeitsportler",
+    description: "Schnelle Auszahlung bei Sportverletzungen: Schmerzensgeld bis 2.000€, Invaliditätsleistung bis 1.000.000€. Persönliche Beratung statt Callcenter.",
+    siteName: "PlaySafe",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "PlaySafe - Sportverletzung Versicherung",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PlaySafe - Sportverletzung Versicherung",
+    description: "Schnelle Auszahlung bei Sportverletzungen: Schmerzensgeld bis 2.000€, Invaliditätsleistung bis 1.000.000€.",
+    images: ["/images/logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    // Füge später deine Google Search Console Verification ID hier ein
+    // google: 'deine-google-verification-id',
   },
 };
 
@@ -29,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="de">
     <head>
         {/* Regular tracking code from modal works here too */}
         <script

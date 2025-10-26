@@ -32,12 +32,12 @@ export default function Stories() {
         },
         {
             id: 2,
-            userName: "Ethem G.",
+            userName: "Andreas H.",
             userAge: 28,
-            story: "Sehr kompetente und freundliche Beratung. Alles wurde verständlich erklärt, ohne Druck oder aufdringliche Verkaufsversuche. Ich habe mich gut aufgehoben gefühlt und kann Herrn Allmendinger uneingeschränkt weiterempfehlen.",
+            story: "Sehr kompetenter junger Mitarbeiter, der sich außerordentlich Zeit für die Beratungen und Erklärungen nimmt. Man merkt, dass er seinen Beruf mit Leidenschaft ausübt.",
             rating: 5,
             backgroundImage: "/images/herobg.png",
-            sport: "Basketball"
+            sport: ""
         },
         {
             id: 3,

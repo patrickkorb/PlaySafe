@@ -146,16 +146,16 @@ export default function About() {
                         </div>
                         
                         {/* Image section */}
-                        <div className="flex-1 lg:max-w-lg xl:max-w-xl">
-                            <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] md:min-h-[600px]">
-                                <Image 
-                                    src="/images/mike.jpg"
-                                    alt="Mike Allmendinger - Dein persönlicher Berater" 
-                                    fill
-                                    className="object-cover lg:rounded-r-2xl xl:rounded-r-3xl"
-                                />
-                            </div>
-                        </div>
+                        {/*<div className="flex-1 lg:max-w-lg xl:max-w-xl">*/}
+                        {/*    <div className="relative h-64 md:h-80 lg:h-full min-h-[400px] md:min-h-[600px]">*/}
+                        {/*        <Image */}
+                        {/*            src="/images/mike.jpg"*/}
+                        {/*            alt="Mike Allmendinger - Dein persönlicher Berater" */}
+                        {/*            fill*/}
+                        {/*            className="object-cover lg:rounded-r-2xl xl:rounded-r-3xl"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </div>
                 </motion.div>
             </div>

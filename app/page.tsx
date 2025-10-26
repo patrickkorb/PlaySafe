@@ -7,11 +7,15 @@ import Team from "@/app/sections/Team";
 import Sponsor from "@/app/sections/Sponsor";
 import FAQ from "@/app/sections/FAQ";
 import Contact from "@/app/sections/Contact";
+import { OrganizationSchema, ServiceSchema, FAQPageSchema } from "@/app/components/StructuredData";
 
 
 export default function Index() {
   return (
       <>
+            <OrganizationSchema />
+            <ServiceSchema />
+            <FAQPageSchema />
             <div>
                 <Hero />
                 <Pricing />

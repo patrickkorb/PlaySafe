@@ -34,16 +34,19 @@ export default function Rechner() {
 
     const handleBirthYearSubmit = () => {
         if (birthYear && birthYear.length === 4 && parseInt(birthYear) > 1900 && parseInt(birthYear) <= new Date().getFullYear()) {
+            window.scrollTo({ top: 0, behavior: 'smooth' })
             setStep(2)
         }
     }
 
     const handleSportSelect = (sportName: string) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         setSport(sportName)
         setStep(3)
     }
 
     const handleFrequencySelect = (freq: string) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         setFrequency(freq)
         setIsCalculating(true)
 
@@ -189,7 +192,7 @@ export default function Rechner() {
                                     className="bg-white border-2 border-gray-300 hover:cursor-pointer hover:border-[#1a3691] hover:shadow-lg hover:from-blue-100 hover:to-blue-50 rounded-xl p-6 transition-all duration-200 flex flex-col items-center gap-3"
                                 >
                                     <div className="text-6xl">{s.icon}</div>
-                                    <div className="text-lg font-semibold text-gray-900">{s.name}</div>
+                                    <div className="text-base md:text-lg font-semibold text-gray-900 whitespace-nowrap">{s.name}</div>
                                 </button>
                             ))}
                         </div>
