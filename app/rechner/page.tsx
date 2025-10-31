@@ -314,10 +314,10 @@ export default function Rechner() {
                                                 <Check className="w-4 h-4 text-green-600" />
                                             </div>
                                             <div className={"flex flex-col justify-center items-start"}>
-                                                <p className={"font-semibold text-black/80"}>Schmerzensgeld: 1000€ sofort aufs Konto</p>
+                                                <p className={"font-semibold text-black/80"}>1000€ sofort aufs Konto</p>
                                             </div>
                                         </div>
-                                        <p className={"pl-8 text-start text-gray-800 font-normal"}>Schon bei Knochenbrüchen, Sehnenrissen und weiteren Sportverletzungen</p>
+                                        <p className={"pl-8 text-start text-gray-700 font-medium text-sm"}>schon bei Kapselrissen, Muskelrissen und weiteren Sportverletzungen</p>
                                     </div>
                                     {features.map(( feature, index) => (
                                         (
