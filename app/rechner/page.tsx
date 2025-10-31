@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link";
+import {Check} from "lucide-react";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -30,6 +31,12 @@ export default function Rechner() {
         '4-5x pro Woche',
         'Täglich',
         'Unregelmäßig'
+    ]
+
+    const features = [
+        "Vollinvalidalität: 500.000€",
+        "Zahnersatz: 5000€",
+        "Premium Leistungen der Signal Iduna"
     ]
 
     const handleBirthYearSubmit = () => {
@@ -293,26 +300,46 @@ export default function Rechner() {
                     >
                         <div className="rounded-2xl py-4 mb-2 text-center">
                             <h2 className="text-3xl font-bold text-black mb-2 flex flex-row items-center justify-center gap-4">
-                                <div className="text-6xl">✓</div>
                                 Eine Versicherung lohnt sich für dich!
                             </h2>
-                            <div className="bg-primary rounded-lg p-6 px-16 shadow-lg mb-4 flex flex-row justify-center items-baseline">
-                                <p className={"text-white text-2xl font-bold"}>Für 10€</p>
-                                <p className={"text-gray-100 text-lg"}>/Monat</p>
+                            <div className={"rounded-lg "}>
+                                <div className="bg-primary rounded-lg p-4 px-16 shadow-lg flex flex-row justify-center items-baseline">
+                                    <p className={"text-white text-2xl font-bold"}>Für 10€</p>
+                                    <p className={"text-gray-100 text-lg"}>/Monat</p>
+                                </div>
+                                <div>
+                                    <div className={"flex flex-col items-start justify-center"}>
+                                        <div className={"pt-4 pb-1 px-0 flex flex-row items-center justify-start gap-2"}>
+                                            <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                                                <Check className="w-4 h-4 text-green-600" />
+                                            </div>
+                                            <div className={"flex flex-col justify-center items-start"}>
+                                                <p className={"font-semibold text-black/80"}>Schmerzensgeld: 1000€ sofort aufs Konto</p>
+                                            </div>
+                                        </div>
+                                        <p className={"pl-8 text-start text-gray-800 font-normal"}>Schon bei Knochenbrüchen, Sehnenrissen und weiteren Sportverletzungen</p>
+                                    </div>
+                                    {features.map(( feature, index) => (
+                                        (
+                                            <div key={index} className={"py-4 px-0 flex flex-row items-center justify-start gap-2"}>
+                                                <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                                                    <Check className="w-4 h-4 text-green-600" />
+                                                </div>
+                                                <p className={"font-semibold text-black/80"}>{feature}</p>
+                                            </div>
+                                        )
+                                    ))}
+                                </div>
                             </div>
-                            <p className={"text-lg mb-2 text-gray-600"}>perfekten Schutz mit über 500.000€ an Leistungen</p>
-                            <p className="text-lg text-gray-500 mt-4">
-                            </p>
+
                         </div>
 
                         {/* Formular */}
-                        <div className="bg-white rounded-2xl shadow-xl py-6 px-12 max-w-5xl mx-auto">
-                            <h3 className="text-2xl font-bold text-gray-900 my-2 text-center">
-                                Auf welcher Nummer können wir dich am besten erreichen?
+                        <div className="bg-white rounded-2xl shadow-xl py-6 px-4 max-w-5xl mx-auto">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
+                                Auf welcher Nummer erreichen wir dich?
                             </h3>
-                            <h4 className={"text-center text-gray-900 mb-8 text-sm font-medium"}>
-                                Bitte bedenke, dass wir dir nur ein Angebot erstellen können, wenn deine Rufnummer korrekt angegeben wurde.
-                            </h4>
+
 
                             <form onSubmit={handleSubmit} className="max-w-5xl mx-auto">
                                 <div className="space-y-4">
@@ -357,10 +384,13 @@ export default function Rechner() {
                                             placeholder="Nummer für das Angebot"
                                         />
                                     </div>
+                                    <h4 className={"text-center text-gray-700 text-sm font-semibold"}>
+                                        Bitte bedenke, dass wir dir nur ein Angebot erstellen können, wenn deine Rufnummer korrekt angegeben wurde.
+                                    </h4>
 
                                     <button
                                         type="submit"
-                                        className="w-full bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-8"
+                                        className="w-full bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-2"
                                     >
                                         Angebot reinholen
                                     </button>
@@ -375,7 +405,7 @@ export default function Rechner() {
                                     5000+ Kunden
                                 </p>
                                 <p className="text-4xl font-bold text-gray-900 p-2">
-                                    vertrauen auf diesen Unfallschutz
+                                    vertrauen auf uns!
                                 </p>
                             </div>
                             <Link
