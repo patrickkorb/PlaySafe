@@ -15,14 +15,16 @@ export default function Rechner() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [phone, setPhone] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
     const sports = [
-        { name: 'Fußball', icon: '⚽' },
-        { name: 'Tennis', icon: '🎾' },
-        { name: 'Ski', icon: '⛷️' },
-        { name: 'Fitness', icon: '💪' },
-        { name: 'Radfahren', icon: '🚴' },
-        { name: 'Sonstiges', icon: '🏃' },
+        { name: 'Fußball', icon: '⚽', catch: "schon bei Kreuzbandrissen, Bänderverletzungen und sonstigen Sportverletzungen" },
+        { name: 'Tennis', icon: '🎾', catch: "schon bei Sehnenrissen, Bänderverletzungen und sonstigen Sportverletzungen"},
+        { name: 'Ski', icon: '⛷️', catch: "schon bei Kreuzbandrissen, Knochenbrüchen und sonstigen Skiunfällen"},
+        { name: 'Fitness', icon: '💪', catch: "schon bei Muskelrissen, Bandscheibenverletzungen und sonstigen Trainingsverletzungen" },
+        { name: 'Radfahren', icon: '🚴', catch: "schon bei Sehnenrissen, Schlüsselbeinbrüchen und sonstigen Radunfällen" },
+        { name: 'Sonstiges', icon: '🏃', catch: "schon bei kleinen Verletzungen jeder Art" },
     ]
 
     const frequencies = [
@@ -33,11 +35,15 @@ export default function Rechner() {
         'Unregelmäßig'
     ]
 
+
+    {/*Je nach Sportart andere Leistung anzeigen*/}
     const features = [
         "Vollinvalidalität: 500.000€",
         "Zahnersatz: 5000€",
         "Premium Leistungen der Signal Iduna"
     ]
+
+
 
     const handleBirthYearSubmit = () => {
         if (birthYear && birthYear.length === 4 && parseInt(birthYear) > 1900 && parseInt(birthYear) <= new Date().getFullYear()) {
@@ -64,10 +70,59 @@ export default function Rechner() {
         }, 2000)
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log({ name, email, phone, birthYear, sport, frequency })
-        // Hier könnte die Formular-Übermittlung erfolgen
+        setIsSubmitting(true)
+        setSubmitStatus('idle')
+
+        try {
+            const message = `
+Neue Anfrage über den Rechner:
+
+Persönliche Daten:
+- Name: ${name}
+- E-Mail: ${email}
+- Telefon: ${phone}
+
+Versicherungsdetails:
+- Geburtsjahr: ${birthYear}
+- Sportart: ${sport}
+- Häufigkeit: ${frequency}
+
+Empfohlener Tarif: 10€/Monat
+            `.trim()
+
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone,
+                    message
+                }),
+            })
+
+            if (!response.ok) {
+                throw new Error('Fehler beim Senden')
+            }
+
+            setSubmitStatus('success')
+            // Formular zurücksetzen nach 2 Sekunden
+            setTimeout(() => {
+                setName('')
+                setEmail('')
+                setPhone('')
+            }, 2000)
+
+        } catch (error) {
+            console.error('Error submitting form:', error)
+            setSubmitStatus('error')
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -292,7 +347,9 @@ export default function Rechner() {
                 )}
 
                 {/* Schritt 4: Ergebnis und Formular */}
-                {step === 4 && !isCalculating && (
+                {step === 4 && !isCalculating && (() => {
+                    const selectedSport = sports.find(s => s.name === sport)
+                    return (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -317,7 +374,7 @@ export default function Rechner() {
                                                 <p className={"font-semibold text-black/80"}>1000€ sofort aufs Konto</p>
                                             </div>
                                         </div>
-                                        <p className={"pl-8 text-start text-gray-700 font-medium text-sm"}>schon bei Kapselrissen, Muskelrissen und weiteren Sportverletzungen</p>
+                                        <p className={"pl-8 text-start text-gray-700 font-medium text-sm"}>{selectedSport?.catch}</p>
                                     </div>
                                     {features.map(( feature, index) => (
                                         (
@@ -388,11 +445,26 @@ export default function Rechner() {
                                         Bitte bedenke, dass wir dir nur ein Angebot erstellen können, wenn deine Rufnummer korrekt angegeben wurde.
                                     </h4>
 
+                                    {submitStatus === 'success' && (
+                                        <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 text-center">
+                                            <p className="text-green-700 font-semibold">✓ Anfrage erfolgreich gesendet!</p>
+                                            <p className="text-green-600 text-sm mt-1">Wir melden uns in Kürze bei dir.</p>
+                                        </div>
+                                    )}
+
+                                    {submitStatus === 'error' && (
+                                        <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-center">
+                                            <p className="text-red-700 font-semibold">✗ Fehler beim Senden</p>
+                                            <p className="text-red-600 text-sm mt-1">Bitte versuche es erneut.</p>
+                                        </div>
+                                    )}
+
                                     <button
                                         type="submit"
-                                        className="w-full bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-2"
+                                        disabled={isSubmitting}
+                                        className="w-full bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-2"
                                     >
-                                        Angebot reinholen
+                                        {isSubmitting ? 'Wird gesendet...' : 'Angebot reinholen'}
                                     </button>
                                 </div>
                             </form>
@@ -416,7 +488,8 @@ export default function Rechner() {
                             </Link>
                         </div>
                     </motion.div>
-                )}
+                    )
+                })()}
             </div>
         </div>
     )

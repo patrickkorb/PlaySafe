@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // E-Mail senden
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: 'mike.allmendinger@signal-iduna.net',
+      to: 'mike-managing@gmx.de',
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
