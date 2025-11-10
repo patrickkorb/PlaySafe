@@ -22,7 +22,6 @@ export default function Index() {
                 <Services />
                 <Stories />
                 <FAQ />
-                <About />
                 <Sponsor />
                 <Contact />
             </div>

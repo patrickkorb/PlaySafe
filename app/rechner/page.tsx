@@ -22,7 +22,7 @@ export default function Rechner() {
         { name: 'Fußball', icon: '⚽', catch: "schon bei Kreuzbandrissen, Bänderverletzungen und sonstigen Sportverletzungen" },
         { name: 'Tennis', icon: '🎾', catch: "schon bei Sehnenrissen, Bänderverletzungen und sonstigen Sportverletzungen"},
         { name: 'Ski', icon: '⛷️', catch: "schon bei Kreuzbandrissen, Knochenbrüchen und sonstigen Skiunfällen"},
-        { name: 'Fitness', icon: '💪', catch: "schon bei Muskelrissen, Bandscheibenverletzungen und sonstigen Trainingsverletzungen" },
+        { name: 'Fitness', icon: '💪', catch: "schon bei Muskelrissen, Kapselrissen und sonstigen Trainingsverletzungen" },
         { name: 'Radfahren', icon: '🚴', catch: "schon bei Sehnenrissen, Schlüsselbeinbrüchen und sonstigen Radunfällen" },
         { name: 'Sonstiges', icon: '🏃', catch: "schon bei kleinen Verletzungen jeder Art" },
     ]
