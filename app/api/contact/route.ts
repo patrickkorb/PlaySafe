@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     // 1. E-Mail an dich
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: 'PlaySafe Anfrage',
       to: 'mike-managing@gmx.de',
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     // Bestätigungsmail mit Template an Kunden
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: 'PlaySafe',
       to: email,
       subject: 'Vielen Dank für Ihre Nachricht - PlaySafe',
       html: emailTemplate,
