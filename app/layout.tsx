@@ -109,9 +109,9 @@ export default function RootLayout({
         />
         <script
             defer
-            data-website-id="dfid_OxxKdd3S7HRzcJoBeX8iM"
+            data-website-id="playsafefit-41n8wx9"
             data-domain="playsafe.fit"
-            src="https://datafa.st/js/script.js">
+            src="https://lead-fuchs.vercel.app/js/script.js">
         </script>
     </head>
       <body
