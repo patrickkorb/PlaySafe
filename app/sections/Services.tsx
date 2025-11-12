@@ -120,7 +120,7 @@ export default function Services() {
                             <h3 className="text-xl md:text-2xl font-bold text-gray-900">Happy Holiday</h3>
                         </div>
                         <p className="text-gray-600 leading-relaxed mb-4">
-                            Bei Unfällen, die mehr als 100 km von deinem Wohnort entfernt passieren, wird dein PlaySafe um folgende Leistungen erweitert:
+                            Bei Unfällen, die mehr als 100 km von deinem Wohnort entfernt passieren, wird deine Versicherung um folgende Leistungen erweitert:
                         </p>
                         <ul className="text-gray-600 space-y-2">
                             <li className="flex items-start">

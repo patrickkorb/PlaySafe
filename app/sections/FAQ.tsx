@@ -16,11 +16,11 @@ export default function FAQ() {
     const faqItems: FAQItem[] = [
         {
             question: "Greift der Versicherungsschutz nur bei Verletzungen, die während sportlicher Aktivitäten entstehen?",
-            answer: "Nein, unsere PlaySafe-Verträge/Produkte decken alle Risiken in deiner kompletten Freizeit ab. Egal ob beim Sport, im Urlaub oder Zuhause."
+            answer: "Nein, unsere Tarife decken alle Risiken in deiner kompletten Freizeit ab. Egal ob beim Sport, im Urlaub oder Zuhause."
         },
         {
             question: "Wie schnell erhalte ich mein Schmerzensgeld?",
-            answer: "Im Schadenfall findest du das Schmerzensgeld in der Regel innerhalb von einer Woche auf deinem Konto. Wir legen großen Wert auf eine schnelle und unkomplizierte Abwicklung."
+            answer: "Im Schadenfall findest du das Schmerzensgeld in der Regel innerhalb von wenigen Tagen auf deinem Konto. Wir legen großen Wert auf eine schnelle und unkomplizierte Abwicklung."
         },
         {
             question: "Bin ich auch im Ausland versichert?",
@@ -37,7 +37,7 @@ export default function FAQ() {
         {
             question: "Was ist, wenn ich bereits eine Unfallversicherung habe?",
             answer: "Schick uns einfach den Versicherungsschein deiner bestehenden Unfallversicherung zu. Wir prüfen deinen Schutz und bieten Dir eine kombinierte Unfallversicherung inkl./ mit Sportschutz an.\n" +
-                "So sparst du Geld und hast beide Absicherungen in einer Police.",
+                "So sparst du Geld und hast beide Absicherungen in einer Versicherung zusammengefasst.",
         },
         {
             question: "Wie finanziert sich PlaySafe?",

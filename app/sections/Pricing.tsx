@@ -76,7 +76,7 @@ export default function Pricing() {
                         Schließe dich heute über <span className="text-primary">5000 zufriedenen</span> Kunden an.
                     </h2>
                     <p className="text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                        Unsere Tarife bieten dir genau den Schutz, den du brauchst - 
+                        Die verschiedenen Tarife bieten dir genau den Schutz, den du brauchst -
                         von kompakt bis zur Vollausstattung.
                     </p>
                 </motion.div>
