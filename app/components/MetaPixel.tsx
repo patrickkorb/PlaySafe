@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 declare global {
   interface Window {
@@ -11,7 +11,6 @@ declare global {
 
 export default function MetaPixel() {
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     // Initialisiere Meta Pixel
@@ -44,7 +43,7 @@ export default function MetaPixel() {
     if (window.fbq) {
       window.fbq('track', 'PageView')
     }
-  }, [pathname, searchParams])
+  }, [pathname])
 
   return null
 }
