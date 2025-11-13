@@ -95,14 +95,14 @@ export default function Pricing() {
                             
                             {/* Pricing Card */}
                             <div className="flex-1">
-                                <PricingCard 
+                                <PricingCard
                                     title={plan.title}
                                     price={plan.price}
                                     priceSubtext={plan.priceSubtext}
                                     features={plan.features}
                                     isPopular={plan.isPopular}
                                     buttonText="Jetzt beraten lassen"
-                                    buttonHref="/kontakt"
+                                    buttonHref={`/kontakt?tarif=${plan.title}&preis=${plan.price}`}
                                 />
                             </div>
                         </motion.div>

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Send, User, Mail, Phone, MessageSquare } from "lucide-react";
 import Image from "next/image";
@@ -15,6 +16,19 @@ interface FormData {
 }
 
 export default function Kontakt() {
+    const searchParams = useSearchParams();
+    const [selectedTarif, setSelectedTarif] = useState<string | null>(null);
+    const [selectedPreis, setSelectedPreis] = useState<string | null>(null);
+
+    useEffect(() => {
+        const tarif = searchParams.get('tarif');
+        const preis = searchParams.get('preis');
+        if (tarif && preis) {
+            setSelectedTarif(tarif);
+            setSelectedPreis(preis);
+        }
+    }, [searchParams]);
+
     const [formData, setFormData] = useState<FormData>({
         vorname: "",
         nachname: "",
@@ -57,6 +71,19 @@ export default function Kontakt() {
         setSubmitStatus('idle');
 
         try {
+            // Erstelle die Nachricht mit optionalem Tarif
+            let message = '';
+
+            if (selectedTarif && selectedPreis) {
+                message += `Ausgewählter Tarif: ${selectedTarif} - ${selectedPreis}/Monat\n\n`;
+            }
+
+            if (formData.interessen.length > 0) {
+                message += `Interessen: ${formData.interessen.join(', ')}\n\n`;
+            }
+
+            message += formData.bemerkungen || 'Keine weiteren Bemerkungen';
+
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
@@ -66,9 +93,7 @@ export default function Kontakt() {
                     name: `${formData.vorname} ${formData.nachname}`.trim(),
                     email: formData.email,
                     phone: formData.telefon,
-                    message: formData.interessen.length > 0 || formData.bemerkungen 
-                        ? `${formData.interessen.length > 0 ? `Interessen: ${formData.interessen.join(', ')}\n\n` : ''}${formData.bemerkungen || 'Keine weiteren Bemerkungen'}`
-                        : 'Kontaktanfrage ohne spezifische Nachricht'
+                    message: message
                 }),
             });
 
@@ -115,6 +140,15 @@ export default function Kontakt() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                     <form onSubmit={handleSubmit} data-leadstream-form="true" className="space-y-5 sm:space-y-6">
+                        {/* Selected Tarif Display */}
+                        {selectedTarif && selectedPreis && (
+                            <div className="bg-primary/10 border-2 border-primary rounded-lg p-4">
+                                <p className="text-white text-sm font-semibold">
+                                    Ausgewählter Tarif: <span className="text-primary">{selectedTarif} - {selectedPreis}/Monat</span>
+                                </p>
+                            </div>
+                        )}
+
                         {/* Name Fields */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <div>
@@ -296,7 +330,8 @@ export default function Kontakt() {
                                 src="/images/mike.jpg"
                                 alt="Mike Allmendinger" 
                                 fill
-                                className="object-cover"
+                                className="object-cover object-top"
+                                style={{ objectPosition: '60% top' }}
                             />
                         </div>
                         
