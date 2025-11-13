@@ -268,7 +268,7 @@ export default function Stories() {
                     </p>
                     <a 
                         href="/kontakt"
-                        className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-xl text-base font-semibold hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl"
+                        className="inline-flex items-center gap-2 bg-secondary text-white px-8 py-4 rounded-xl text-base font-semibold hover:bg-secondary/90 transition-colors shadow-lg hover:shadow-xl"
                     >
                         Jetzt kostenlos beraten lassen
                     </a>

@@ -46,7 +46,7 @@ export default function Contact() {
                             text="Jetzt Kontakt aufnehmen"
                             href="/kontakt"
                             size="lg"
-                            className="w-full md:w-auto"
+                            variant={"secondary"}
                         />
                     </div>
 

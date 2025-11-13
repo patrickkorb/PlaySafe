@@ -47,7 +47,7 @@ export default function Sponsor() {
                             text="Jetzt Sponsoring anfragen" 
                             href="/kontakt" 
                             size="lg"
-                            className="w-full md:w-auto"
+                            variant={"secondary"}
                         />
                     </div>
                 </motion.div>

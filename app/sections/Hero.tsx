@@ -95,7 +95,7 @@ export default function Hero() {
                                 text="Kostenloses Erstgespräch vereinbaren"
                                 href="/kontakt"
                                 size="lg"
-                                className="w-full text-xs sm:text-sm md:text-base lg:text-lg py-2 sm:py-3 md:py-4 lg:py-5"
+                                variant={"secondary"}
                             />
                         </div>
                         

@@ -81,7 +81,7 @@ export default function PricingCard({
             {/* CTA Button */}
             <div className={showButton? "w-full" : "hidden"}>
                 <Button
-                    variant={buttonVariant ? "v3" : "primary"}
+                    variant={buttonVariant ? "v3" : "secondary"}
                     text={buttonText} 
                     href={buttonHref}
                 />
