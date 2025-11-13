@@ -6,9 +6,12 @@ interface PricingCardProps {
     price: string;
     priceSubtext?: string;
     features: string[];
+    catchPhrase?: string;
     isPopular?: boolean;
     buttonText?: string;
     buttonHref?: string;
+    buttonVariant?: "primary" | "secondary" | "v3";
+    showButton?: boolean;
 }
 
 export default function PricingCard({
@@ -16,12 +19,15 @@ export default function PricingCard({
     price,
     priceSubtext = "pro Monat",
     features,
+    catchPhrase,
     isPopular = false,
     buttonText = "Kontakt aufnehmen",
-    buttonHref = "/kontakt"
+    buttonHref = "/kontakt",
+    buttonVariant,
+    showButton=true
 }: PricingCardProps) {
     return (
-        <div className={`relative bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 p-8 transition-all duration-300 hover:shadow-2xl ${
+        <div className={`relative bg-white rounded-2xl shadow-xl ring-3 ${buttonVariant === "v3"? "ring-green-200": "ring-gray-200"} p-8 transition-all duration-300 hover:shadow-2xl ${
             isPopular ? 'ring-2 ring-primary scale-105' : ''
         }`}>
             {/* Popular badge */}
@@ -39,6 +45,7 @@ export default function PricingCard({
                     {title}
                 </h3>
                 <div className="flex items-baseline justify-center gap-1">
+                    <span className={"text-sm text-gray-500"}>ab</span>
                     <span className="text-4xl md:text-5xl font-bold text-gray-900">
                         {price}
                     </span>
@@ -56,17 +63,25 @@ export default function PricingCard({
                             <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
                                 <Check className="w-4 h-4 text-green-600" />
                             </div>
-                            <span className="text-gray-700 text-base leading-relaxed">
-                                {feature}
-                            </span>
+                            <div className="flex flex-col">
+                                <span className="text-gray-700 text-left leading-relaxed">
+                                    {feature}
+                                </span>
+                                {index === 0 && catchPhrase && (
+                                    <span className="text-gray-500 text-sm mt-1">
+                                        {catchPhrase}
+                                    </span>
+                                )}
+                            </div>
                         </li>
                     ))}
                 </ul>
             </div>
 
             {/* CTA Button */}
-            <div className="w-full">
-                <Button 
+            <div className={showButton? "w-full" : "hidden"}>
+                <Button
+                    variant={buttonVariant ? "v3" : "primary"}
                     text={buttonText} 
                     href={buttonHref}
                 />

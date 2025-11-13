@@ -33,6 +33,7 @@ export default function Navigation() {
                     {/* Logo + Social Links */}
                     <div className="flex items-center gap-2 md:gap-4">
                         <Image src="/images/logo.png" alt="Logo" width={40} height={40} className="md:w-[50px] md:h-[50px]" />
+                        <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2"}/>
                         <div className="flex items-center gap-2">
                             <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
                                 <Instagram color={"black"}/>
@@ -61,8 +62,8 @@ export default function Navigation() {
                     {/* Left: Logo + Social Links */}
                     <div className="flex items-center gap-3 lg:gap-4">
                         <div className="flex flex-row items-center gap-1">
-                            <Image src="/images/logo.png" alt="Logo" width={50} height={50} />
-                            <p className="text-lg font-bold">PlaySafe</p>
+                            <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
+                            <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2 mt-0"}/>
                         </div>
                         <div className="flex items-center gap-3">
                             <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-sm text-gray-600 hover:text-primary transition-colors">

@@ -4,7 +4,7 @@ interface ButtonProps {
     text: string;
     href: string;
     className?: string;
-    variant?: "primary" | "secondary";
+    variant?: "primary" | "secondary" | "v3";
     size?: "sm" | "md" | "lg";
 }
 
@@ -25,7 +25,8 @@ export default function Button({
     
     const variantClasses = {
         primary: "bg-primary text-white hover:bg-primary/90 shadow-md hover:shadow-lg",
-        secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 shadow-sm hover:shadow-md"
+        secondary: "bg-secondary text-white hover:bg-secondary/90 shadow-sm hover:shadow-md",
+        v3: "bg-green-700 text-white hover:bg-green-800 shadow-md hover:shadow-lg"
     };
     
     const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;

@@ -4,10 +4,13 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link";
 import {Check} from "lucide-react";
+import PricingCard from "@/app/components/PricingCard";
+import Button from "@/app/components/ui/Button";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
-    const [birthYear, setBirthYear] = useState('')
+    const [birthDate, setBirthDate] = useState('')
+    const [birthDateError, setBirthDateError] = useState('')
     const [sport, setSport] = useState('')
     const [frequency, setFrequency] = useState('')
     const [isCalculating, setIsCalculating] = useState(false)
@@ -36,20 +39,30 @@ export default function Rechner() {
     ]
 
 
-    {/*Je nach Sportart andere Leistung anzeigen*/}
-    const features = [
-        "Vollinvalidalität: 500.000€",
-        "Zahnersatz: 5000€",
-        "Premium Leistungen der Signal Iduna"
-    ]
 
 
 
-    const handleBirthYearSubmit = () => {
-        if (birthYear && birthYear.length === 4 && parseInt(birthYear) > 1900 && parseInt(birthYear) <= new Date().getFullYear()) {
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-            setStep(2)
+    const handleBirthDateSubmit = () => {
+        setBirthDateError('')
+
+        // Prüfe ob Datum eingegeben wurde
+        if (!birthDate) {
+            setBirthDateError('Bitte gib dein Geburtsdatum ein')
+            return
         }
+
+        // Erstelle Datum-Objekte zum Vergleichen
+        const selectedDate = new Date(birthDate)
+        const cutoffDate = new Date(1958, 0, 1) // 1. Januar 1958
+
+        // Prüfe ob Person vor 1.1.1958 geboren wurde
+        if (selectedDate < cutoffDate) {
+            setBirthDateError('Leider können wir für Personen, die vor dem 1.1.1958 geboren wurden, kein Angebot erstellen.')
+            return
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setStep(2)
     }
 
     const handleSportSelect = (sportName: string) => {
@@ -76,6 +89,21 @@ export default function Rechner() {
         setSubmitStatus('idle')
 
         try {
+            // Formatiere Datum von YYYY-MM-DD zu DD.MM.YYYY
+            const formattedDate = birthDate.split('-').reverse().join('.')
+
+            // Bestimme Tarif basierend auf Häufigkeit
+            let tariffName = 'Small'
+            let tariffPrice = '10'
+
+            if (frequency === '2-3x pro Woche') {
+                tariffName = 'Medium'
+                tariffPrice = '15'
+            } else if (frequency === '4-5x pro Woche' || frequency === 'Täglich') {
+                tariffName = 'Large'
+                tariffPrice = '20'
+            }
+
             const message = `
 Neue Anfrage über den Rechner:
 
@@ -85,11 +113,11 @@ Persönliche Daten:
 - Telefon: ${phone}
 
 Versicherungsdetails:
-- Geburtsjahr: ${birthYear}
+- Geburtsdatum: ${formattedDate}
 - Sportart: ${sport}
 - Häufigkeit: ${frequency}
 
-Empfohlener Tarif: 10€/Monat
+Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
             `.trim()
 
             const response = await fetch('/api/contact', {
@@ -197,7 +225,7 @@ Empfohlener Tarif: 10€/Monat
                     </motion.div>
                 )}
 
-                {/* Schritt 1: Geburtsjahr */}
+                {/* Schritt 1: Geburtsdatum */}
                 {step === 1 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
@@ -206,24 +234,29 @@ Empfohlener Tarif: 10€/Monat
                         className="bg-white rounded-2xl shadow-xl p-12 text-center border-t-4 border-[#1a3691]"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                            In welchem Jahr bist du geboren?
+                            Wann bist du geboren?
                         </h2>
                         <p className="text-gray-600 mb-8">
-                            Gib dein Geburtsjahr ein
+                            Gib dein Geburtsdatum ein
                         </p>
                         <div className={"flex flex-col items-center gap-4"}>
                             <input
-                                type="number"
-                                value={birthYear}
-                                onChange={(e) => setBirthYear(e.target.value)}
-                                placeholder="z.B. 1990"
-                                className="w-full max-w-md mx-auto px-6 py-4 text-2xl text-center border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none transition-colors"
-                                min="1900"
-                                max={new Date().getFullYear()}
+                                type="date"
+                                value={birthDate}
+                                onChange={(e) => setBirthDate(e.target.value)}
+                                className="w-full max-w-md mx-auto px-6 py-4 text-xl text-center border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none transition-colors"
+                                max={new Date().toISOString().split('T')[0]}
                             />
+
+                            {birthDateError && (
+                                <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 w-full max-w-md mx-auto">
+                                    <p className="text-red-700 font-semibold text-center">{birthDateError}</p>
+                                </div>
+                            )}
+
                             <button
-                                onClick={handleBirthYearSubmit}
-                                disabled={!birthYear || birthYear.length !== 4}
+                                onClick={handleBirthDateSubmit}
+                                disabled={!birthDate}
                                 className="bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 px-16 rounded-lg text-xl transition-colors duration-200 w-full max-w-md"
                             >
                                 Weiter
@@ -349,6 +382,73 @@ Empfohlener Tarif: 10€/Monat
                 {/* Schritt 4: Ergebnis und Formular */}
                 {step === 4 && !isCalculating && (() => {
                     const selectedSport = sports.find(s => s.name === sport)
+
+                    // Bestimme Tarif basierend auf Häufigkeit
+                    const getTariff = () => {
+                        switch(frequency) {
+                            case '1x pro Woche':
+                            case 'Unregelmäßig':
+                                return {
+                                    title: 'Small',
+                                    price: '10€',
+                                    features: [
+                                        "1.000€ sofort aufs Konto",
+                                        "Vollinvalidität: 500.000€",
+                                        "Krankenhaustagegeld: 10€",
+                                        "Schwerverletzung: 2.500€",
+                                        "Happy Holiday",
+                                        "Zahnersatz: 5.000€",
+                                        "Premium Leistungen der SIGNAL IDUNA"
+                                    ]
+                                }
+                            case '2-3x pro Woche':
+                                return {
+                                    title: 'Medium',
+                                    price: '15€',
+                                    features: [
+                                        "1.500€ sofort aufs Konto",
+                                        "Vollinvalidität: 750.000€",
+                                        "Krankenhaustagegeld: 30€",
+                                        "Schwerverletzung: 7.000€",
+                                        "Happy Holiday",
+                                        "Zahnersatz: 5.000€",
+                                        "Premium Leistungen der SIGNAL IDUNA"
+                                    ]
+                                }
+                            case '4-5x pro Woche':
+                            case 'Täglich':
+                                return {
+                                    title: 'Large',
+                                    price: '20€',
+                                    features: [
+                                        "2.000€ sofort aufs Konto",
+                                        "Vollinvalidität: 1.000.000€",
+                                        "Krankenhaustagegeld: 50€",
+                                        "Schwerverletzung: 12.000€",
+                                        "Happy Holiday",
+                                        "Zahnersatz: 5.000€",
+                                        "Premium Leistungen der SIGNAL IDUNA"
+                                    ]
+                                }
+                            default:
+                                return {
+                                    title: 'Small',
+                                    price: '10€',
+                                    features: [
+                                        "1.000€ sofort aus Konto",
+                                        "Vollinvalidität: 500.000€",
+                                        "Krankenhaustagegeld: 10€",
+                                        "Schwerverletzung: 2.500€",
+                                        "Happy Holiday",
+                                        "Zahnersatz: 5.000€",
+                                        "Premium Leistungen der SIGNAL IDUNA"
+                                    ]
+                                }
+                        }
+                    }
+
+                    const tariff = getTariff()
+
                     return (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
@@ -359,35 +459,30 @@ Empfohlener Tarif: 10€/Monat
                             <h2 className="text-3xl font-bold text-black mb-2 flex flex-row items-center justify-center gap-4">
                                 Eine Versicherung lohnt sich für dich!
                             </h2>
-                            <div className={"rounded-lg "}>
-                                <div className="bg-primary rounded-lg p-4 px-16 shadow-lg flex flex-row justify-center items-baseline">
-                                    <p className={"text-white text-2xl font-bold"}>Für 10€</p>
-                                    <p className={"text-gray-100 text-lg"}>/Monat</p>
+                            <motion.div
+                                className="flex flex-col mx-auto mt-4"
+                                initial={{ opacity: 0, y: 60 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                            >
+
+                                {/* Pricing Card */}
+                                <div className="flex-1">
+                                    <PricingCard
+                                        title={tariff.title}
+                                        price={tariff.price}
+                                        priceSubtext={"/Monat"}
+                                        features={tariff.features}
+                                        catchPhrase={selectedSport?.catch}
+                                        isPopular={false}
+                                        buttonText="Jetzt beraten lassen"
+                                        buttonHref="/kontakt"
+                                        buttonVariant={"v3"}
+                                        showButton={false}
+                                    />
                                 </div>
-                                <div>
-                                    <div className={"flex flex-col items-start justify-center"}>
-                                        <div className={"pt-4 pb-1 px-0 flex flex-row items-center justify-start gap-2"}>
-                                            <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                                                <Check className="w-4 h-4 text-green-600" />
-                                            </div>
-                                            <div className={"flex flex-col justify-center items-start"}>
-                                                <p className={"font-semibold text-black/80"}>1000€ sofort aufs Konto</p>
-                                            </div>
-                                        </div>
-                                        <p className={"pl-8 text-start text-gray-700 font-medium text-sm"}>{selectedSport?.catch}</p>
-                                    </div>
-                                    {features.map(( feature, index) => (
-                                        (
-                                            <div key={index} className={"py-4 px-0 flex flex-row items-center justify-start gap-2"}>
-                                                <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                                                    <Check className="w-4 h-4 text-green-600" />
-                                                </div>
-                                                <p className={"font-semibold text-black/80"}>{feature}</p>
-                                            </div>
-                                        )
-                                    ))}
-                                </div>
-                            </div>
+                            </motion.div>
 
                         </div>
 
@@ -462,9 +557,9 @@ Empfohlener Tarif: 10€/Monat
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="w-full bg-[#1a3691] hover:bg-[#152a75] hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-2"
+                                        className="w-full bg-secondary hover:bg-secondary/90 hover:cursor-pointer disabled:bg-secondary/80 disabled:cursor-not-allowed text-white font-bold py-5 px-8 rounded-lg text-xl transition-all duration-300 shadow-lg hover:shadow-xl mt-2"
                                     >
-                                        {isSubmitting ? 'Wird gesendet...' : 'Angebot reinholen'}
+                                        {isSubmitting ? 'Wird gesendet...' : 'Jetzt Beratungstermin vereinbaren'}
                                     </button>
                                 </div>
                             </form>
@@ -482,7 +577,7 @@ Empfohlener Tarif: 10€/Monat
                             </div>
                             <Link
                                 href="/#stories"
-                                className="inline-block bg-white hover:bg-gray-50 text-[#1a3691] font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 shadow-md hover:shadow-lg border-2 border-[#1a3691]"
+                                className="inline-block bg-white hover:bg-gray-50 text-primary font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 shadow-md hover:shadow-lg border-2 border-primary"
                             >
                                 Überzeug dich selbst →
                             </Link>
