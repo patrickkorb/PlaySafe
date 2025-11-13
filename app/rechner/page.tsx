@@ -6,6 +6,7 @@ import Link from "next/link";
 import {Check} from "lucide-react";
 import PricingCard from "@/app/components/PricingCard";
 import Button from "@/app/components/ui/Button";
+import { trackLead } from "@/app/components/MetaPixel";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -136,6 +137,10 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
             if (!response.ok) {
                 throw new Error('Fehler beim Senden')
             }
+
+            // Track Lead Event in Meta Pixel
+            const leadValue = parseInt(tariffPrice) || 10
+            trackLead(leadValue)
 
             setSubmitStatus('success')
             // Formular zurücksetzen nach 2 Sekunden
