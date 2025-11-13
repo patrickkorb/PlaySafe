@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Send, User, Mail, Phone, MessageSquare } from "lucide-react";
 import Image from "next/image";
-import { trackContact } from "@/app/components/MetaPixel";
+import { trackLead } from "@/app/components/MetaPixel";
 
 interface FormData {
     vorname: string;
@@ -100,7 +100,7 @@ export default function KontaktForm() {
 
             if (response.ok) {
                 // Track Contact Event in Meta Pixel
-                trackContact();
+                trackLead();
 
                 setSubmitStatus('success');
                 setFormData({
