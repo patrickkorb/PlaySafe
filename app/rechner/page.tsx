@@ -23,12 +23,12 @@ export default function Rechner() {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
     const sports = [
-        { name: 'Fußball', icon: '⚽', catch: "schon bei Kreuzbandrissen, Bänderverletzungen und sonstigen Sportverletzungen" },
-        { name: 'Tennis', icon: '🎾', catch: "schon bei Sehnenrissen, Bänderverletzungen und sonstigen Sportverletzungen"},
+        { name: 'Fußball', icon: '⚽', catch: "schon bei Kreuzbandrissen, Bänderrissen und weiteren Fußballverletzungen" },
+        { name: 'Tennis', icon: '🎾', catch: "schon bei Sehnenrissen, Bänderrissen und sonstigen Tennisverletzungen"},
         { name: 'Ski', icon: '⛷️', catch: "schon bei Kreuzbandrissen, Knochenbrüchen und sonstigen Skiunfällen"},
         { name: 'Fitness', icon: '💪', catch: "schon bei Muskelrissen, Kapselrissen und sonstigen Trainingsverletzungen" },
         { name: 'Radfahren', icon: '🚴', catch: "schon bei Sehnenrissen, Schlüsselbeinbrüchen und sonstigen Radunfällen" },
-        { name: 'Sonstiges', icon: '🏃', catch: "schon bei kleinen Verletzungen jeder Art" },
+        { name: 'Sonstiges', icon: '🏃', catch: "schon bei Rissen oder Brüchen jeder Art" },
     ]
 
     const frequencies = [
@@ -492,7 +492,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         </div>
 
                         {/* Formular */}
-                        <div className="bg-white rounded-2xl shadow-xl py-6 px-4 max-w-5xl mx-auto">
+                        <div className="bg-white rounded-2xl shadow-xl py-6 px-2 lg:px-4 max-w-5xl mx-auto">
                             <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
                                 Auf welcher Nummer erreichen wir dich?
                             </h3>
