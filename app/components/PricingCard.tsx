@@ -72,20 +72,20 @@ export default function PricingCard({
                                         {feature}
                                     </span>
                                     {index === 0 && feature.includes("sofort aufs Konto") && (
-                                        <div className="group relative inline-flex">
+                                        <div className="relative inline-flex">
                                             <Info
                                                 className="w-4 h-4 text-gray-800 cursor-pointer mb-3 active:scale-95 transition-transform"
                                                 onClick={() => setShowTooltip(!showTooltip)}
                                                 onMouseEnter={() => setShowTooltip(true)}
                                                 onMouseLeave={() => setShowTooltip(false)}
                                             />
-                                            <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-64 bg-gray-900 text-white text-xs rounded-lg p-3 transition-all duration-200 z-50 shadow-xl ${
+                                            <div className={`fixed left-4 right-4 sm:absolute sm:left-auto sm:right-auto sm:bottom-full sm:left-1/2 sm:-translate-x-1/2 bottom-auto top-1/2 -translate-y-1/2 sm:translate-y-0 sm:mb-2 max-w-xs bg-gray-900 text-white text-xs rounded-lg p-3 transition-all duration-200 z-50 shadow-xl ${
                                                 showTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'
                                             }`}>
                                                 <div className="text-left leading-relaxed">
                                                     Bei einer vollständigen Zusammenhangstrennung bei Brüchen oder vollständigen Zerreißung von Muskel, Sehne, Band oder Kapsel.
                                                 </div>
-                                                <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                                                <div className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
                                             </div>
                                         </div>
                                     )}
