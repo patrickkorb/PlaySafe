@@ -99,8 +99,20 @@ export default function KontaktForm() {
             });
 
             if (response.ok) {
-                // Track Contact Event in Meta Pixel
-                trackLead();
+                // Track Lead Event mit User-Daten (Pixel + Conversion API)
+                // Bestimme leadValue: Wenn Tarif aus URL bekannt, nutze diesen, sonst Standard 15€
+                let leadValue = 15; // Standard-Wert für Kontaktformular-Leads
+                if (selectedPreis) {
+                    // Extrahiere Zahl aus "15€" oder "15"
+                    leadValue = parseInt(selectedPreis.replace(/[^\d]/g, '')) || 15;
+                }
+
+                await trackLead({
+                    email: formData.email,
+                    phone: formData.telefon,
+                    firstName: formData.vorname,
+                    lastName: formData.nachname,
+                }, leadValue);
 
                 setSubmitStatus('success');
                 setFormData({

@@ -138,9 +138,17 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                 throw new Error('Fehler beim Senden')
             }
 
-            // Track Lead Event in Meta Pixel
+            // Track Lead Event mit User-Daten (Pixel + Conversion API)
             const leadValue = parseInt(tariffPrice) || 10
-            trackLead(leadValue)
+            await trackLead(
+                {
+                    email: email,
+                    phone: phone,
+                    firstName: name.split(' ')[0],  // Erster Teil = Vorname
+                    lastName: name.split(' ').slice(1).join(' '),  // Rest = Nachname
+                },
+                leadValue
+            )
 
             setSubmitStatus('success')
             // Formular zurücksetzen nach 2 Sekunden
