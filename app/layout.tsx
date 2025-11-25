@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "@/app/sections/Navigation";
 import Footer from "@/app/sections/Footer";
 import MetaPixel from "@/app/components/MetaPixel";
+import {Analytics} from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -127,6 +128,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
       <MetaPixel />
+      <Analytics/>
       <Navigation />
         {children}
       <Footer />
