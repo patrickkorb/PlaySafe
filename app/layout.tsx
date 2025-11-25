@@ -115,6 +115,13 @@ export default function RootLayout({
             src="https://lead-fuchs.vercel.app/js/script.js">
         </script>
 
+      <script
+          defer
+          data-website-id="dfid_IahKlyGpftWvMLSGydg53"
+          data-domain="playsafe.fit"
+          src="https://datafa.st/js/script.js">
+      </script>
+
     </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
