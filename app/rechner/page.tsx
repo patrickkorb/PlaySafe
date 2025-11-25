@@ -7,6 +7,7 @@ import {Check} from "lucide-react";
 import PricingCard from "@/app/components/PricingCard";
 import Button from "@/app/components/ui/Button";
 import { trackLead } from "@/app/components/MetaPixel";
+import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete } from "@/app/components/Datafast";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -62,6 +63,9 @@ export default function Rechner() {
             return
         }
 
+        // Track Datafast goal: enter_birth_date
+        trackEnterBirthDate(birthDate)
+
         window.scrollTo({ top: 0, behavior: 'smooth' })
         setStep(2)
     }
@@ -69,12 +73,20 @@ export default function Rechner() {
     const handleSportSelect = (sportName: string) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         setSport(sportName)
+
+        // Track Datafast goal: select_sport
+        trackSportSelected(sportName)
+
         setStep(3)
     }
 
     const handleFrequencySelect = (freq: string) => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
         setFrequency(freq)
+
+        // Track Datafast goal: select_frequency
+        trackFrequencySelected(freq)
+
         setIsCalculating(true)
 
         // Fake loading animation - 2 Sekunden
@@ -149,6 +161,9 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                 },
                 leadValue
             )
+
+            // Track Datafast goal: calculator_complete
+            trackCalculatorComplete(sport, frequency, tariffName)
 
             setSubmitStatus('success')
             // Formular zurücksetzen nach 2 Sekunden
