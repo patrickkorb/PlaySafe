@@ -40,7 +40,22 @@ export default function Rechner() {
         'Unregelmäßig'
     ]
 
+    // Formatiert Eingabe zu DD.MM.JJJJ
+    const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, '') // Nur Zahlen
 
+        if (value.length >= 2) {
+            value = value.slice(0, 2) + '.' + value.slice(2)
+        }
+        if (value.length >= 5) {
+            value = value.slice(0, 5) + '.' + value.slice(5)
+        }
+        if (value.length > 10) {
+            value = value.slice(0, 10)
+        }
+
+        setBirthDate(value)
+    }
 
 
 
@@ -53,13 +68,48 @@ export default function Rechner() {
             return
         }
 
+        // Validiere Format DD.MM.JJJJ
+        if (birthDate.length !== 10) {
+            setBirthDateError('Bitte gib ein vollständiges Datum ein (TT.MM.JJJJ)')
+            return
+        }
+
+        // Parse DD.MM.JJJJ
+        const parts = birthDate.split('.')
+        if (parts.length !== 3) {
+            setBirthDateError('Ungültiges Datumsformat')
+            return
+        }
+
+        const day = parseInt(parts[0])
+        const month = parseInt(parts[1])
+        const year = parseInt(parts[2])
+
+        // Validiere Werte
+        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > new Date().getFullYear()) {
+            setBirthDateError('Ungültiges Datum')
+            return
+        }
+
         // Erstelle Datum-Objekte zum Vergleichen
-        const selectedDate = new Date(birthDate)
+        const selectedDate = new Date(year, month - 1, day)
         const cutoffDate = new Date(1958, 0, 1) // 1. Januar 1958
+
+        // Prüfe ob Datum gültig ist (z.B. 31.02 wird zu einem anderen Datum)
+        if (selectedDate.getDate() !== day || selectedDate.getMonth() !== month - 1 || selectedDate.getFullYear() !== year) {
+            setBirthDateError('Ungültiges Datum')
+            return
+        }
 
         // Prüfe ob Person vor 1.1.1958 geboren wurde
         if (selectedDate < cutoffDate) {
             setBirthDateError('Leider können wir für Personen, die vor dem 1.1.1958 geboren wurden, kein Angebot erstellen.')
+            return
+        }
+
+        // Prüfe ob Datum in der Zukunft liegt
+        if (selectedDate > new Date()) {
+            setBirthDateError('Das Datum darf nicht in der Zukunft liegen')
             return
         }
 
@@ -102,8 +152,8 @@ export default function Rechner() {
         setSubmitStatus('idle')
 
         try {
-            // Formatiere Datum von YYYY-MM-DD zu DD.MM.YYYY
-            const formattedDate = birthDate.split('-').reverse().join('.')
+            // Datum ist bereits in DD.MM.YYYY Format
+            const formattedDate = birthDate
 
             // Bestimme Tarif basierend auf Häufigkeit
             let tariffName = 'Small'
@@ -192,11 +242,8 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         className="text-center mb-12 pt-8"
                     >
                         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                            Finde deinen perfekten Tarif
+                            In 3 Schritten zu deinem Tarif
                         </h1>
-                        <p className="text-xl text-gray-600">
-                            In nur 3 Schritten zu deiner Sportversicherung
-                        </p>
                     </motion.div>
                 )}
 
@@ -259,21 +306,19 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-12 text-center border-t-4 border-[#1a3691]"
+                        className="bg-white rounded-2xl shadow-xl p-8 text-center border-2 border-gray-100"
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-6">
                             Wann bist du geboren?
                         </h2>
-                        <p className="text-gray-600 mb-8">
-                            Gib dein Geburtsdatum ein
-                        </p>
                         <div className={"flex flex-col items-center gap-4"}>
                             <input
-                                type="date"
+                                type="text"
                                 value={birthDate}
-                                onChange={(e) => setBirthDate(e.target.value)}
+                                onChange={handleBirthDateChange}
                                 className="w-full max-w-md mx-auto px-6 py-4 text-xl text-center border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none transition-colors"
-                                max={new Date().toISOString().split('T')[0]}
+                                placeholder="TT.MM.JJJJ"
+                                inputMode="numeric"
                             />
 
                             {birthDateError && (
@@ -299,14 +344,11 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-12 border-t-4 border-[#1a3691]"
+                        className="bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-100"
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                             Welchen Sport übst du aus?
                         </h2>
-                        <p className="text-gray-600 mb-8 text-center">
-                            Wähle deine Sportart
-                        </p>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                             {sports.map((s) => (
                                 <button
@@ -328,14 +370,11 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-12 border-t-4 border-[#1a3691]"
+                        className="bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-100"
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                             Wie oft übst du {sport} aus?
                         </h2>
-                        <p className="text-gray-600 mb-8 text-center">
-                            Wähle deine Häufigkeit
-                        </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                             {frequencies.map((freq) => (
                                 <button
@@ -356,13 +395,13 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
-                        className="flex items-center justify-center min-h-[70vh]"
+                        className="flex items-center justify-center min-h-[70vh] pt-12"
                     >
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white rounded-2xl shadow-2xl p-16 text-center border-t-4 border-[#1a3691] max-w-2xl w-full"
+                            className="bg-white rounded-2xl shadow-2xl p-12 text-center border-2 border-gray-100 max-w-2xl w-full"
                         >
                             <div className="flex flex-col items-center gap-8">
                                 <motion.div

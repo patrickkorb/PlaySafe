@@ -31,12 +31,12 @@ export default function PricingCard({
 
     return (
         <div className={`relative bg-white rounded-2xl shadow-xl ring-3 ${buttonVariant === "v3"? "ring-green-200": "ring-gray-200"} p-8 transition-all duration-300 hover:shadow-2xl ${
-            isPopular ? 'ring-2 ring-primary scale-105' : ''
+            isPopular ? 'ring-2 ring-primary scale-105 mt-4' : ''
         }`}>
             {/* Popular badge */}
             {isPopular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
+                    <span className="bg-primary text-white px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg whitespace-nowrap">
                         Beliebteste Wahl
                     </span>
                 </div>
