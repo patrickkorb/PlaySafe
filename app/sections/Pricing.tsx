@@ -75,10 +75,6 @@ export default function Pricing() {
                     <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 md:mb-8 leading-tight">
                         Schließe dich heute über <span className="text-primary">5000 zufriedenen</span> Kunden an.
                     </h2>
-                    <p className="text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                        Die verschiedenen Tarife bieten dir genau den Schutz, den du brauchst -
-                        von kompakt bis zur Vollausstattung.
-                    </p>
                 </motion.div>
 
                 {/* Pricing Cards */}

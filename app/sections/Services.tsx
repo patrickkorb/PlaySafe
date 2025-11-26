@@ -21,7 +21,6 @@ export default function Services() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
                     <h1 className={"text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 md:mb-8"}>Unsere Leistungen für dich</h1>
-                    <p className={"text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto"}>Unkomplizierte und schnelle Hilfe bei Freizeitverletzungen - Dein umfassender Schutz im Überblick</p>
                 </motion.div>
 
                 {/* Services Grid */}
