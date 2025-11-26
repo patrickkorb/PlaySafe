@@ -59,18 +59,25 @@ export default function Rechner() {
     // Toast-Benachrichtigungen nur für Schritt 1
     useEffect(() => {
         if (step === 1) {
-            toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
-                duration: 3000,
-            })
-            // Zeige weitere Toasts alle 3 Sekunden
-            const interval = setInterval(() => {
+            let interval: NodeJS.Timeout | null = null
+
+            // Zeige ersten Toast nach 1,5 Sekunden
+            const firstTimeout = setTimeout(() => {
                 toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
-                    duration: 3000,
+                    duration: 2500,
                 })
-            }, 3000)
+
+                // Starte Interval für weitere Toasts alle 3 Sekunden
+                interval = setInterval(() => {
+                    toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
+                        duration: 3000,
+                    })
+                }, 3000)
+            }, 1500)
 
             return () => {
-                clearInterval(interval)
+                clearTimeout(firstTimeout)
+                if (interval) clearInterval(interval)
             }
         }
     }, [step])
@@ -150,6 +157,9 @@ export default function Rechner() {
 
         // Track Datafast goal: enter_birth_date
         trackEnterBirthDate(birthDate)
+
+        // Entferne alle aktiven Toasts sofort
+        toast.dismiss()
 
         window.scrollTo({ top: 0, behavior: 'smooth' })
         setStep(2)
