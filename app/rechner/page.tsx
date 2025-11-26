@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link";
 import {Check} from "lucide-react";
@@ -8,6 +8,7 @@ import PricingCard from "@/app/components/PricingCard";
 import Button from "@/app/components/ui/Button";
 import { trackLead } from "@/app/components/MetaPixel";
 import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete } from "@/app/components/Datafast";
+import { Toaster, toast } from 'sonner';
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -39,6 +40,40 @@ export default function Rechner() {
         'Täglich',
         'Unregelmäßig'
     ]
+
+    // Zufällige Namen für Toast-Benachrichtigungen
+    const firstNames = ['Markus', 'Thomas', 'Stefan', 'Michael', 'Andreas', 'Christian', 'Daniel', 'Sebastian', 'Alexander', 'Tobias', 'Julia', 'Anna', 'Laura', 'Sarah', 'Lisa', 'Maria', 'Katharina', 'Nina', 'Sophie', 'Jana']
+    const lastInitials = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'K.', 'L.', 'M.', 'N.', 'P.', 'R.', 'S.', 'T.', 'W.', 'Z.']
+    const times = ["vor 2 Minuten","vor 4 Minuten", "vor 5 Minuten", "vor 8 Minuten", "vor 10 Minuten", "vor 15 Minuten", "gerade eben", "gerade eben", "gerade eben"]
+
+    const getRandomName = () => {
+        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
+        const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)]
+        return `${firstName} ${lastInitial}`
+    }
+
+    const getRandomMinutes = () => {
+        return times[Math.floor(Math.random() * times.length)]
+    }
+
+    // Toast-Benachrichtigungen nur für Schritt 1
+    useEffect(() => {
+        if (step === 1) {
+            toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
+                duration: 3000,
+            })
+            // Zeige weitere Toasts alle 3 Sekunden
+            const interval = setInterval(() => {
+                toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
+                    duration: 3000,
+                })
+            }, 3000)
+
+            return () => {
+                clearInterval(interval)
+            }
+        }
+    }, [step])
 
     // Formatiert Eingabe zu DD.MM.JJJJ
     const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -306,7 +341,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-8 text-center border-2 border-gray-100"
+                        className="bg-white rounded-2xl shadow-xl p-8 px-4 text-center border-2 border-gray-100"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-6">
                             Wann bist du geboren?
@@ -344,7 +379,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-100"
+                        className="bg-white rounded-2xl shadow-xl p-8 px-4 border-2 border-gray-100"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                             Welchen Sport übst du aus?
@@ -370,7 +405,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-100"
+                        className="bg-white rounded-2xl shadow-xl p-8 px-4 border-2 border-gray-100"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                             Wie oft übst du {sport} aus?
@@ -401,7 +436,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5 }}
-                            className="bg-white rounded-2xl shadow-2xl p-12 text-center border-2 border-gray-100 max-w-2xl w-full"
+                            className="bg-white rounded-2xl shadow-2xl p-12 px-4 text-center border-2 border-gray-100 max-w-2xl w-full"
                         >
                             <div className="flex flex-col items-center gap-8">
                                 <motion.div
@@ -653,6 +688,9 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                     )
                 })()}
             </div>
+
+            {/* Toast Benachrichtigungen */}
+            <Toaster position="bottom-center" />
         </div>
     )
 }
