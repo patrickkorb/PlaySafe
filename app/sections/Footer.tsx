@@ -1,8 +1,17 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import { MapPinned, Phone, Mail } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+    const pathname = usePathname();
+
+    // Footer auf der Rechner-Seite nicht anzeigen
+    if (pathname === '/rechner') {
+        return null;
+    }
     const companyLinks = [
         { title: "Home", href: "/" },
         { title: "Über uns", href: "/" },
@@ -17,6 +26,7 @@ export default function Footer() {
         { title: "Impressum", href: "/impressum" },
         { title: "Datenschutz", href: "/datenschutz" },
     ];
+
 
     return (
         <footer className="bg-black text-white pb-8 pt-16 md:pt-20 lg:pt-24">
