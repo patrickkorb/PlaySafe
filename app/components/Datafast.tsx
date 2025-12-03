@@ -51,3 +51,22 @@ export const trackCalculatorComplete = async (
     tariff: tariff || '',
   });
 };
+
+// Fußball-specific tracking functions
+export const trackGenderSelected = async (gender?: string) => {
+  return await trackDatafastGoal('select_gender', {
+    gender: gender || '',
+  });
+};
+
+export const trackInsuranceStatusSelected = async (hasInsurance?: string) => {
+  return await trackDatafastGoal('select_insurance_status', {
+    has_insurance: hasInsurance || '',
+  });
+};
+
+export const trackInjuryStatusSelected = async (hasInjury?: string) => {
+  return await trackDatafastGoal('select_injury_status', {
+    has_injury: hasInjury || '',
+  });
+};

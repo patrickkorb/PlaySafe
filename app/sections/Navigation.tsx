@@ -34,17 +34,6 @@ export default function Navigation() {
                     <div className="flex items-center gap-2 md:gap-4">
                         <Image src="/images/logo.png" alt="Logo" width={40} height={40} className="md:w-[50px] md:h-[50px]" />
                         <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2"}/>
-                        <div className="flex items-center gap-2">
-                            <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
-                                <Instagram color={"black"}/>
-                            </Link>
-                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
-                                <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={22} height={22} />
-                            </Link>
-                            <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" className="text-xs md:text-sm text-gray-600 hover:text-primary transition-colors">
-                                <MapPin color={"black"}/>
-                            </Link>
-                        </div>
                     </div>
 
                     {/* Menu Button */}
@@ -64,17 +53,6 @@ export default function Navigation() {
                         <div className="flex flex-row items-center gap-1">
                             <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
                             <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2 mt-0"}/>
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <Link href="https://instagram.com/playsafe.fit" target={"_blank"} className="text-sm text-gray-600 hover:text-primary transition-colors">
-                                <Instagram size={18} color={"black"}/>
-                            </Link>
-                            <Link href="https://wa.me/491629436375?text=Hallo%20Mike%2C%20ich%20habe%20Interesse%20an%20PlaySafe.%20Lass%20uns%20bitte%20einen%20Termin%20vereinbaren.%20Viele%20Gr%C3%BC%C3%9Fe" className="text-sm text-gray-600 hover:text-primary transition-colors">
-                                <Image src={"/images/whatsapp.svg"} alt={"whatsapp logo"} width={18} height={18} />
-                            </Link>
-                            <Link href="https://maps.app.goo.gl/Ge64CUzvMQ8vQXvh7" target="_blank" className="text-sm text-gray-600 hover:text-primary transition-colors">
-                                <MapPin size={18} color={"black"}/>
-                            </Link>
                         </div>
                     </div>
                     

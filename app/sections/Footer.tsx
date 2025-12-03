@@ -9,7 +9,7 @@ export default function Footer() {
     const pathname = usePathname();
 
     // Footer auf der Rechner-Seite nicht anzeigen
-    if (pathname === '/rechner') {
+    if (pathname === '/rechner' || pathname === '/fusball') {
         return null;
     }
     const companyLinks = [
