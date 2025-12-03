@@ -7,9 +7,10 @@ interface ChoiceCardProps {
     icon?: LucideIcon
     emoji?: string
     onClick: () => void
+    priority?: boolean
 }
 
-export default function ChoiceCard({ title, image, icon: Icon, emoji, onClick }: ChoiceCardProps) {
+export default function ChoiceCard({ title, image, icon: Icon, emoji, onClick, priority = false }: ChoiceCardProps) {
     // Layout mit Bild: 3/5 Bild oben, 2/5 Text unten
     if (image) {
         return (
@@ -24,6 +25,10 @@ export default function ChoiceCard({ title, image, icon: Icon, emoji, onClick }:
                         alt={title}
                         fill
                         className="object-cover rounded-t-lg"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        quality={75}
+                        priority={priority}
+                        loading={priority ? 'eager' : 'lazy'}
                     />
                 </div>
 

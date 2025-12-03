@@ -28,20 +28,20 @@ export default function FussballRechner() {
     ]
 
     const frequencyOptions = [
-        { name: '1x pro Woche', emoji: '📅', image: '/images/fusball/cat.jpg' },
-        { name: '2-3x pro Woche', emoji: '💪', image: '/images/fusball/soccer1.jpg' },
-        { name: '4-5x pro Woche', emoji: '🔥', image: '/images/fusball/soccer2.jpg' },
-        { name: 'Täglich', emoji: '⭐', image: '/images/fusball/soccer3.jpg' }
+        { name: '1x pro Woche', emoji: '📅', image: '/images/fusball/cat.webp' },
+        { name: '2-3x pro Woche', emoji: '💪', image: '/images/fusball/soccer1.webp' },
+        { name: '4-5x pro Woche', emoji: '🔥', image: '/images/fusball/soccer2.webp' },
+        { name: 'Täglich', emoji: '⭐', image: '/images/fusball/soccer3.webp' }
     ]
 
     const insuranceOptions = [
-        { name: 'Ja', emoji: '✅', image: '/images/fusball/thumbsup.jpg' },
-        { name: 'Nein', emoji: '❌', image: '/images/fusball/injury.jpg' }
+        { name: 'Ja', emoji: '✅', image: '/images/fusball/thumbsup.webp' },
+        { name: 'Nein', emoji: '❌', image: '/images/fusball/injury.webp' }
     ]
 
     const injuryOptions = [
-        { name: 'Ja', emoji: '🤕', image: '/images/fusball/injury.jpg' },
-        { name: 'Nein', emoji: '✅', image: '/images/fusball/soccer2.jpg' }
+        { name: 'Ja', emoji: '🤕', image: '/images/fusball/injury.webp' },
+        { name: 'Nein', emoji: '✅', image: '/images/fusball/soccer2.webp' }
     ]
 
 
@@ -220,6 +220,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                     title={option.name}
                                     image={option.image}
                                     onClick={() => handleFrequencySelect(option.name)}
+                                    priority={true}
                                 />
                             ))}
                         </div>
