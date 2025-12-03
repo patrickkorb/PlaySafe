@@ -277,7 +277,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
     }
 
     return (
-        <div className="max-h-screen bg-gradient-to-br from-blue-50 to-white pb-12 px-4">
+        <div className="max-h-screen pb-12 px-4">
             <div className="max-w-5xl mx-auto">
                 {step === 1 && (
                     <motion.div
