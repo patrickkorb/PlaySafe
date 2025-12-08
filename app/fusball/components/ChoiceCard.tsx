@@ -28,7 +28,7 @@ export default function ChoiceCard({ title, image, icon: Icon, emoji, onClick, p
                         sizes="(max-width: 768px) 50vw, 25vw"
                         quality={75}
                         priority={priority}
-                        loading={priority ? 'eager' : 'lazy'}
+                        loading={"eager"}
                     />
                 </div>
 

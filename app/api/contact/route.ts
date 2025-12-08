@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // 1. E-Mail an dich
     await transporter.sendMail({
       from: `"PlaySafe Anfrage" <${process.env.EMAIL_USER}>`,
-      to: 'mike.allmendinger@signal-iduna.net',
+      to: 'mike.allmendinger@signal-iduna.net, korbpatrick@web.de',
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

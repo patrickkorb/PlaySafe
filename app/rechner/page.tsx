@@ -3,20 +3,21 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link";
-import {Check} from "lucide-react";
+import { Check, Mars, Venus } from "lucide-react";
 import PricingCard from "@/app/components/PricingCard";
 import Button from "@/app/components/ui/Button";
 import { trackLead } from "@/app/components/MetaPixel";
 import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete } from "@/app/components/Datafast";
 import { Toaster, toast } from 'sonner';
+import ChoiceCard from "@/app/fusball/components/ChoiceCard";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
-    const [birthDate, setBirthDate] = useState('')
-    const [birthDateError, setBirthDateError] = useState('')
+    const [gender, setGender] = useState('')
     const [sport, setSport] = useState('')
     const [frequency, setFrequency] = useState('')
-    const [isCalculating, setIsCalculating] = useState(false)
+    const [birthDate, setBirthDate] = useState('')
+    const [birthDateError, setBirthDateError] = useState('')
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -24,13 +25,18 @@ export default function Rechner() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
+    const genderOptions = [
+        { name: 'Männlich', icon: Mars },
+        { name: 'Weiblich', icon: Venus },
+    ]
+
     const sports = [
-        { name: 'Fußball', icon: '⚽', catch: "schon bei Kreuzbandrissen, Bänderrissen und weiteren Fußballverletzungen" },
-        { name: 'Tennis', icon: '🎾', catch: "schon bei Sehnenrissen, Bänderrissen und sonstigen Tennisverletzungen"},
-        { name: 'Ski', icon: '⛷️', catch: "schon bei Kreuzbandrissen, Knochenbrüchen und sonstigen Skiunfällen"},
-        { name: 'Fitness', icon: '💪', catch: "schon bei Muskelrissen, Kapselrissen und sonstigen Trainingsverletzungen" },
-        { name: 'Radfahren', icon: '🚴', catch: "schon bei Sehnenrissen, Schlüsselbeinbrüchen und sonstigen Radunfällen" },
-        { name: 'Sonstiges', icon: '🏃', catch: "schon bei Rissen oder Brüchen jeder Art" },
+        { name: 'Fußball', icon: '⚽', image: '/images/rechner/soccer.jpg', catch: "schon bei Kreuzbandrissen, Bänderrissen und weiteren Fußballverletzungen" },
+        { name: 'Tennis', icon: '🎾', image: '/images/rechner/tennis.jpg', catch: "schon bei Sehnenrissen, Bänderrissen und sonstigen Tennisverletzungen"},
+        { name: 'Ski', icon: '⛷️', image: '/images/rechner/ski.jpg', catch: "schon bei Kreuzbandrissen, Knochenbrüchen und sonstigen Skiunfällen"},
+        { name: 'Fitness', icon: '💪', image: '/images/rechner/gym.jpg', catch: "schon bei Muskelrissen, Kapselrissen und sonstigen Trainingsverletzungen" },
+        { name: 'Radfahren', icon: '🚴', image: '/images/rechner/rad.jpg', catch: "schon bei Sehnenrissen, Schlüsselbeinbrüchen und sonstigen Radunfällen" },
+        { name: 'Sonstiges', icon: '🏃', image: '/images/rechner/running.jpg', catch: "schon bei Rissen oder Brüchen jeder Art" },
     ]
 
     const frequencies = [
@@ -41,46 +47,6 @@ export default function Rechner() {
         'Unregelmäßig'
     ]
 
-    // Zufällige Namen für Toast-Benachrichtigungen
-    const firstNames = ['Markus', 'Thomas', 'Stefan', 'Michael', 'Andreas', 'Christian', 'Daniel', 'Sebastian', 'Alexander', 'Tobias', 'Julia', 'Anna', 'Laura', 'Sarah', 'Lisa', 'Maria', 'Katharina', 'Nina', 'Sophie', 'Jana']
-    const lastInitials = ['A.', 'B.', 'C.', 'D.', 'E.', 'F.', 'G.', 'H.', 'K.', 'L.', 'M.', 'N.', 'P.', 'R.', 'S.', 'T.', 'W.', 'Z.']
-    const times = ["vor 2 Minuten","vor 4 Minuten", "vor 5 Minuten", "vor 8 Minuten", "vor 10 Minuten", "vor 15 Minuten", "gerade eben", "gerade eben", "gerade eben"]
-
-    const getRandomName = () => {
-        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
-        const lastInitial = lastInitials[Math.floor(Math.random() * lastInitials.length)]
-        return `${firstName} ${lastInitial}`
-    }
-
-    const getRandomMinutes = () => {
-        return times[Math.floor(Math.random() * times.length)]
-    }
-
-    // Toast-Benachrichtigungen nur für Schritt 1
-    useEffect(() => {
-        if (step === 1) {
-            let interval: NodeJS.Timeout | null = null
-
-            // Zeige ersten Toast nach 1,5 Sekunden
-            const firstTimeout = setTimeout(() => {
-                toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
-                    duration: 2500,
-                })
-
-                // Starte Interval für weitere Toasts alle 3 Sekunden
-                interval = setInterval(() => {
-                    toast.success(`${getRandomName()} hat ${getRandomMinutes()} ein Angebot erhalten`, {
-                        duration: 3000,
-                    })
-                }, 3000)
-            }, 1500)
-
-            return () => {
-                clearTimeout(firstTimeout)
-                if (interval) clearInterval(interval)
-            }
-        }
-    }, [step])
 
     // Formatiert Eingabe zu DD.MM.JJJJ
     const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +66,32 @@ export default function Rechner() {
     }
 
 
+
+    const handleGenderSelect = (selectedGender: string) => {
+        setGender(selectedGender)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setStep(2)
+    }
+
+    const handleSportSelect = (sportName: string) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setSport(sportName)
+
+        // Track Datafast goal: select_sport
+        trackSportSelected(sportName)
+
+        setStep(3)
+    }
+
+    const handleFrequencySelect = (freq: string) => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setFrequency(freq)
+
+        // Track Datafast goal: select_frequency
+        trackFrequencySelected(freq)
+
+        setStep(4)
+    }
 
     const handleBirthDateSubmit = () => {
         setBirthDateError('')
@@ -158,37 +150,8 @@ export default function Rechner() {
         // Track Datafast goal: enter_birth_date
         trackEnterBirthDate(birthDate)
 
-        // Entferne alle aktiven Toasts sofort
-        toast.dismiss()
-
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        setStep(2)
-    }
-
-    const handleSportSelect = (sportName: string) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        setSport(sportName)
-
-        // Track Datafast goal: select_sport
-        trackSportSelected(sportName)
-
-        setStep(3)
-    }
-
-    const handleFrequencySelect = (freq: string) => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        setFrequency(freq)
-
-        // Track Datafast goal: select_frequency
-        trackFrequencySelected(freq)
-
-        setIsCalculating(true)
-
-        // Fake loading animation - 2 Sekunden
-        setTimeout(() => {
-            setIsCalculating(false)
-            setStep(4)
-        }, 2000)
+        setStep(5)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -261,12 +224,8 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
             trackCalculatorComplete(sport, frequency, tariffName)
 
             setSubmitStatus('success')
-            // Formular zurücksetzen nach 2 Sekunden
-            setTimeout(() => {
-                setName('')
-                setEmail('')
-                setPhone('')
-            }, 2000)
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+            setStep(6)
 
         } catch (error) {
             console.error('Error submitting form:', error)
@@ -286,75 +245,97 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         transition={{ duration: 0.5 }}
                         className="text-center mb-12 pt-8"
                     >
-                        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                            In 3 Schritten zu deinem Tarif
+                        <h1 className="text-2xl font-extrabold text-gray-900 mb-4">
+                            Finde Deine Perfekte Sportversicherung!
                         </h1>
+                        <h2 className={"font-medium"}>Erhalte deine persönliche Unfallversicherungsempfehlung, perfekt abgestimmt auf deinen aktiven Lebensstil - vollig kostenlos und unverbindlich.</h2>
                     </motion.div>
                 )}
 
-                {/* Fortschrittsanzeige */}
-                {step < 4 && !isCalculating && (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5 }}
-                        className={`flex justify-center mb-12 ${step >= 2 ? 'pt-8' : ''}`}
-                    >
-                        <div className="flex items-center gap-4">
-                            <motion.div
-                                animate={{
-                                    scale: step >= 1 ? [1, 1.1, 1] : 1,
-                                    backgroundColor: step >= 1 ? '#1a3691' : '#d1d5db'
-                                }}
-                                transition={{ duration: 0.3 }}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 1 ? 'text-white' : 'text-gray-600'}`}
-                            >
-                                1
-                            </motion.div>
-                            <motion.div
-                                animate={{ backgroundColor: step >= 2 ? '#1a3691' : '#d1d5db' }}
-                                transition={{ duration: 0.3 }}
-                                className="w-16 h-1 rounded"
-                            ></motion.div>
-                            <motion.div
-                                animate={{
-                                    scale: step >= 2 ? [1, 1.1, 1] : 1,
-                                    backgroundColor: step >= 2 ? '#1a3691' : '#d1d5db'
-                                }}
-                                transition={{ duration: 0.3 }}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 2 ? 'text-white' : 'text-gray-600'}`}
-                            >
-                                2
-                            </motion.div>
-                            <motion.div
-                                animate={{ backgroundColor: step >= 3 ? '#1a3691' : '#d1d5db' }}
-                                transition={{ duration: 0.3 }}
-                                className="w-16 h-1 rounded"
-                            ></motion.div>
-                            <motion.div
-                                animate={{
-                                    scale: step >= 3 ? [1, 1.1, 1] : 1,
-                                    backgroundColor: step >= 3 ? '#1a3691' : '#d1d5db'
-                                }}
-                                transition={{ duration: 0.3 }}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${step >= 3 ? 'text-white' : 'text-gray-600'}`}
-                            >
-                                3
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* Schritt 1: Geburtsdatum */}
+                {/* Schritt 1: Geschlecht */}
                 {step === 1 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="text-center"
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                            Wann bist du geboren?
+                        <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">
+                            Wer wird versichert?
+                        </h2>
+                        <div className="flex flex-row justify-center gap-4 max-w-2xl mx-auto">
+                            {genderOptions.map((option) => (
+                                <ChoiceCard
+                                    key={option.name}
+                                    title={option.name}
+                                    icon={option.icon}
+                                    onClick={() => handleGenderSelect(option.name)}
+                                />
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Schritt 2: Sportart */}
+                {step === 2 && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="pt-8"
+                    >
+                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                            Welchen Sport übst du aus?
+                        </h2>
+                        <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+                            {sports.map((s, index) => (
+                                <ChoiceCard
+                                    key={s.name}
+                                    title={s.name}
+                                    image={s.image}
+                                    onClick={() => handleSportSelect(s.name)}
+                                    priority={index < 3}
+                                />
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Schritt 3: Häufigkeit */}
+                {step === 3 && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="pt-8"
+                    >
+                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+                            Wie oft übst du {sport} aus?
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
+                            {frequencies.map((freq) => (
+                                <button
+                                    key={freq}
+                                    onClick={() => handleFrequencySelect(freq)}
+                                    className="bg-white border-2 border-gray-300 hover:cursor-pointer hover:border-[#1a3691] hover:shadow-lg hover:from-blue-100 hover:to-blue-50 rounded-xl p-6 transition-all duration-200 text-xl font-semibold text-gray-900 hover:text-[#1a3691]"
+                                >
+                                    {freq}
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Schritt 4: Geburtsdatum */}
+                {step === 4 && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-center pt-8"
+                    >
+                        <h1 className={"text-3xl font-bold mb-8"}>Fast geschafft! 🎉</h1>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                            Wann ist dein Geburtstag?
                         </h2>
                         <div className={"flex flex-col items-center gap-4"}>
                             <input
@@ -383,116 +364,86 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                     </motion.div>
                 )}
 
-                {/* Schritt 2: Sportart */}
-                {step === 2 && (
+                {/* Schritt 5: Formular */}
+                {step === 5 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
-                        className=""
+                        className="pt-8"
                     >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                            Welchen Sport übst du aus?
+                        <h2 className="text-xl font-medium text-gray-900 mb-2 text-center">
+                            Super, nur noch 1 Schritt bis zu Deiner persönlichen Sportversicherungsberatung 🙌
                         </h2>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            {sports.map((s) => (
-                                <button
-                                    key={s.name}
-                                    onClick={() => handleSportSelect(s.name)}
-                                    className="bg-white border-2 border-gray-300 hover:cursor-pointer hover:border-[#1a3691] hover:shadow-lg hover:from-blue-100 hover:to-blue-50 rounded-xl p-6 transition-all duration-200 flex flex-col items-center gap-3"
-                                >
-                                    <div className="text-6xl">{s.icon}</div>
-                                    <div className="text-base md:text-lg font-semibold text-gray-900 whitespace-nowrap">{s.name}</div>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
+                        <h3 className="text-xl font-bold text-center mb-8 mt-4">
+                            Um dir passende Versicherungs-Lösungen zu zeigen, lass uns wissen, wie wir dir deine Empfehlung zusenden können:
+                        </h3>
 
-                {/* Schritt 3: Häufigkeit */}
-                {step === 3 && !isCalculating && (
-                    <motion.div
-                        initial={{ opacity: 0, x: 100 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className=""
-                    >
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                            Wie oft übst du {sport} aus?
-                        </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                            {frequencies.map((freq) => (
-                                <button
-                                    key={freq}
-                                    onClick={() => handleFrequencySelect(freq)}
-                                    className="bg-white border-2 border-gray-300 hover:cursor-pointer hover:border-[#1a3691] hover:shadow-lg hover:from-blue-100 hover:to-blue-50 rounded-xl p-6 transition-all duration-200 text-xl font-semibold text-gray-900 hover:text-[#1a3691]"
-                                >
-                                    {freq}
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* Loading Animation - Fullscreen */}
-                {isCalculating && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex items-center justify-center min-h-[70vh] pt-12"
-                    >
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5 }}
-                            className="text-center"
-                        >
-                            <div className="flex flex-col items-center gap-8">
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                    className="w-20 h-20 border-4 border-[#1a3691] border-t-transparent rounded-full"
-                                />
-                                <h2 className="text-3xl font-bold text-gray-900">
-                                    Berechne deinen perfekten Tarif...
-                                </h2>
-                                <div className="space-y-4 text-lg text-gray-600 w-full max-w-md">
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 0.3 }}
-                                        className="flex items-center gap-3 bg-green-50 p-4 rounded-lg"
-                                    >
-                                        <span className="text-2xl text-green-600">✓</span>
-                                        <p className="text-left">Analysiere dein Sportprofil</p>
-                                    </motion.div>
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 0.8 }}
-                                        className="flex items-center gap-3 bg-green-50 p-4 rounded-lg"
-                                    >
-                                        <span className="text-2xl text-green-600">✓</span>
-                                        <p className="text-left">Vergleiche Versicherungspakete</p>
-                                    </motion.div>
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 1.3 }}
-                                        className="flex items-center gap-3 bg-green-50 p-4 rounded-lg"
-                                    >
-                                        <span className="text-2xl text-green-600">✓</span>
-                                        <p className="text-left">Erstelle dein individuelles Angebot</p>
-                                    </motion.div>
+                        <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+                            <div className="space-y-4">
+                                <div className="relative">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <span className="text-2xl">👋</span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                        className="w-full pl-16 pr-4 py-4 border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
+                                        placeholder="Vor- & Nachname"
+                                    />
                                 </div>
+
+                                <div className="relative">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <span className="text-2xl">📧</span>
+                                    </div>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        className="w-full pl-16 pr-4 py-4 border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
+                                        placeholder="Deine E-Mail"
+                                    />
+                                </div>
+
+                                <div className="relative">
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                        <span className="text-2xl">📱</span>
+                                    </div>
+                                    <input
+                                        type="tel"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        required
+                                        className="w-full pl-16 pr-4 py-4 border-2 border-gray-300 rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
+                                        placeholder="Deine Handynummer"
+                                    />
+                                </div>
+
+                                {submitStatus === 'error' && (
+                                    <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-center">
+                                        <p className="text-red-700 font-semibold">✗ Fehler beim Senden</p>
+                                        <p className="text-red-600 text-sm mt-1">Bitte versuche es erneut.</p>
+                                    </div>
+                                )}
+
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-primary hover:bg-[#152a75] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-5 px-6 rounded-lg text-lg transition-colors duration-200 hover:cursor-pointer"
+                                >
+                                    {isSubmitting ? 'Wird berechnet...' : 'Meine Empfehlung erhalten 👉'}
+                                </button>
                             </div>
-                        </motion.div>
+                        </form>
                     </motion.div>
                 )}
 
-                {/* Schritt 4: Ergebnis und Formular */}
-                {step === 4 && !isCalculating && (() => {
+                {/* Schritt 6: Ergebnis */}
+                {step === 6 && (() => {
                     const selectedSport = sports.find(s => s.name === sport)
 
                     // Bestimme Tarif basierend auf Häufigkeit
@@ -568,11 +519,75 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         transition={{ duration: 0.5 }}
                     >
                         <div className="rounded-2xl py-4 mb-2 text-center">
-                            <h2 className="text-3xl font-bold text-black mb-2 flex flex-row items-center justify-center gap-4 mt-2">
+                            <h2 className="text-3xl font-bold text-black mb-4 flex flex-row items-center justify-center gap-4 mt-2">
                                 Eine Versicherung lohnt sich für dich!
                             </h2>
-                            <p className={"text-gray-700 font-semibold my-4"}>Laut deinen Angaben treibst du regelmäßig Sport und solltest dich deshalb definitiv absichern.</p>
-                            <p className={"text-gray-700 font-semibold"}>Für einen geringen monatlichen Betrag, bist du für die häufigsten Sportverletzungen vorbereitet:</p>
+
+                            <div className="max-w-3xl mx-auto text-left space-y-4 mb-6">
+                                <p className="text-gray-800 font-medium">
+                                    Jedes Jahr verletzen sich in Deutschland über 1,5 Millionen Menschen beim Sport.
+                                    Jeder 3. aktive Sportler erleidet mindestens einmal pro Jahr eine Verletzung,
+                                    die ärztliche Behandlung erfordert.
+                                </p>
+
+                                {sport === 'Fußball' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Als Fußballspieler</strong> bist Du besonders gefährdet: Über 600.000 Fußballverletzungen
+                                        passieren jährlich in Deutschland. 20% davon sind schwere Verletzungen wie Kreuzbandrisse
+                                        oder Bänderrisse. Ein Kreuzbandriss bedeutet 6-9 Monate Pause und Kosten bis zu 12.000€.
+                                    </p>
+                                )}
+
+                                {sport === 'Tennis' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Als Tennisspieler</strong> erleidest Du besonders häufig Sehnenrisse (Achillessehne,
+                                        Rotatorenmanschette) und Überlastungsschäden. Eine Rotatorenmanschettenriss-OP kostet
+                                        8.000-15.000€ und erfordert 6-12 Monate Rehabilitation.
+                                    </p>
+                                )}
+
+                                {sport === 'Ski' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Beim Skifahren</strong> passieren die teuersten Unfälle: Kreuzbandrisse,
+                                        Schlüsselbeinbrüche und Schulterverletzungen. Durchschnittliche Kosten pro Unfall: 8.500€.
+                                        Hinzu kommen oft Bergungskosten von bis zu 5.000€.
+                                    </p>
+                                )}
+
+                                {sport === 'Fitness' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Im Fitnessstudio</strong> sind Muskelrisse, Kapselrisse und Sehnenentzündungen
+                                        die häufigsten Verletzungen. Besonders betroffen: Schulter, Knie und Rücken.
+                                        Behandlungskosten inkl. Physiotherapie: 2.500-5.000€ pro Verletzung.
+                                    </p>
+                                )}
+
+                                {sport === 'Radfahren' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Als Radfahrer</strong> bist Du besonders gefährdet für Schlüsselbeinbrüche,
+                                        Handgelenksverletzungen und Sehnenrisse. Bei Stürzen kommen oft mehrere Verletzungen
+                                        zusammen. Kosten für Behandlung und Reha: 3.000-10.000€.
+                                    </p>
+                                )}
+
+                                {sport === 'Sonstiges' && (
+                                    <p className="text-gray-800 font-medium">
+                                        <strong>Beim Sport</strong> können Verletzungen jeden treffen und schnell teuer werden.
+                                        Die durchschnittlichen Behandlungskosten bei Sportverletzungen liegen bei 2.300€ –
+                                        ohne Berücksichtigung von Folgekosten oder Verdienstausfall.
+                                    </p>
+                                )}
+
+                                <p className="text-gray-800 font-medium">
+                                    Die häufigsten Sportverletzungen sind Bänderrisse (40%), Knochenbrüche (25%),
+                                    Sehnenrisse (20%) und Kreuzbandrisse (15%). Die Kosten: Von einfachen Zerrungen (150-300€)
+                                    über Bänderrisse (1.500-3.500€) bis zu Kreuzbandrissen (bis zu 12.000€).
+                                </p>
+
+                                <p className="text-gray-800 font-semibold">
+                                    Mit Deiner Sportversicherung bist Du für nur {tariff.price}/Monat abgesichert:
+                                </p>
+                            </div>
                             <motion.div
                                 className="flex flex-col mx-auto mt-4"
                                 initial={{ opacity: 0, y: 60 }}
@@ -599,95 +614,8 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             </motion.div>
                         </div>
 
-                        {/* Formular */}
-                        <div className=" rounded-2xl py-6 px-2 lg:px-4 max-w-5xl mx-auto">
-                            <h3 className="text-3xl font-bold text-gray-900 mb-4 text-center">
-                                Wie können wir dich erreichen?
-                            </h3>
-
-
-                            <form onSubmit={handleSubmit} className="max-w-5xl mx-auto">
-                                <div className="space-y-4">
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                            <span className="text-2xl">👤</span>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            required
-                                            className="w-full pl-16 pr-4 py-4 border-2 border-primary rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
-                                            placeholder="Vor- & Nachname"
-                                        />
-                                    </div>
-
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                            <span className="text-2xl">📧</span>
-                                        </div>
-                                        <input
-                                            type="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            required
-                                            className="w-full pl-16 pr-4 py-4 border-2 border-primary rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
-                                            placeholder="Deine E-Mail"
-                                        />
-                                    </div>
-
-                                    <div className="relative">
-                                        <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                            <span className="text-2xl">📱</span>
-                                        </div>
-                                        <input
-                                            type="tel"
-                                            value={phone}
-                                            onChange={(e) => setPhone(e.target.value)}
-                                            required
-                                            className="w-full pl-16 pr-4 py-4 border-2 border-primary rounded-lg focus:border-[#1a3691] focus:outline-none text-lg transition-colors"
-                                            placeholder="Deine Handynummer"
-                                        />
-                                    </div>
-
-
-                                    {submitStatus === 'success' && (
-                                        <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4 text-center">
-                                            <p className="text-green-700 font-semibold">✓ Anfrage erfolgreich gesendet!</p>
-                                            <p className="text-green-600 text-sm mt-1">Wir melden uns in Kürze bei dir.</p>
-                                        </div>
-                                    )}
-
-                                    {submitStatus === 'error' && (
-                                        <div className="bg-red-50 border-2 border-red-500 rounded-lg p-4 text-center">
-                                            <p className="text-red-700 font-semibold">✗ Fehler beim Senden</p>
-                                            <p className="text-red-600 text-sm mt-1">Bitte versuche es erneut.</p>
-                                        </div>
-                                    )}
-
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full bg-secondary hover:bg-secondary/90 hover:cursor-pointer disabled:bg-secondary/80 disabled:cursor-not-allowed text-white font-bold py-4 px-8 leading-7 rounded-lg text-md transition-all duration-300 shadow-lg hover:shadow-xl mt-1"
-                                    >
-                                        {isSubmitting ? 'Wird gesendet...' : 'Unverbindliches Angebot erhalten'}
-                                    </button>
-                                </div>
-                            </form>
-                            <p className={"font-bold text-lg text-gray-800 mt-6 mb-1"}>Wie gehts weiter?</p>
-                            <p className={"font-semibold text-gray-700"}>Nachdem du deine Daten gesendet hast, melden wir uns persönlich bei dir und stellen dir dein individuelles, unverbindliches Angebot zusammen. Du erhältst alle Informationen transparent und ohne Verpflichtung.</p>
-                            <ul className={"flex flex-col items-start gap-2 mt-4 font-semibold text-gray-700"}>
-                                <li>
-                                    📅Rückmeldung meist am selben Tag
-                                </li>
-                                <li>
-                                    📞Kein Werbeanruf - nur ehrliche Beratung
-                                </li>
-                                <li>
-                                    🔒Deine Angaben bleiben vertraulich - keine Weitergabe und kein Spam
-                                </li>
-                            </ul>
-                        </div>
+                        <Button text={"Jetzt Termin vereinbaren"} variant={"secondary"} size={"lg"} className={"mb-6 mt-2"}
+                                href={"https://signal-iduna-agentur.de/mike.allmendinger/termin-vereinbaren/?advnr=7156292"}/>
 
                         {/* Google Reviews Badge */}
                         <div className="text-center mb-8">
