@@ -523,6 +523,31 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                 Eine Versicherung lohnt sich für dich!
                             </h2>
 
+                            <motion.div
+                                className="flex flex-col mx-auto mt-4"
+                                initial={{ opacity: 0, y: 60 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.4 }}
+                            >
+
+                                {/* Pricing Card */}
+                                <div className="flex-1">
+                                    <PricingCard
+                                        title={tariff.title}
+                                        price={tariff.price}
+                                        priceSubtext={"/Monat"}
+                                        features={tariff.features}
+                                        catchPhrase={selectedSport?.catch}
+                                        isPopular={false}
+                                        buttonText="Jetzt beraten lassen"
+                                        buttonHref="/kontakt"
+                                        buttonVariant={"v3"}
+                                        showButton={false}
+                                    />
+                                </div>
+                            </motion.div>
+
                             <div className="max-w-3xl mx-auto text-left space-y-4 mb-6">
                                 <p className="text-gray-800 font-medium">
                                     Jedes Jahr verletzen sich in Deutschland über 1,5 Millionen Menschen beim Sport.
@@ -588,30 +613,6 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                     Mit Deiner Sportversicherung bist Du für nur {tariff.price}/Monat abgesichert:
                                 </p>
                             </div>
-                            <motion.div
-                                className="flex flex-col mx-auto mt-4"
-                                initial={{ opacity: 0, y: 60 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.4 }}
-                            >
-
-                                {/* Pricing Card */}
-                                <div className="flex-1">
-                                    <PricingCard
-                                        title={tariff.title}
-                                        price={tariff.price}
-                                        priceSubtext={"/Monat"}
-                                        features={tariff.features}
-                                        catchPhrase={selectedSport?.catch}
-                                        isPopular={false}
-                                        buttonText="Jetzt beraten lassen"
-                                        buttonHref="/kontakt"
-                                        buttonVariant={"v3"}
-                                        showButton={false}
-                                    />
-                                </div>
-                            </motion.div>
                         </div>
 
                         <Button text={"Jetzt Termin vereinbaren"} variant={"secondary"} size={"lg"} className={"mb-6 mt-2"}
