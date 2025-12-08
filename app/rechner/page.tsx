@@ -548,7 +548,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                 </div>
                             </motion.div>
 
-                            <div className="max-w-3xl mx-auto text-left space-y-4 mb-6">
+                            <div className="max-w-3xl mx-auto text-left space-y-4 my-4">
                                 <p className="text-gray-800 font-medium">
                                     Jedes Jahr verletzen sich in Deutschland über 1,5 Millionen Menschen beim Sport.
                                     Jeder 3. aktive Sportler erleidet mindestens einmal pro Jahr eine Verletzung,
@@ -615,7 +615,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             </div>
                         </div>
 
-                        <Button text={"Jetzt Termin vereinbaren"} variant={"secondary"} size={"lg"} className={"mb-6 mt-2"}
+                        <Button text={"Jetzt Termin vereinbaren"} variant={"secondary"} size={"lg"} className={"mb-6"}
                                 href={"https://signal-iduna-agentur.de/mike.allmendinger/termin-vereinbaren/?advnr=7156292"}/>
 
                         {/* Google Reviews Badge */}
