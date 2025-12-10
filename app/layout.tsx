@@ -118,7 +118,7 @@ export default function RootLayout({
 
       <script
           defer
-          data-website-id="dfid_IahKlyGpftWvMLSGydg53"
+          data-website-id="dfid_OxxKdd3S7HRzcJoBeX8iM"
           data-domain="playsafe.fit"
           src="https://datafa.st/js/script.js">
       </script>
