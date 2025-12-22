@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // 1. E-Mail an dich (Admin)
     const adminEmail = await resend.emails.send({
       from: 'PlaySafe <info@mail.playsafe.fit>',
-      to: 'korbpatrick@web.de',
+      to: ['korbpatrick@web.de', 'mike.allmendinger@signal-iduna.net'],
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
