@@ -654,7 +654,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
 
                                 {/* Review Count */}
                                 <p className="text-gray-600 font-semibold text-sm">
-                                    75+ Rezensionen
+                                    80+ Rezensionen
                                 </p>
                             </a>
                         </div>

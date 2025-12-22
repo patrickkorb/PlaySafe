@@ -1,64 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
+import { Resend } from 'resend';
 
 export async function POST(request: NextRequest) {
   try {
     const { name, email, message, phone } = await request.json();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message || !phone) {
       return NextResponse.json(
           { error: 'Alle Felder sind erforderlich' },
           { status: 400 }
       );
     }
 
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.web.de',
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // 1. E-Mail an dich
-    await transporter.sendMail({
-      from: `"PlaySafe Anfrage" <${process.env.EMAIL_USER}>`,
-      to: 'mike.allmendinger@signal-iduna.net, korbpatrick@web.de',
+    // 1. E-Mail an dich (Admin)
+    const adminEmail = await resend.emails.send({
+      from: 'PlaySafe <info@mail.playsafe.fit>',
+      to: 'korbpatrick@web.de',
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neue Kontaktanfrage - PlaySafe</h2>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>E-Mail:</strong> ${email}</p>
-          ${phone ? `<p><strong>Telefon:</strong> ${phone}</p>` : ''}
+          <p><strong>Telefon:</strong> ${phone}</p>
           <p><strong>Nachricht:</strong><br>${message.replace(/\n/g, '<br>')}</p>
         </div>
       `,
     });
 
-    // 2. Canva-Template laden und anpassen
+    console.log('Admin-E-Mail gesendet:', adminEmail);
+
+    // 2. Bestätigungsmail an Kunden
     const templatePath = path.join(process.cwd(), 'emails', 'email.html');
     let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
 
     // Platzhalter ersetzen
-    emailTemplate = emailTemplate
-        .replace(/{{NAME}}/g, name)
+    emailTemplate = emailTemplate.replace(/{{NAME}}/g, name);
 
-    // Bestätigungsmail mit Template an Kunden
-    await transporter.sendMail({
-      from: `"PlaySafe" <${process.env.EMAIL_USER}>`,
+    const customerEmail = await resend.emails.send({
+      from: 'PlaySafe <info@mail.playsafe.fit>',
       to: email,
       subject: 'Vielen Dank für Ihre Nachricht - PlaySafe',
       html: emailTemplate,
     });
 
+    console.log('Bestätigungsmail gesendet:', customerEmail);
+
     return NextResponse.json({
       success: true,
-      message: 'Nachricht erfolgreich gesendet'
+      message: 'Nachricht erfolgreich gesendet',
+      emailsSent: {
+        admin: adminEmail.data?.id,
+        customer: customerEmail.data?.id
+      }
     });
 
   } catch (error) {
