@@ -7,7 +7,7 @@ import { Check, Mars, Venus } from "lucide-react";
 import PricingCard from "@/app/components/PricingCard";
 import Button from "@/app/components/ui/Button";
 import { trackLead } from "@/app/components/MetaPixel";
-import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete } from "@/app/components/Datafast";
+import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete, trackContactDataSubmitted, trackOfferPageVisited } from "@/app/components/Datafast";
 import { Toaster, toast } from 'sonner';
 import ChoiceCard from "@/app/fusball/components/ChoiceCard";
 import Footer from "@/app/sections/Footer";
@@ -189,13 +189,16 @@ export default function Rechner() {
                     phone,
                     birthDate,
                     gender,
-                    tariffName
+                    tarif: tariffName
                 }),
             })
 
             if (!response.ok) {
                 throw new Error('Fehler beim Senden')
             }
+
+            // Track Datafast goal: contact_data_submitted
+            trackContactDataSubmitted(name, email, phone)
 
             // Track Lead Event mit User-Daten (Pixel + Conversion API)
             const leadValue = parseInt(tariffPrice) || 10
@@ -532,7 +535,7 @@ export default function Rechner() {
                                         features={tariff.features}
                                         catchPhrase={selectedSport?.catch}
                                         isPopular={false}
-                                        buttonText="Jetzt beraten lassen"
+                                        buttonText="Jetzt Antrag erstellen"
                                         buttonHref="/kontakt"
                                         buttonVariant={"v3"}
                                         showButton={true}
@@ -608,11 +611,12 @@ export default function Rechner() {
                         </div>
 
                         <Button
-                            text={"Jetzt Angebot erhalten"}
+                            text={"Jetzt Antrag erstellen"}
                             variant={"secondary"}
                             size={"lg"}
                             className={"mb-6"}
-                            href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}`}
+                            href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                            onClick={() => trackOfferPageVisited(tariff.title)}
                         />
 
                         {/* Google Reviews Badge */}

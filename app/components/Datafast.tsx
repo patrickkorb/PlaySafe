@@ -70,3 +70,34 @@ export const trackInjuryStatusSelected = async (hasInjury?: string) => {
     has_injury: hasInjury || '',
   });
 };
+
+// Rechner-specific tracking functions
+export const trackContactDataSubmitted = async (
+  name?: string,
+  email?: string,
+  phone?: string
+) => {
+  return await trackDatafastGoal('contact_data_submitted', {
+    name: name || '',
+    email: email || '',
+    phone: phone || '',
+  });
+};
+
+export const trackOfferPageVisited = async (tariff?: string) => {
+  return await trackDatafastGoal('offer_page_visited', {
+    tariff: tariff || '',
+  });
+};
+
+export const trackOfferFormSubmitted = async (
+  name?: string,
+  email?: string,
+  tariff?: string
+) => {
+  return await trackDatafastGoal('offer_form_submitted', {
+    name: name || '',
+    email: email || '',
+    tariff: tariff || '',
+  });
+};

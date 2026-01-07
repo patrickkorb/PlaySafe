@@ -7,6 +7,7 @@ export interface AngebotFormData {
   salutation: string; // Herr, Frau, Divers
   name: string;
   birthDate: string; // DD.MM.YYYY format
+  job: string; // Beruf
 
   // Step 2: Contact Data
   email: string;

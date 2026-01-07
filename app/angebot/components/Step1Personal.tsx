@@ -43,6 +43,10 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
       newErrors.birthDate = birthDateValidation.error || 'Ungültiges Geburtsdatum';
     }
 
+    if (!formData.job) {
+      newErrors.job = 'Bitte wähle deinen Beruf';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -61,21 +65,6 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
       transition={{ duration: 0.5 }}
       className="space-y-6"
     >
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Persönliche Daten
-        </h2>
-        <p className="text-gray-600">
-          Lass uns mit deinen Basisdaten starten
-        </p>
-      </div>
-
-      {/* Trust Indicator */}
-      <div className="bg-primary/10 border-l-4 border-primary p-4 rounded-lg mb-6">
-        <p className="text-sm text-gray-700">
-          🔒 Deine Daten sind bei uns sicher und werden verschlüsselt übertragen
-        </p>
-      </div>
 
       <div className="space-y-4">
         {/* Salutation */}
@@ -148,15 +137,52 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
             <p className="text-red-500 text-sm mt-1">{errors.birthDate}</p>
           )}
         </div>
+
+        {/* Job */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Beruf <span className="text-red-500">*</span>
+          </label>
+          <select
+            value={formData.job}
+            onChange={(e) => {
+              onUpdate({ job: e.target.value });
+              if (errors.job) setErrors({ ...errors, job: '' });
+            }}
+            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+              errors.job ? 'border-red-500' : 'border-gray-300'
+            }`}
+          >
+            <option value="">Bitte wählen</option>
+            <option value="Angestellter">Angestellter</option>
+            <option value="Selbstständiger">Selbstständiger</option>
+            <option value="Beamter">Beamter</option>
+            <option value="Student">Student</option>
+            <option value="Rentner">Rentner</option>
+            <option value="Arbeitsuchend">Arbeitsuchend</option>
+            <option value="Sonstiges">Sonstiges</option>
+          </select>
+          {errors.job && (
+            <p className="text-red-500 text-sm mt-1">{errors.job}</p>
+          )}
+        </div>
       </div>
+
 
       {/* Next Button */}
       <button
         onClick={handleNext}
-        className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 mt-8"
+        className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 mt-2"
       >
         Weiter
       </button>
+
+      {/* Trust Indicator */}
+      <div className="bg-primary/10 border-2 border-primary p-4 rounded-lg mb-6">
+        <p className="text-sm text-gray-700">
+          🔒 Deine Daten sind bei uns sicher und werden verschlüsselt übertragen
+        </p>
+      </div>
     </motion.div>
   );
 }

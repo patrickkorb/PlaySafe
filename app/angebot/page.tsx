@@ -9,11 +9,13 @@ import Step2Contact from './components/Step2Contact';
 import Step3Bank from './components/Step3Bank';
 import Step4Confirmation from './components/Step4Confirmation';
 import { trackLead } from '@/app/components/MetaPixel';
+import { trackOfferFormSubmitted } from '@/app/components/Datafast';
 
 const initialFormData: AngebotFormData = {
   salutation: '',
   name: '',
   birthDate: '',
+  job: '',
   email: '',
   phone: '',
   street: '',
@@ -40,6 +42,7 @@ function AngebotContent() {
     const phone = searchParams.get('phone');
     const birthDate = searchParams.get('birthDate');
     const gender = searchParams.get('gender');
+    const tarif = searchParams.get('tarif');
 
     // Map gender to salutation
     let salutation = '';
@@ -91,6 +94,7 @@ function AngebotContent() {
           birthDate: formData.birthDate,
           email: formData.email,
           phone: formData.phone,
+          job: formData.job,
           street: formData.street,
           houseNumber: formData.houseNumber,
           postalCode: formData.postalCode,
@@ -110,6 +114,10 @@ function AngebotContent() {
       const nameParts = formData.name.split(' ');
       const firstName = nameParts[0] || '';
       const lastName = nameParts.slice(1).join(' ') || '';
+
+      // Track Datafast goal: offer_form_submitted
+      const tarif = searchParams.get('tarif');
+      trackOfferFormSubmitted(formData.name, formData.email, tarif || '');
 
       // Track Lead Event
       await trackLead(

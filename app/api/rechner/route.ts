@@ -5,7 +5,7 @@ import { Resend } from 'resend';
 
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, phone, birthDate, gender, tariffName } = await request.json();
+        const { name, email, phone, birthDate, gender, tarif } = await request.json();
 
         if (!name || !email || !phone) {
             return NextResponse.json(
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
           <p><strong>E-Mail:</strong> ${email}</p>
           <p><strong>Telefon:</strong> ${phone}</p>
           <p><strong>Geburtsdatum:</strong> ${birthDate}</p>
-          <p><strong>Tarif:</strong> ${tariffName}</p>
+          <p><strong>Tarif:</strong> ${tarif}</p>
         </div>
       `,
         });
@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
             Large: 'playsafe-large.pdf',
         };
 
-        const pdfFileName = tariffPdfMap[tariffName];
-        console.log('pdfFileName:', tariffName);
+        const pdfFileName = tariffPdfMap[tarif];
+        console.log('pdfFileName:', tarif);
 
         const pdfPath = path.join(process.cwd(), 'emails', 'pdfs', pdfFileName);
         const pdfBuffer = fs.readFileSync(pdfPath);
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 
       <p>
         auf Basis deiner Angaben haben wir dein individuelles PlaySafe-Angebot berechnet.
-        Das passende Angebot für den <strong>${tariffName.toUpperCase()}-Tarif</strong> findest du im Anhang dieser E-Mail.
+        Das passende Angebot für den <strong>${tarif.toUpperCase()}-Tarif</strong> findest du im Anhang dieser E-Mail.
       </p>
 
       <p>
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
 
       <div style="text-align: center; margin: 32px 0;">
         <a
-          href="https://playsafe.fit/angebot?name=${name}&email=${email}&phone=${phone}&birtDate=${birthDate}&tarif=${tariffName}&gender=${gender}"
+          href="https://playsafe.fit/angebot?name=${name}&email=${email}&phone=${phone}&birthDate=${birthDate}&tarif=${tarif}&gender=${gender}"
           style="
             background-color: #1a3691;
             color: #ffffff;

@@ -117,7 +117,7 @@ export default function Step4Confirmation({
             <Link href="/datenschutz" target="_blank" className="text-primary underline hover:text-primary/80">
               Datenschutzerklärung
             </Link>{' '}
-            gelesen und akzeptiert. Ich bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Angebotsanfrage
+            gelesen und akzeptiert. Ich bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Antragsanfrage
             verarbeitet werden. <span className="text-red-500">*</span>
           </label>
         </div>
@@ -138,7 +138,7 @@ export default function Step4Confirmation({
             className="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
           />
           <label htmlFor="contact" className="text-sm text-gray-700 cursor-pointer">
-            Ich bin damit einverstanden, dass die SIGNAL IDUNA Versicherung mich per E-Mail und Telefon
+            Ich bin damit einverstanden, dass PlaySafe mich per E-Mail und Telefon
             kontaktiert, um mir ein persönliches Angebot zu unterbreiten. Diese Einwilligung kann ich jederzeit
             widerrufen. <span className="text-red-500">*</span>
           </label>

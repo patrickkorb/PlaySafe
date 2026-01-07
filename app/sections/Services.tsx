@@ -52,12 +52,16 @@ export default function Services() {
                     
                     {/* Schmerzensgeld */}
                     <motion.div 
-                        className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+                        className="relative bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-primary hover:shadow-xl transition-shadow duration-300"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.4 }}
                     >
+                        <div className="absolute -top-4 -right-4 bg-primary text-white px-6 py-2 rounded-full text-xs font-bold shadow-md">
+                            HIGHLIGHT
+                        </div>
+
                         <div className="flex items-center mb-4">
                             <div className="p-3 bg-primary/10 rounded-xl mr-4">
                                 <Heart className="w-6 h-6 text-primary" />

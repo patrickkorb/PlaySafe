@@ -5,9 +5,9 @@ import { Resend } from 'resend';
 
 export async function POST(request: NextRequest) {
     try {
-        const { salutation, name, birthDate, email, phone, street, houseNumber, postalCode, city, iban, accountHolder, privacyConsent, contactConsent } = await request.json();
+        const { salutation, name, birthDate, job, email, phone, street, houseNumber, postalCode, city, iban, accountHolder, privacyConsent, contactConsent } = await request.json();
 
-        if (!name || !email || !birthDate || !phone || !street || !houseNumber || !postalCode || !city || !iban || !accountHolder || !privacyConsent || !contactConsent) {
+        if (!name || !email || !birthDate ||!job || !phone || !street || !houseNumber || !postalCode || !city || !iban || !accountHolder || !privacyConsent || !contactConsent) {
             return NextResponse.json(
                 { error: 'Alle Felder sind erforderlich' },
                 { status: 400 }
@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
           <p><strong>E-Mail:</strong> ${email}</p>
           <p><strong>Telefon:</strong> ${phone}</p>
           <p><strong>Geburtsdatum:</strong> ${birthDate}</p>
+          <p><strong>Job:</strong> ${job}</p>
           <p><strong>Adresse:</strong> ${street} ${houseNumber}, ${postalCode} ${city}</p>
           <p><strong>IBAN:</strong> ${iban}</p>
           <p><strong>Kontoinhaber:</strong> ${accountHolder}</p>
