@@ -15,6 +15,10 @@ export default function FAQ() {
 
     const faqItems: FAQItem[] = [
         {
+            question: "Wie funktioniert das Sicherheitsbudget?",
+            answer: "Jeder Kunde erhält jährlich ein festes Budget von 30€, unabhängig vom gewählten Tarif. Du kannst dieses Geld frei für Sicherheitsmaßnahmen wie Helme, Handschuhe, Schoner oder andere Schutzausrüstung verwenden. Sende uns einfach die Rechnung oder den Beleg zu und du erhältst das Geld direkt zurückerstattet."
+        },
+        {
             question: "Greift der Versicherungsschutz nur bei Verletzungen, die während sportlicher Aktivitäten entstehen?",
             answer: "Nein, unsere Tarife decken alle Risiken in deiner kompletten Freizeit ab. Egal ob beim Sport, im Urlaub oder Zuhause."
         },

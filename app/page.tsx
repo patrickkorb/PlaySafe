@@ -18,10 +18,10 @@ export default function Index() {
             <FAQPageSchema />
             <div>
                 <Hero />
-                <Pricing />
                 <Services />
                 <Stories />
                 <FAQ />
+                <Pricing />
                 <Sponsor />
                 <Contact />
             </div>

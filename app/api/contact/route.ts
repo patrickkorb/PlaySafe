@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     // 1. E-Mail an dich (Admin)
     const adminEmail = await resend.emails.send({
       from: 'PlaySafe <info@mail.playsafe.fit>',
-      to: ['korbpatrick@web.de', 'mike.allmendinger@signal-iduna.net'],
+      to: ['korbpatrick@web.de'],
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -31,8 +31,6 @@ export async function POST(request: NextRequest) {
         </div>
       `,
     });
-
-    console.log('Admin-E-Mail gesendet:', adminEmail);
 
     // 2. Bestätigungsmail an Kunden
     const templatePath = path.join(process.cwd(), 'emails', 'email.html');

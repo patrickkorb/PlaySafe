@@ -10,6 +10,8 @@ import { trackLead } from "@/app/components/MetaPixel";
 import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete } from "@/app/components/Datafast";
 import { Toaster, toast } from 'sonner';
 import ChoiceCard from "@/app/fusball/components/ChoiceCard";
+import Footer from "@/app/sections/Footer";
+import FAQ from "@/app/sections/FAQ";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -175,23 +177,8 @@ export default function Rechner() {
                 tariffPrice = '20'
             }
 
-            const message = `
-Neue Anfrage über den Rechner:
 
-Persönliche Daten:
-- Name: ${name}
-- E-Mail: ${email}
-- Telefon: ${phone}
-
-Versicherungsdetails:
-- Geburtsdatum: ${formattedDate}
-- Sportart: ${sport}
-- Häufigkeit: ${frequency}
-
-Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
-            `.trim()
-
-            const response = await fetch('/api/contact', {
+            const response = await fetch('/api/rechner', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -200,7 +187,9 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                     name,
                     email,
                     phone,
-                    message
+                    birthDate,
+                    gender,
+                    tariffName
                 }),
             })
 
@@ -236,7 +225,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
     }
 
     return (
-        <div className="max-h-screen pb-12 px-4">
+        <div className="max-h-screen pb-12 mx-4">
             <div className="max-w-5xl mx-auto">
                 {step === 1 && (
                     <motion.div
@@ -248,7 +237,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         <h1 className="text-2xl font-extrabold text-gray-900 mb-4">
                             Finde Deine Perfekte Sportversicherung!
                         </h1>
-                        <h2 className={"font-medium"}>Erhalte deine persönliche Unfallversicherungsempfehlung, perfekt abgestimmt auf deinen aktiven Lebensstil - vollig kostenlos und unverbindlich.</h2>
+                        <h2 className={"font-medium"}>Erhalte deine persönliche Versicherungsempfehlung, perfekt abgestimmt auf deinen aktiven Lebensstil - vollig kostenlos und unverbindlich.</h2>
                     </motion.div>
                 )}
 
@@ -456,6 +445,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                     price: '10€',
                                     features: [
                                         "1.000€ sofort aufs Konto",
+                                        "Sicherheitsmaßnahmen: 30€",
                                         "Vollinvalidität: 500.000€",
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
@@ -470,6 +460,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                     price: '15€',
                                     features: [
                                         "1.500€ sofort aufs Konto",
+                                        "Sicherheitsmaßnahmen: 30€",
                                         "Vollinvalidität: 750.000€",
                                         "Krankenhaustagegeld: 30€",
                                         "Schwerverletzung: 7.000€",
@@ -485,6 +476,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                     price: '20€',
                                     features: [
                                         "2.000€ sofort aufs Konto",
+                                        "Sicherheitsmaßnahmen: 30€",
                                         "Vollinvalidität: 1.000.000€",
                                         "Krankenhaustagegeld: 50€",
                                         "Schwerverletzung: 12.000€",
@@ -518,9 +510,9 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="rounded-2xl py-4 mb-2 text-center">
+                        <div className="rounded-2xl py-4 mb-2 mx-4 text-center">
                             <h2 className="text-3xl font-bold text-black mb-4 flex flex-row items-center justify-center gap-4 mt-2">
-                                Eine Versicherung lohnt sich für dich!
+                                Dein passender Versicherungstarif:
                             </h2>
 
                             <motion.div
@@ -543,7 +535,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                         buttonText="Jetzt beraten lassen"
                                         buttonHref="/kontakt"
                                         buttonVariant={"v3"}
-                                        showButton={false}
+                                        showButton={true}
                                     />
                                 </div>
                             </motion.div>
@@ -615,8 +607,13 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             </div>
                         </div>
 
-                        <Button text={"Jetzt Termin vereinbaren"} variant={"secondary"} size={"lg"} className={"mb-6"}
-                                href={"https://signal-iduna-agentur.de/mike.allmendinger/termin-vereinbaren/?advnr=7156292"}/>
+                        <Button
+                            text={"Jetzt Angebot erhalten"}
+                            variant={"secondary"}
+                            size={"lg"}
+                            className={"mb-6"}
+                            href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}`}
+                        />
 
                         {/* Google Reviews Badge */}
                         <div className="text-center mb-8">
@@ -671,18 +668,24 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             </div>
                             <Link
                                 href="/#stories"
-                                className="inline-block bg-white hover:bg-gray-50 text-primary font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 shadow-md hover:shadow-lg border-2 border-primary mb-8"
+                                className="w-full inline-block bg-white hover:bg-gray-50 text-primary font-bold py-3 px-8 rounded-lg text-lg transition-all duration-200 shadow-md hover:shadow-lg border-2 border-primary mb-8"
                             >
                                 Überzeug dich selbst →
                             </Link>
                         </div>
+                        <div className={"-mx-4"}>
+                            <FAQ />
+                        </div>
+                        <Footer />
                     </motion.div>
                     )
                 })()}
+
             </div>
 
             {/* Toast Benachrichtigungen */}
             <Toaster position="bottom-center" />
+
         </div>
     )
 }

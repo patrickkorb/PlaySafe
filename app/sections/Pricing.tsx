@@ -2,6 +2,7 @@
 
 import PricingCard from "@/app/components/PricingCard";
 import { motion } from "framer-motion";
+import Button from "@/app/components/ui/Button";
 
 export default function Pricing() {
     const pricingPlans = [
@@ -12,6 +13,7 @@ export default function Pricing() {
             description: "Der Einstieg in deinen Schutz: Kompakt",
             features: [
                 "Schmerzensgeld: 1.000€",
+                "Sicherheitsbudget: 30€",
                 "Vollinvalidität: 500.000€", 
                 "Krankenhaustagegeld: 10€",
                 "Schwerverletzung: 2.500€",
@@ -28,6 +30,7 @@ export default function Pricing() {
             description: "Mehr Sicherheit für dich und deine Ziele",
             features: [
                 "Schmerzensgeld: 1.500€",
+                "Sicherheitsbudget: 30€",
                 "Vollinvalidität: 750.000€",
                 "Krankenhaustagegeld: 30€", 
                 "Schwerverletzung: 7.000€",
@@ -44,6 +47,7 @@ export default function Pricing() {
             description: "Unser Komplettpaket für maximale Sicherheit und Sorgenfreiheit.",
             features: [
                 "Schmerzensgeld: 2.000€",
+                "Sicherheitsbudget: 30€",
                 "Vollinvalidität: 1.000.000€",
                 "Krankenhaustagegeld: 50€",
                 "Schwerverletzung: 12.000€", 
@@ -97,12 +101,17 @@ export default function Pricing() {
                                     priceSubtext={plan.priceSubtext}
                                     features={plan.features}
                                     isPopular={plan.isPopular}
-                                    buttonText="Jetzt beraten lassen"
+                                    buttonText="Jetzt Angebot erhalten"
                                     buttonHref={`/kontakt?tarif=${plan.title}&preis=${plan.price}`}
                                 />
                             </div>
                         </motion.div>
                     ))}
+                </div>
+                <div className={"flex flex-col items-center justify-center w-full  text-center mt-16"}>
+                    <h2 className={"text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-2 leading-tight"}>Nicht sicher welcher Tarif zu dir passt?</h2>
+                    <h3 className={"text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed text-gray-700 mb-8"}>Nutze unseren Rechner und finde deinen individuellen Tarif</h3>
+                    <Button text={"Passenden Tarif berechnen"} href={"/rechner"} size={"lg"} className={"max-w-[300px]"}/>
                 </div>
 
             </div>

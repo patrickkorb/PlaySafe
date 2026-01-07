@@ -92,8 +92,8 @@ export default function Hero() {
                         {/* CTA Button */}
                         <div className="mb-3 sm:mb-5 md:mb-6 lg:mb-8">
                             <Button
-                                text="Kostenloses Erstgespräch vereinbaren"
-                                href="/kontakt"
+                                text="Kostenloses Angebot erhalten"
+                                href="/angebot"
                                 size="lg"
                                 className="w-full text-xs sm:text-sm md:text-base lg:text-lg py-2 sm:py-3 md:py-4 lg:py-5 bg-secondary hover:bg-secondary/90"
                             />

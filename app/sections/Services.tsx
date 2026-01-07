@@ -1,6 +1,6 @@
 "use client"
 import { motion } from "framer-motion";
-import { Heart, Shield, Hospital, AlertTriangle, Plane } from "lucide-react";
+import { Heart, Shield, Hospital, AlertTriangle, Plane, Wallet } from "lucide-react";
 
 export default function Services() {
     return (
@@ -18,13 +18,37 @@ export default function Services() {
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                    <h1 className={"text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 md:mb-8"}>Unsere Leistungen für dich</h1>
+                <h1 className={"text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 "}>Unsere Leistungen für dich</h1>
                 </motion.div>
 
                 {/* Services Grid */}
                 <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"}>
+
+                    {/* Sicherheitsbudget - NEU */}
+                    <motion.div
+                        className="relative bg-white p-6 md:p-8 rounded-2xl shadow-lg border-2 border-secondary hover:shadow-xl transition-shadow duration-300"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.3 }}
+                    >
+                        {/* NEU Badge */}
+                        <div className="absolute -top-4 -right-4 bg-secondary text-gray-900 px-6 py-2 rounded-full text-xs font-bold shadow-md">
+                            NEU
+                        </div>
+
+                        <div className="flex items-center mb-4">
+                            <div className="p-3 bg-primary/10 rounded-xl mr-4">
+                                <Wallet className="w-6 h-6 text-primary" />
+                            </div>
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-900">Sicherheitsbudget</h3>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed">
+                            Erhalte jährlich ein <span className="font-semibold text-primary">Budget von 30€</span>, das du frei für Sicherheitsmaßnahmen verwenden kannst – ob Helme, Handschuhe, Schoner oder andere Schutzausrüstung. Deine Sicherheit liegt uns am Herzen!
+                        </p>
+                    </motion.div>
                     
                     {/* Schmerzensgeld */}
                     <motion.div 
@@ -105,7 +129,7 @@ export default function Services() {
                     </motion.div>
 
                     {/* Happy Holiday */}
-                    <motion.div 
+                    <motion.div
                         className="bg-white p-6 md:p-8 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300 md:col-span-2 lg:col-span-1"
                         initial={{ opacity: 0, y: 50 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -132,6 +156,8 @@ export default function Services() {
                             </li>
                         </ul>
                     </motion.div>
+
+
 
                 </div>
             </div>
