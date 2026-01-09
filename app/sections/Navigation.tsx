@@ -15,8 +15,9 @@ export default function Navigation() {
         { title: "Unsere Leistungen", href: "/#services" },
         { title: "Sponsoring", href: "/#sponsor" },
         { title: "FAQ", href: "/#faq" },
-        { title: "Angebot", href: "/angebot" },
         { title: "Rechner", href: "/rechner" },
+        { title: "Angebot", href: "/angebot" },
+
     ];
 
     const toggleMobileMenu = () => {

@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from "next/link";
-import { Check, Mars, Venus } from "lucide-react";
-import PricingCard from "@/app/components/PricingCard";
+import { Check, Mars, Venus, Info } from "lucide-react";
 import Button from "@/app/components/ui/Button";
 import { trackLead } from "@/app/components/MetaPixel";
 import { trackEnterBirthDate, trackSportSelected, trackFrequencySelected, trackCalculatorComplete, trackContactDataSubmitted, trackOfferPageVisited } from "@/app/components/Datafast";
@@ -12,6 +11,7 @@ import { Toaster, toast } from 'sonner';
 import ChoiceCard from "@/app/fusball/components/ChoiceCard";
 import Footer from "@/app/sections/Footer";
 import FAQ from "@/app/sections/FAQ";
+import Image from "next/image";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
@@ -26,6 +26,8 @@ export default function Rechner() {
     const [phone, setPhone] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+    const [showTooltip, setShowTooltip] = useState(false)
+    const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false)
 
     const genderOptions = [
         { name: 'Männlich', icon: Mars },
@@ -228,8 +230,8 @@ export default function Rechner() {
     }
 
     return (
-        <div className="max-h-screen pb-12 mx-4">
-            <div className="max-w-5xl mx-auto">
+        <div className="max-h-screen pb-12 mx-2">
+            <div className="max-w-4xl mx-auto">
                 {step === 1 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
@@ -448,11 +450,11 @@ export default function Rechner() {
                                     price: '10€',
                                     features: [
                                         "1.000€ sofort aufs Konto",
-                                        "Sicherheitsmaßnahmen: 30€",
+                                        "Sicherheitsbudget: 30€",
                                         "Vollinvalidität: 500.000€",
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
-                                        "Happy Holiday",
+                                        "Happy Holiday: Extra-Schutz im Urlaub",
                                         "Zahnersatz: 5.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
@@ -463,11 +465,11 @@ export default function Rechner() {
                                     price: '15€',
                                     features: [
                                         "1.500€ sofort aufs Konto",
-                                        "Sicherheitsmaßnahmen: 30€",
+                                        "Sicherheitsbudget: 30€",
                                         "Vollinvalidität: 750.000€",
                                         "Krankenhaustagegeld: 30€",
                                         "Schwerverletzung: 7.000€",
-                                        "Happy Holiday",
+                                        "Happy Holiday: Extra-Schutz im Urlaub",
                                         "Zahnersatz: 5.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
@@ -479,11 +481,11 @@ export default function Rechner() {
                                     price: '20€',
                                     features: [
                                         "2.000€ sofort aufs Konto",
-                                        "Sicherheitsmaßnahmen: 30€",
+                                        "Sicherheitsbudget: 30€",
                                         "Vollinvalidität: 1.000.000€",
                                         "Krankenhaustagegeld: 50€",
                                         "Schwerverletzung: 12.000€",
-                                        "Happy Holiday",
+                                        "Happy Holiday: Extra-Schutz im Urlaub",
                                         "Zahnersatz: 5.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
@@ -497,7 +499,7 @@ export default function Rechner() {
                                         "Vollinvalidität: 500.000€",
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
-                                        "Happy Holiday",
+                                        "Happy Holiday: Extra-Schutz im Urlaub",
                                         "Zahnersatz: 5.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
@@ -527,97 +529,182 @@ export default function Rechner() {
                             >
 
                                 {/* Pricing Card */}
-                                <div className="flex-1">
-                                    <PricingCard
-                                        title={tariff.title}
-                                        price={tariff.price}
-                                        priceSubtext={"/Monat"}
-                                        features={tariff.features}
-                                        catchPhrase={selectedSport?.catch}
-                                        isPopular={false}
-                                        buttonText="Jetzt Antrag erstellen"
-                                        buttonHref="/kontakt"
-                                        buttonVariant={"v3"}
-                                        showButton={true}
-                                    />
+                                <div className="flex-1 ">
+                                    <div className="relative bg-white rounded-2xl shadow-xl ring-3 ring-green-200 p-8 transition-all duration-300 hover:shadow-2xl">
+                                        {/* Header */}
+                                        <div className="text-center mb-8">
+                                            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                                                {tariff.title}
+                                            </h3>
+                                            <div className="flex items-baseline justify-center gap-1">
+                                                <span className="text-4xl md:text-5xl font-bold text-gray-900">
+                                                    {tariff.price}
+                                                </span>
+                                                <span className="text-gray-500 text-lg">
+                                                    /Monat
+                                                </span>
+                                            </div>
+                                            <motion.div
+                                                className="bg-green-100 text-green-600 px-2 py-2  rounded-md text-sm font-medium flex items-center justify-center gap-2 mt-2"
+                                                animate={{
+                                                    rotate: [0, -1, 1, -1, 1, 0],
+                                                    scale: [1, 1.02, 1.02, 1.02, 1.02, 1]
+                                                }}
+                                                transition={{
+                                                    duration: 0.5,
+                                                    repeat: Infinity,
+                                                    repeatDelay: 3
+                                                }}
+                                            >
+                                                30€ Sicherheitsbudget geschenkt 🎁
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Features list */}
+                                        <div className="mb-8">
+                                            <ul className="space-y-4">
+                                                {tariff.features.map((feature, index) => (
+                                                    <li key={index} className="flex items-start gap-3">
+                                                        <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
+                                                            <Check className="w-4 h-4 text-green-600" />
+                                                        </div>
+                                                        <div className="flex flex-col flex-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-gray-700 text-left leading-relaxed">
+                                                                    {feature}
+                                                                </span>
+                                                                {index === 0 && feature.includes("sofort aufs Konto") && (
+                                                                    <div className="relative inline-flex">
+                                                                        <Info
+                                                                            className="w-4 h-4 text-gray-800 cursor-pointer mb-3 active:scale-95 transition-transform"
+                                                                            onClick={() => setShowTooltip(!showTooltip)}
+                                                                            onMouseEnter={() => setShowTooltip(true)}
+                                                                            onMouseLeave={() => setShowTooltip(false)}
+                                                                        />
+                                                                        <div className={`fixed left-4 right-4 sm:absolute sm:left-auto sm:right-auto sm:bottom-full sm:left-1/2 sm:-translate-x-1/2 bottom-auto top-1/2 -translate-y-1/2 sm:translate-y-0 sm:mb-2 max-w-xs bg-gray-900 text-white text-xs rounded-lg p-3 transition-all duration-200 z-50 shadow-xl ${
+                                                                            showTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'
+                                                                        }`}>
+                                                                            <div className="text-left leading-relaxed">
+                                                                                Bei einer vollständigen Zusammenhangstrennung bei Brüchen oder vollständigen Zerreißung von Muskel, Sehne, Band oder Kapsel.
+                                                                            </div>
+                                                                            <div className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                {feature.includes("Sicherheitsmaßnahmen") && (
+                                                                    <div className="relative inline-flex">
+                                                                        <Info
+                                                                            className="w-4 h-4 text-gray-800 cursor-pointer mb-3 active:scale-95 transition-transform"
+                                                                            onClick={() => setShowSicherheitsTooltip(!showSicherheitsTooltip)}
+                                                                            onMouseEnter={() => setShowSicherheitsTooltip(true)}
+                                                                            onMouseLeave={() => setShowSicherheitsTooltip(false)}
+                                                                        />
+                                                                        <div className={`fixed left-4 right-4 sm:absolute sm:left-auto sm:right-auto sm:bottom-full sm:left-1/2 sm:-translate-x-1/2 bottom-auto top-1/2 -translate-y-1/2 sm:translate-y-0 sm:mb-2 max-w-xs bg-gray-900 text-white text-xs rounded-lg p-3 transition-all duration-200 z-50 shadow-xl ${
+                                                                            showSicherheitsTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'
+                                                                        }`}>
+                                                                            <div className="text-left leading-relaxed">
+                                                                                Das Budget kann jährlich frei für Sicherheitsmaßnahmen genutzt werden, wie z.B. Schienbeinschoner, Protektoren, Reflektoren, Helme, Knieschützer und andere Schutzausrüstung.
+                                                                            </div>
+                                                                            <div className="hidden sm:block absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                            {index === 0 && selectedSport?.catch && (
+                                                                <span className="text-gray-500 text-sm mt-1 text-left">
+                                                                    {selectedSport.catch}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+
+                                        {/* CTA Button */}
+                                        <div className="w-full">
+                                            <Button
+                                                variant="v3"
+                                                text="Jetzt Antrag erstellen"
+                                                href="/kontakt"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                             </motion.div>
 
-                            <div className="max-w-3xl mx-auto text-left space-y-4 my-4">
-                                <p className="text-gray-800 font-medium">
-                                    Jedes Jahr verletzen sich in Deutschland über 1,5 Millionen Menschen beim Sport.
-                                    Jeder 3. aktive Sportler erleidet mindestens einmal pro Jahr eine Verletzung,
-                                    die ärztliche Behandlung erfordert.
-                                </p>
+                            {/* Testimonials Section */}
+                            <div className="mt-8 -mx-3">
+                                <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">
+                                    Erfahrungen unserer Kunden
+                                </h3>
 
-                                {sport === 'Fußball' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Als Fußballspieler</strong> bist Du besonders gefährdet: Über 600.000 Fußballverletzungen
-                                        passieren jährlich in Deutschland. 20% davon sind schwere Verletzungen wie Kreuzbandrisse
-                                        oder Bänderrisse. Ein Kreuzbandriss bedeutet 6-9 Monate Pause und Kosten bis zu 12.000€.
-                                    </p>
-                                )}
+                                <div className="grid md:grid-cols-2 gap-4">
+                                    {/* Testimonial 1 */}
+                                    <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+                                        <div className="flex gap-1 mb-3">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                        <p className="text-gray-700 mb-4 italic text-left">
+                                            "Nach meinem Kreuzbandriss kam das Geld innerhalb von 3 Tagen auf mein Konto. Kein Papierkram, keine Probleme - einfach perfekt!"
+                                        </p>
+                                        <div className="flex items-end justify-between gap-3 border-t border-gray-200 pt-3">
+                                            <div>
+                                                <p className="font-semibold text-gray-900 text-left">Max S.</p>
+                                                <p className="text-sm text-gray-500">Fußballspieler, 28</p>
+                                            </div>
+                                            <Image src={"/images/google.svg"} alt={"google logo"} width={25} height={25} />
+                                        </div>
+                                    </div>
 
-                                {sport === 'Tennis' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Als Tennisspieler</strong> erleidest Du besonders häufig Sehnenrisse (Achillessehne,
-                                        Rotatorenmanschette) und Überlastungsschäden. Eine Rotatorenmanschettenriss-OP kostet
-                                        8.000-15.000€ und erfordert 6-12 Monate Rehabilitation.
-                                    </p>
-                                )}
-
-                                {sport === 'Ski' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Beim Skifahren</strong> passieren die teuersten Unfälle: Kreuzbandrisse,
-                                        Schlüsselbeinbrüche und Schulterverletzungen. Durchschnittliche Kosten pro Unfall: 8.500€.
-                                        Hinzu kommen oft Bergungskosten von bis zu 5.000€.
-                                    </p>
-                                )}
-
-                                {sport === 'Fitness' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Im Fitnessstudio</strong> sind Muskelrisse, Kapselrisse und Sehnenentzündungen
-                                        die häufigsten Verletzungen. Besonders betroffen: Schulter, Knie und Rücken.
-                                        Behandlungskosten inkl. Physiotherapie: 2.500-5.000€ pro Verletzung.
-                                    </p>
-                                )}
-
-                                {sport === 'Radfahren' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Als Radfahrer</strong> bist Du besonders gefährdet für Schlüsselbeinbrüche,
-                                        Handgelenksverletzungen und Sehnenrisse. Bei Stürzen kommen oft mehrere Verletzungen
-                                        zusammen. Kosten für Behandlung und Reha: 3.000-10.000€.
-                                    </p>
-                                )}
-
-                                {sport === 'Sonstiges' && (
-                                    <p className="text-gray-800 font-medium">
-                                        <strong>Beim Sport</strong> können Verletzungen jeden treffen und schnell teuer werden.
-                                        Die durchschnittlichen Behandlungskosten bei Sportverletzungen liegen bei 2.300€ –
-                                        ohne Berücksichtigung von Folgekosten oder Verdienstausfall.
-                                    </p>
-                                )}
-
-                                <p className="text-gray-800 font-medium">
-                                    Die häufigsten Sportverletzungen sind Bänderrisse (40%), Knochenbrüche (25%),
-                                    Sehnenrisse (20%) und Kreuzbandrisse (15%). Die Kosten: Von einfachen Zerrungen (150-300€)
-                                    über Bänderrisse (1.500-3.500€) bis zu Kreuzbandrissen (bis zu 12.000€).
-                                </p>
-
-                                <p className="text-gray-800 font-semibold">
-                                    Mit Deiner Sportversicherung bist Du für nur {tariff.price}/Monat abgesichert:
-                                </p>
+                                    {/* Testimonial 2 */}
+                                    <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
+                                        <div className="flex gap-1 mb-3">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <svg key={star} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                                                </svg>
+                                            ))}
+                                        </div>
+                                        <p className="text-gray-700 mb-4 italic">
+                                            "Beste Entscheidung! Als Skifahrer hatte ich schon mehrere Verletzungen. Die Versicherung hat immer sofort und unkompliziert gezahlt."
+                                        </p>
+                                        <div className="flex items-end justify-between gap-3 border-t border-gray-200 pt-3">
+                                            <div>
+                                                <p className="font-semibold text-gray-900 text-left">Sarah K.</p>
+                                                <p className="text-sm text-gray-500">Skifahrerin, 34</p>
+                                            </div>
+                                            <Image src={"/images/google.svg"} alt={"google logo"} width={25} height={25} />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <Button
-                            text={"Jetzt Antrag erstellen"}
-                            variant={"secondary"}
-                            size={"lg"}
-                            className={"mb-6"}
-                            href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
-                            onClick={() => trackOfferPageVisited(tariff.title)}
-                        />
+                        <motion.div
+                            className="mb-6"
+                            animate={{
+                                rotate: [0, -1, 1, -1, 1, 0],
+                                scale: [1, 1.05, 1.05, 1.05, 1.05, 1]
+                            }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                repeatDelay: 3
+                            }}
+                        >
+                            <Button
+                                text={"Jetzt Antrag erstellen"}
+                                variant={"primary"}
+                                size={"lg"}
+                                href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                                onClick={() => trackOfferPageVisited(tariff.title)}
+                            />
+                        </motion.div>
 
                         {/* Google Reviews Badge */}
                         <div className="text-center mb-8">

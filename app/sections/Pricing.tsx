@@ -17,7 +17,7 @@ export default function Pricing() {
                 "Vollinvalidität: 500.000€", 
                 "Krankenhaustagegeld: 10€",
                 "Schwerverletzung: 2.500€",
-                "Happy Holiday",
+                "Happy Holiday: Extra-Schutz im Urlaub",
                 "Zahnersatz: 5.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],
@@ -34,7 +34,7 @@ export default function Pricing() {
                 "Vollinvalidität: 750.000€",
                 "Krankenhaustagegeld: 30€", 
                 "Schwerverletzung: 7.000€",
-                "Happy Holiday",
+                "Happy Holiday: Extra-Schutz im Urlaub",
                 "Zahnersatz: 5.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],
@@ -50,8 +50,8 @@ export default function Pricing() {
                 "Sicherheitsbudget: 30€",
                 "Vollinvalidität: 1.000.000€",
                 "Krankenhaustagegeld: 50€",
-                "Schwerverletzung: 12.000€", 
-                "Happy Holiday",
+                "Schwerverletzung: 12.000€",
+                "Happy Holiday: Extra-Schutz im Urlaub",
                 "Zahnersatz: 5.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],

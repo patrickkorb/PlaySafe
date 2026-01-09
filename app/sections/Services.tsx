@@ -46,7 +46,7 @@ export default function Services() {
                             <h3 className="text-xl md:text-2xl font-bold text-gray-900">Sicherheitsbudget</h3>
                         </div>
                         <p className="text-gray-600 leading-relaxed">
-                            Erhalte jährlich ein <span className="font-semibold text-primary">Budget von 30€</span>, das du frei für Sicherheitsmaßnahmen verwenden kannst – ob Helme, Handschuhe, Schoner oder andere Schutzausrüstung. Deine Sicherheit liegt uns am Herzen!
+                            Erhalte jährlich ein <span className="font-semibold text-primary">Budget von 30€</span>, das du flexibel für deine Sicherheit einsetzen kannst – sei es für Sicherheitsausrüstung wie Helme, Protektoren oder Reflektoren, für Sicherheit zu Hause mit Herdschutz, Treppengittern oder Schutzbrillen, oder für wichtige Sicherheitskurse wie Schwimm- und Erste-Hilfe-Kurse. Deine Sicherheit liegt uns am Herzen.
                         </p>
                     </motion.div>
                     
