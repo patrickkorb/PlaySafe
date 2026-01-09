@@ -626,7 +626,7 @@ export default function Rechner() {
                                             <Button
                                                 variant="v3"
                                                 text="Jetzt Antrag erstellen"
-                                                href="/kontakt"
+                                                href={`/angebot?name=${name}&email=${email}&phone=${phone}&birthDate=${birthDate}&tarif=${tariff.title}&gender=${gender}`}
                                             />
                                         </div>
                                     </div>

@@ -3,6 +3,34 @@ import fs from 'fs';
 import path from 'path';
 import { Resend } from 'resend';
 
+// Tarif-Daten basierend auf den offiziellen Dokumenten
+const tariffData = {
+    Small: {
+        price: '10€',
+        invaliditaet: '250.000 EUR',
+        gipsgeld: '1.000 EUR',
+        schwerverletzung: '2.500 EUR',
+        krankenhaus: '10 EUR',
+        zahnersatz: '20.000 EUR',
+    },
+    Medium: {
+        price: '15€',
+        invaliditaet: '375.000 EUR',
+        gipsgeld: '1.500 EUR',
+        schwerverletzung: '7.000 EUR',
+        krankenhaus: '30 EUR',
+        zahnersatz: '20.000 EUR',
+    },
+    Large: {
+        price: '20€',
+        invaliditaet: '500.000 EUR',
+        gipsgeld: '2.000 EUR',
+        schwerverletzung: '12.000 EUR',
+        krankenhaus: '50 EUR',
+        zahnersatz: '20.000 EUR',
+    },
+};
+
 export async function POST(request: NextRequest) {
     try {
         const { name, email, phone, birthDate, gender, tarif } = await request.json();
@@ -14,7 +42,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         // 1. E-Mail an dich (Admin)
@@ -24,8 +51,8 @@ export async function POST(request: NextRequest) {
             subject: `Neue Angebotsanfrage von ${name}`,
             html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe - Max Mustermann Angebot schicken</h2>
-          <p><strong>Name:</strong>${gender} ${name}</p>
+          <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
+          <p><strong>Name:</strong> ${gender} ${name}</p>
           <p><strong>E-Mail:</strong> ${email}</p>
           <p><strong>Telefon:</strong> ${phone}</p>
           <p><strong>Geburtsdatum:</strong> ${birthDate}</p>
@@ -34,85 +61,44 @@ export async function POST(request: NextRequest) {
       `,
         });
 
-        const tariffPdfMap: Record<string, string> = {
-            Small: 'playsafe-small.pdf',
-            Medium: 'playsafe-medium.pdf',
-            Large: 'playsafe-large.pdf',
-        };
+        // 2. Lade das detaillierte Email-Template
+        const templatePath = path.join(process.cwd(), 'emails', 'tariff-details.html');
+        let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
 
-        const pdfFileName = tariffPdfMap[tarif];
-        console.log('pdfFileName:', tarif);
+        // Hole die Tarif-Daten
+        const tariffInfo = tariffData[tarif as keyof typeof tariffData];
 
-        const pdfPath = path.join(process.cwd(), 'emails', 'pdfs', pdfFileName);
-        const pdfBuffer = fs.readFileSync(pdfPath);
-        const pdfBase64 = pdfBuffer.toString('base64');
+        if (!tariffInfo) {
+            throw new Error(`Ungültiger Tarif: ${tarif}`);
+        }
 
+        // Erstelle den CTA-Link
+        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}`;
+
+        const anrede = gender == "Männlich" ? "Lieber" : "Liebe";
+
+        // Ersetze alle Platzhalter im Template
+        emailTemplate = emailTemplate
+            .replace(/{{ANREDE}}/g, anrede)
+            .replace(/{{NAME}}/g, name)
+            .replace(/{{TARIFF}}/g, tarif)
+            .replace(/{{PRICE}}/g, tariffInfo.price)
+            .replace(/{{INVALIDITAET}}/g, tariffInfo.invaliditaet)
+            .replace(/{{GIPSGELD}}/g, tariffInfo.gipsgeld)
+            .replace(/{{SCHWERVERLETZUNG}}/g, tariffInfo.schwerverletzung)
+            .replace(/{{KRANKENHAUS}}/g, tariffInfo.krankenhaus)
+            .replace(/{{ZAHNERSATZ}}/g, tariffInfo.zahnersatz)
+            .replace(/{{CTA_LINK}}/g, ctaLink);
+
+        // 3. Sende die Email mit dem detaillierten Template (ohne PDF-Anhang)
         const customerEmail = await resend.emails.send({
             from: 'PlaySafe <info@mail.playsafe.fit>',
             to: email,
-            subject: 'Dein persönliches PlaySafe-Angebot',
-            html: `
-    <div style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
-      
-      <h2 style="color: #1a3691;">Dein persönliches PlaySafe-Angebot</h2>
-
-      <p>Hallo ${name},</p>
-
-      <p>
-        auf Basis deiner Angaben haben wir dein individuelles PlaySafe-Angebot berechnet.
-        Das passende Angebot für den <strong>${tarif.toUpperCase()}-Tarif</strong> findest du im Anhang dieser E-Mail.
-      </p>
-
-      <p>
-        Nimm dir gerne die Zeit, das Angebot in Ruhe durchzulesen.
-        Wenn dir die Versicherung zusagt, kannst du im nächsten Schritt
-        deine Daten für den Antrag bequem online ausfüllen.
-      </p>
-
-      <div style="text-align: center; margin: 32px 0;">
-        <a
-          href="https://playsafe.fit/angebot?name=${name}&email=${email}&phone=${phone}&birthDate=${birthDate}&tarif=${tarif}&gender=${gender}"
-          style="
-            background-color: #1a3691;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 6px;
-            font-weight: bold;
-            display: inline-block;
-          "
-        >
-          Jetzt Antrag ausfüllen
-        </a>
-      </div>
-
-      <p>
-        Solltest du vorab Fragen haben oder dir unsicher sein,
-        melde dich gerne jederzeit bei uns – wir helfen dir weiter.
-      </p>
-
-      <p style="margin-top: 32px;">
-        Viele Grüße<br>
-        <strong>Dein PlaySafe Team</strong>
-      </p>
-
-      <hr style="margin: 32px 0; border: none; border-top: 1px solid #eee;" />
-
-      <p style="font-size: 12px; color: #777;">
-        Hinweis: Dieses Angebot ist unverbindlich und stellt noch keinen Antrag dar.
-      </p>
-
-    </div>
-  `,
-            attachments: [
-                {
-                    filename: 'PlaySafe-Angebot.pdf',
-                    content: pdfBase64,
-                },
-            ],
+            subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
+            html: emailTemplate,
         });
 
-
+        console.log('Email erfolgreich gesendet:', customerEmail.data?.id);
 
         return NextResponse.json({
             success: true,
