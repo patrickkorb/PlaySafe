@@ -455,7 +455,9 @@ export default function Rechner() {
                         const normalizedSport = sportMap[sportName] || 'sonstiges'
                         const normalizedTariff = tariffTitle.toLowerCase()
 
-                        return `/videos/${normalizedSport}-${normalizedTariff}.mp4`
+                        // Cloudinary URL (automatische Optimierung & CDN)
+                        const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo'
+                        return `https://res.cloudinary.com/${cloudinaryCloudName}/video/upload/v1768247662/${normalizedSport}-${normalizedTariff}.mp4`
                     }
 
                     // Bestimme Tarif basierend auf Häufigkeit
