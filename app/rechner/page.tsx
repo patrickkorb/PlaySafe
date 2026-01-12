@@ -440,6 +440,24 @@ export default function Rechner() {
                 {step === 6 && (() => {
                     const selectedSport = sports.find(s => s.name === sport)
 
+                    // Generiere Video-Pfad basierend auf Sport und Tarif
+                    const getVideoPath = (sportName: string, tariffTitle: string): string => {
+                        // Sportart normalisieren (lowercase, ä -> ae, ü -> ue, etc.)
+                        const sportMap: { [key: string]: string } = {
+                            'Fußball': 'fussball',
+                            'Tennis': 'tennis',
+                            'Ski': 'ski',
+                            'Fitness': 'fitness',
+                            'Radfahren': 'radfahren',
+                            'Sonstiges': 'sonstiges'
+                        }
+
+                        const normalizedSport = sportMap[sportName] || 'sonstiges'
+                        const normalizedTariff = tariffTitle.toLowerCase()
+
+                        return `/videos/${normalizedSport}-${normalizedTariff}.mp4`
+                    }
+
                     // Bestimme Tarif basierend auf Häufigkeit
                     const getTariff = () => {
                         switch(frequency) {
@@ -633,9 +651,60 @@ export default function Rechner() {
                                 </div>
                             </motion.div>
 
+                            {/* Video Section */}
+                            <motion.div
+                                className="mt-8 rounded-2xl overflow-hidden"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.6 }}
+                            >
+                                <h3 className="text-2xl font-bold text-gray-900 text-center mb-6">
+                                    Erfahre mehr über deinen {tariff.title}-Tarif für {sport}
+                                </h3>
+                                {/* Portrait Video (9:16) optimiert für Mobile */}
+                                <div className="flex justify-center">
+                                    <div className="relative w-full md:max-w-md rounded-lg overflow-hidden" style={{ aspectRatio: '9/16' }}>
+                                        <video
+                                            className="w-full h-full object-cover"
+                                            controls
+                                            autoPlay
+                                            muted
+                                            playsInline
+                                            preload="metadata"
+                                            poster="/images/video-placeholder.jpg"
+                                        >
+                                            <source src={getVideoPath(sport, tariff.title)} type="video/mp4" />
+                                            Dein Browser unterstützt keine Video-Wiedergabe.
+                                        </video>
+                                    </div>
+                                </div>
+                            </motion.div>
+                            <motion.div
+                                className="my-4"
+                                animate={{
+                                    rotate: [0, -1, 1, -1, 1, 0],
+                                    scale: [1, 1.05, 1.05, 1.05, 1.05, 1]
+                                }}
+                                transition={{
+                                    duration: 1,
+                                    repeat: Infinity,
+                                    repeatDelay: 3
+                                }}
+                            >
+                                <Button
+                                    text={"Jetzt Antrag erstellen"}
+                                    variant={"primary"}
+                                    size={"lg"}
+                                    href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                                    onClick={() => trackOfferPageVisited(tariff.title)}
+                                />
+                            </motion.div>
+
+
                             {/* Testimonials Section */}
                             <div className="mt-8 -mx-3">
-                                <h3 className="text-2xl font-bold text-gray-900 text-center mb-2">
+                                <h3 className="text-2xl font-bold text-gray-900 text-center mb-6">
                                     Erfahrungen unserer Kunden
                                 </h3>
 
@@ -670,7 +739,7 @@ export default function Rechner() {
                                                 </svg>
                                             ))}
                                         </div>
-                                        <p className="text-gray-700 mb-4 italic">
+                                        <p className="text-gray-700 mb-4 italic text-left">
                                             "Beste Entscheidung! Als Skifahrer hatte ich schon mehrere Verletzungen. Die Versicherung hat immer sofort und unkompliziert gezahlt."
                                         </p>
                                         <div className="flex items-end justify-between gap-3 border-t border-gray-200 pt-3">
@@ -685,29 +754,8 @@ export default function Rechner() {
                             </div>
                         </div>
 
-                        <motion.div
-                            className="mb-6"
-                            animate={{
-                                rotate: [0, -1, 1, -1, 1, 0],
-                                scale: [1, 1.05, 1.05, 1.05, 1.05, 1]
-                            }}
-                            transition={{
-                                duration: 1,
-                                repeat: Infinity,
-                                repeatDelay: 3
-                            }}
-                        >
-                            <Button
-                                text={"Jetzt Antrag erstellen"}
-                                variant={"primary"}
-                                size={"lg"}
-                                href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
-                                onClick={() => trackOfferPageVisited(tariff.title)}
-                            />
-                        </motion.div>
-
                         {/* Google Reviews Badge */}
-                        <div className="text-center mb-8">
+                        <div className="text-center mb-8 mx-2">
                             <a
                                 href="https://www.google.com/search?sca_esv=56cc1d46b226e482&rlz=1C1UKOV_deDE1165DE1165&sxsrf=AE3TifN4x6Y16HhJrRe6BxVvlU7-D9ImQg:1764339064823&si=AMgyJEtREmoPL4P1I5IDCfuA8gybfVI2d5Uj7QMwYCZHKDZ-E5xt_wqzbPBtMB-_nYo-edtriR3148wcP90sPj3SZBlswjjI6ZfvtmZAwirrcQpoSozMmTJGKB7VWvet7xmS31R5ntFF9YtI7XHe9a2wFU-6NZCir7IvMU1zrAWegeagomnfR53-x_71Vo3mhhKVE9XbPseFU3JitckJYiNNkmDVt-LSrg%3D%3D&q=SIGNAL+IDUNA+Versicherung+Mike+Allmendinger+-+Versicherungsagentur+Rezensionen&sa=X&ved=2ahUKEwi4luOZg5WRAxX88LsIHfbOGMIQ0bkNegQIIRAE&biw=1920&bih=945&dpr=1"
                                 target="_blank"
@@ -742,13 +790,36 @@ export default function Rechner() {
 
                                 {/* Review Count */}
                                 <p className="text-gray-600 font-semibold text-sm">
-                                    80+ Rezensionen
+                                    85+ Rezensionen
                                 </p>
                             </a>
                         </div>
 
+                        <motion.div
+                            className="mb-6 mx-2"
+                            animate={{
+                                rotate: [0, -1, 1, -1, 1, 0],
+                                scale: [1, 1.05, 1.05, 1.05, 1.05, 1]
+                            }}
+                            transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                repeatDelay: 3
+                            }}
+                        >
+                            <Button
+                                text={"Jetzt Antrag erstellen"}
+                                variant={"primary"}
+                                size={"lg"}
+                                href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                                onClick={() => trackOfferPageVisited(tariff.title)}
+                            />
+                        </motion.div>
+
+
+
                         {/* Trust Badge & CTA */}
-                        <div className="text-center mt-2 bg-white">
+                        <div className="text-center mt-2 bg-white mx-2">
                             <div className={"flex flex-col lg:flex-row gap-2 mb-4"}>
                                 <p className={"text-4xl font-extrabold bg-primary text-white p-2"}>
                                     5000+ Kunden
