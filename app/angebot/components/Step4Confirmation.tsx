@@ -214,7 +214,7 @@ export default function Step4Confirmation({
             className="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
           />
           <label htmlFor="riskExclusion" className="text-sm text-gray-700 cursor-pointer">
-            Ich bestätige, dass keine Pflegebedürftigkeit, kein Flugrisiko und keinMotorsportrisiko besteht oder beruflicher/professioneller Sport ausgeübt wird. <span className="text-red-500">*</span>
+            Ich bestätige, dass keine Pflegebedürftigkeit, kein Flugrisiko und kein Motorsportrisiko besteht oder beruflicher/professioneller Sport ausgeübt wird. <span className="text-red-500">*</span>
           </label>
         </div>
         {errors.riskExclusionConsent && (
