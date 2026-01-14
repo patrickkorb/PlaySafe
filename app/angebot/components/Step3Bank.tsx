@@ -8,12 +8,19 @@ import { validateIBAN, formatIBAN } from '@/lib/validation';
 export default function Step3Bank({ formData, onUpdate, onNext, onBack }: FormStepProps) {
   const [errors, setErrors] = useState<FormErrors>({});
 
-  // Pre-fill account holder with name if empty
+  // Pre-fill account holder with the name of the person submitting the application
   useEffect(() => {
-    if (!formData.accountHolder && formData.name) {
-      onUpdate({ accountHolder: formData.name });
+    if (!formData.accountHolder) {
+      // If insuring someone else, use policy holder's name, otherwise use insured person's name
+      const applicantName = formData.insuranceFor === 'other'
+        ? formData.policyHolderName
+        : formData.name;
+
+      if (applicantName) {
+        onUpdate({ accountHolder: applicantName });
+      }
     }
-  }, [formData.name, formData.accountHolder, onUpdate]);
+  }, [formData.name, formData.policyHolderName, formData.insuranceFor, formData.accountHolder, onUpdate]);
 
   const handleIBANChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s/g, '').toUpperCase();

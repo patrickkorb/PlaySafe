@@ -30,6 +30,10 @@ export default function Step4Confirmation({
       newErrors.contactConsent = 'Bitte erlaube uns, dich zu kontaktieren';
     }
 
+    if (!formData.riskExclusionConsent) {
+      newErrors.riskExclusionConsent = 'Bitte bestätige, dass keine Risikoausschlüsse vorliegen';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -68,13 +72,46 @@ export default function Step4Confirmation({
       <div className="bg-white border-2 border-gray-200 rounded-xl p-6 space-y-4">
         <h3 className="font-bold text-lg text-gray-900 mb-4">📋 Deine Angaben im Überblick</h3>
 
-        {/* Personal Data */}
+        {/* Insurance Type */}
         <div className="border-b border-gray-200 pb-4">
-          <h4 className="font-semibold text-gray-700 mb-2">Persönliche Daten</h4>
+          <h4 className="font-semibold text-gray-700 mb-2">Versicherung für</h4>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>{formData.insuranceFor === 'self' ? 'Mich selbst' : 'Jemand anderen'}</p>
+            {formData.insuranceFor === 'other' && formData.relationshipToInsured && (
+              <p><span className="font-medium">Beziehung:</span> {formData.relationshipToInsured}</p>
+            )}
+          </div>
+        </div>
+
+        {/* Policy Holder Data - Only shown when insuring someone else */}
+        {formData.insuranceFor === 'other' && (
+          <div className="border-b border-gray-200 pb-4">
+            <h4 className="font-semibold text-gray-700 mb-2">Versicherungsnehmer (Person, die die Versicherung abschließt)</h4>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p><span className="font-medium">Anrede:</span> {formData.policyHolderSalutation}</p>
+              <p><span className="font-medium">Name:</span> {formData.policyHolderName}</p>
+              <p><span className="font-medium">Geburtsdatum:</span> {formData.policyHolderBirthDate}</p>
+              <p><span className="font-medium">Berufsstand:</span> {formData.policyHolderJob}</p>
+              {formData.policyHolderJobField && (
+                <p><span className="font-medium">Tätigkeit:</span> {formData.policyHolderJobField}</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Insured Person Data */}
+        <div className="border-b border-gray-200 pb-4">
+          <h4 className="font-semibold text-gray-700 mb-2">
+            {formData.insuranceFor === 'other' ? 'Versicherte Person' : 'Persönliche Daten'}
+          </h4>
           <div className="text-sm text-gray-600 space-y-1">
             <p><span className="font-medium">Anrede:</span> {formData.salutation}</p>
             <p><span className="font-medium">Name:</span> {formData.name}</p>
             <p><span className="font-medium">Geburtsdatum:</span> {formData.birthDate}</p>
+            <p><span className="font-medium">Berufsstand:</span> {formData.job}</p>
+            {formData.jobField && (
+              <p><span className="font-medium">Tätigkeit:</span> {formData.jobField}</p>
+            )}
           </div>
         </div>
 
@@ -89,11 +126,28 @@ export default function Step4Confirmation({
         </div>
 
         {/* Bank Data */}
-        <div>
+        <div className="border-b border-gray-200 pb-4">
           <h4 className="font-semibold text-gray-700 mb-2">Bankverbindung</h4>
           <div className="text-sm text-gray-600 space-y-1">
             <p><span className="font-medium">IBAN:</span> {maskIBAN(formData.iban)}</p>
-            <p><span className="font-medium">Kontoinhaber:</span> {formData.accountHolder || formData.name}</p>
+            <p><span className="font-medium">Kontoinhaber:</span> {formData.accountHolder}</p>
+          </div>
+        </div>
+
+        {/* Insurance Start */}
+        <div>
+          <h4 className="font-semibold text-gray-700 mb-2">Versicherungsbeginn & Tarif</h4>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>
+              <span className="font-medium">Beginn:</span>{' '}
+              {formData.insuranceStartType === 'immediate'
+                ? 'Sofort'
+                : formData.insuranceStartType === 'date' && formData.insuranceStartDate
+                  ? formData.insuranceStartDate
+                  : '-'
+              }
+            </p>
+            <p><span className="font-medium">Tarif:</span> {formData.tarif}</p>
           </div>
         </div>
       </div>
@@ -146,6 +200,26 @@ export default function Step4Confirmation({
         {errors.contactConsent && (
           <p className="text-red-500 text-sm -mt-2">{errors.contactConsent}</p>
         )}
+
+        {/* Risk Exclusion Consent */}
+        <div className="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="riskExclusion"
+            checked={formData.riskExclusionConsent}
+            onChange={(e) => {
+              onUpdate({ riskExclusionConsent: e.target.checked });
+              if (errors.riskExclusionConsent) setErrors({ ...errors, riskExclusionConsent: '' });
+            }}
+            className="mt-1 w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
+          />
+          <label htmlFor="riskExclusion" className="text-sm text-gray-700 cursor-pointer">
+            Ich bestätige, dass keine Pflegebedürftigkeit, kein Flugrisiko und keinMotorsportrisiko besteht oder beruflicher/professioneller Sport ausgeübt wird. <span className="text-red-500">*</span>
+          </label>
+        </div>
+        {errors.riskExclusionConsent && (
+          <p className="text-red-500 text-sm -mt-2">{errors.riskExclusionConsent}</p>
+        )}
       </div>
 
       {/* Trust Badge */}
@@ -154,7 +228,7 @@ export default function Step4Confirmation({
           <span className="text-2xl">✓</span>
           <div className="text-sm text-gray-700">
             <p className="font-semibold">100% kostenlos & unverbindlich</p>
-            <p>Du erhältst ein maßgeschneidertes Angebot - ganz ohne Verpflichtung.</p>
+            <p>Du erhältst einen maßgeschneiderten Antrag - ganz ohne Verpflichtung.</p>
           </div>
         </div>
       </div>
@@ -166,7 +240,7 @@ export default function Step4Confirmation({
             disabled={isSubmitting}
             className="flex-1 bg-secondary hover:bg-secondary/90 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-lg transition-all duration-200"
         >
-          {isSubmitting ? 'Wird gesendet...' : 'Angebot anfordern'}
+          {isSubmitting ? 'Wird gesendet...' : 'Antrag anfordern'}
         </button>
         <button
           onClick={onBack}

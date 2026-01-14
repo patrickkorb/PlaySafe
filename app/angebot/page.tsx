@@ -12,10 +12,21 @@ import { trackLead } from '@/app/components/MetaPixel';
 import { trackOfferFormSubmitted } from '@/app/components/Datafast';
 
 const initialFormData: AngebotFormData = {
+  insuranceFor: '',
+  policyHolderSalutation: '',
+  policyHolderName: '',
+  policyHolderBirthDate: '',
+  policyHolderJob: '',
+  policyHolderJobField: '',
+  relationshipToInsured: '',
   salutation: '',
   name: '',
   birthDate: '',
   job: '',
+  jobField: '',
+  insuranceStartType: '',
+  insuranceStartDate: '',
+  tarif: '',
   email: '',
   phone: '',
   street: '',
@@ -26,6 +37,7 @@ const initialFormData: AngebotFormData = {
   accountHolder: '',
   privacyConsent: false,
   contactConsent: false,
+  riskExclusionConsent: false,
 };
 
 function AngebotContent() {
@@ -52,7 +64,7 @@ function AngebotContent() {
       salutation = 'Frau';
     }
 
-    if (name || email || phone || birthDate || salutation) {
+    if (name || email || phone || birthDate || salutation || tarif) {
       setFormData(prev => ({
         ...prev,
         salutation: salutation || prev.salutation,
@@ -60,6 +72,7 @@ function AngebotContent() {
         email: email || '',
         phone: phone || '',
         birthDate: birthDate || '',
+        tarif: tarif || '',
       }));
     }
   }, [searchParams]);
@@ -89,12 +102,23 @@ function AngebotContent() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          insuranceFor: formData.insuranceFor,
+          policyHolderSalutation: formData.policyHolderSalutation,
+          policyHolderName: formData.policyHolderName,
+          policyHolderBirthDate: formData.policyHolderBirthDate,
+          policyHolderJob: formData.policyHolderJob,
+          policyHolderJobField: formData.policyHolderJobField,
+          relationshipToInsured: formData.relationshipToInsured,
           salutation: formData.salutation,
           name: formData.name,
           birthDate: formData.birthDate,
           email: formData.email,
           phone: formData.phone,
           job: formData.job,
+          jobField: formData.jobField,
+          insuranceStartType: formData.insuranceStartType,
+          insuranceStartDate: formData.insuranceStartDate,
+          tarif: formData.tarif,
           street: formData.street,
           houseNumber: formData.houseNumber,
           postalCode: formData.postalCode,
@@ -103,6 +127,7 @@ function AngebotContent() {
           accountHolder: formData.accountHolder,
           privacyConsent: formData.privacyConsent,
           contactConsent: formData.contactConsent,
+          riskExclusionConsent: formData.riskExclusionConsent,
         }),
       });
 
