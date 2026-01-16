@@ -15,6 +15,7 @@ import Image from "next/image";
 
 export default function Rechner() {
     const [step, setStep] = useState(1)
+    const [insuranceFor, setInsuranceFor] = useState('')
     const [gender, setGender] = useState('')
     const [sport, setSport] = useState('')
     const [frequency, setFrequency] = useState('')
@@ -28,6 +29,13 @@ export default function Rechner() {
     const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
     const [showTooltip, setShowTooltip] = useState(false)
     const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false)
+
+    const insuranceForOptions = [
+        { name: 'Mich selbst', value: 'self' },
+        { name: 'Mein Kind', value: 'child' },
+        { name: 'Ehepartner/in', value: 'spouse' },
+        { name: 'Lebenspartner/in', value: 'partner' },
+    ]
 
     const genderOptions = [
         { name: 'Männlich', icon: Mars },
@@ -52,6 +60,33 @@ export default function Rechner() {
     ]
 
 
+    // Hilfsfunktion: Gibt die passende Bezeichnung basierend auf insuranceFor und Geschlecht zurück
+    const getInsuredPersonLabel = () => {
+        const isMale = gender === 'Männlich'
+        switch (insuranceFor) {
+            case 'child': return isMale ? 'deines Sohnes' : 'deiner Tochter'
+            case 'spouse': return isMale ? 'deines Ehemanns' : 'deiner Ehefrau'
+            case 'partner': return isMale ? 'deines Lebenspartners' : 'deiner Lebenspartnerin'
+            default: return 'dein'
+        }
+    }
+
+    const getInsuredPersonPronoun = () => {
+        const isMale = gender === 'Männlich'
+        switch (insuranceFor) {
+            case 'child': return isMale ? 'dein Sohn' : 'deine Tochter'
+            case 'spouse': return isMale ? 'dein Ehemann' : 'deine Ehefrau'
+            case 'partner': return isMale ? 'dein Lebenspartner' : 'deine Lebenspartnerin'
+            default: return 'du'
+        }
+    }
+
+    const handleInsuranceForSelect = (value: string) => {
+        setInsuranceFor(value)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+        setStep(2)
+    }
+
     // Formatiert Eingabe zu DD.MM.JJJJ
     const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value.replace(/\D/g, '') // Nur Zahlen
@@ -74,7 +109,7 @@ export default function Rechner() {
     const handleGenderSelect = (selectedGender: string) => {
         setGender(selectedGender)
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        setStep(2)
+        setStep(3)
     }
 
     const handleSportSelect = (sportName: string) => {
@@ -84,7 +119,7 @@ export default function Rechner() {
         // Track Datafast goal: select_sport
         trackSportSelected(sportName)
 
-        setStep(3)
+        setStep(4)
     }
 
     const handleFrequencySelect = (freq: string) => {
@@ -94,7 +129,7 @@ export default function Rechner() {
         // Track Datafast goal: select_frequency
         trackFrequencySelected(freq)
 
-        setStep(4)
+        setStep(5)
     }
 
     const handleBirthDateSubmit = () => {
@@ -102,7 +137,7 @@ export default function Rechner() {
 
         // Prüfe ob Datum eingegeben wurde
         if (!birthDate) {
-            setBirthDateError('Bitte gib dein Geburtsdatum ein')
+            setBirthDateError(insuranceFor === 'self' ? 'Bitte gib dein Geburtsdatum ein' : 'Bitte gib das Geburtsdatum ein')
             return
         }
 
@@ -155,7 +190,7 @@ export default function Rechner() {
         trackEnterBirthDate(birthDate)
 
         window.scrollTo({ top: 0, behavior: 'smooth' })
-        setStep(5)
+        setStep(6)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -191,7 +226,8 @@ export default function Rechner() {
                     phone,
                     birthDate,
                     gender,
-                    tarif: tariffName
+                    tarif: tariffName,
+                    insuranceFor
                 }),
             })
 
@@ -219,7 +255,7 @@ export default function Rechner() {
 
             setSubmitStatus('success')
             window.scrollTo({ top: 0, behavior: 'smooth' })
-            setStep(6)
+            setStep(7)
 
         } catch (error) {
             console.error('Error submitting form:', error)
@@ -246,7 +282,7 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 1: Geschlecht */}
+                {/* Schritt 1: Für wen ist die Versicherung? */}
                 {step === 1 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
@@ -254,7 +290,32 @@ export default function Rechner() {
                         transition={{ duration: 0.5 }}
                     >
                         <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">
-                            Wer wird versichert?
+                            Für wen ist die Versicherung?
+                        </h2>
+                        <div className="flex flex-col md:grid md:grid-cols-2 gap-2 md:gap-4 max-w-2xl mx-auto">
+                            {insuranceForOptions.map((option) => (
+                                <button
+                                    key={option.value}
+                                    onClick={() => handleInsuranceForSelect(option.value)}
+                                    className="bg-white border-2 border-gray-300 hover:cursor-pointer hover:border-[#1a3691] hover:shadow-lg rounded-xl p-6 transition-all duration-200 text-xl font-semibold text-gray-900 hover:text-[#1a3691]"
+                                >
+                                    {option.name}
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* Schritt 2: Geschlecht */}
+                {step === 2 && (
+                    <motion.div
+                        initial={{ opacity: 0, x: 100 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="pt-8"
+                    >
+                        <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">
+                            {insuranceFor === 'self' ? 'Welches Geschlecht hast du?' : `Welches Geschlecht hat ${getInsuredPersonPronoun()}?`}
                         </h2>
                         <div className="flex flex-row justify-center gap-4 max-w-2xl mx-auto">
                             {genderOptions.map((option) => (
@@ -269,8 +330,8 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 2: Sportart */}
-                {step === 2 && (
+                {/* Schritt 3: Sportart */}
+                {step === 3 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -278,7 +339,7 @@ export default function Rechner() {
                         className="pt-8"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                            Welchen Sport übst du aus?
+                            {insuranceFor === 'self' ? 'Welchen Sport übst du aus?' : `Welchen Sport übt ${getInsuredPersonPronoun()} aus?`}
                         </h2>
                         <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
                             {sports.map((s, index) => (
@@ -294,8 +355,8 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 3: Häufigkeit */}
-                {step === 3 && (
+                {/* Schritt 4: Häufigkeit */}
+                {step === 4 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -303,7 +364,7 @@ export default function Rechner() {
                         className="pt-8"
                     >
                         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                            Wie oft übst du {sport} aus?
+                            {insuranceFor === 'self' ? `Wie oft übst du ${sport} aus?` : `Wie oft übt ${getInsuredPersonPronoun()} ${sport} aus?`}
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl mx-auto">
                             {frequencies.map((freq) => (
@@ -319,8 +380,8 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 4: Geburtsdatum */}
-                {step === 4 && (
+                {/* Schritt 5: Geburtsdatum */}
+                {step === 5 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -329,7 +390,7 @@ export default function Rechner() {
                     >
                         <h1 className={"text-3xl font-bold mb-8"}>Fast geschafft! 🎉</h1>
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                            Wann ist dein Geburtstag?
+                            {insuranceFor === 'self' ? 'Wann ist dein Geburtstag?' : `Wann ist der Geburtstag ${getInsuredPersonLabel()}?`}
                         </h2>
                         <div className={"flex flex-col items-center gap-4"}>
                             <input
@@ -358,8 +419,8 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 5: Formular */}
-                {step === 5 && (
+                {/* Schritt 6: Formular */}
+                {step === 6 && (
                     <motion.div
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -370,7 +431,10 @@ export default function Rechner() {
                             Super, nur noch 1 Schritt bis zu Deiner persönlichen Sportversicherungsberatung 🙌
                         </h2>
                         <h3 className="text-xl font-bold text-center mb-8 mt-4">
-                            Um dir passende Versicherungs-Lösungen zu zeigen, lass uns wissen, wie wir dir deine Empfehlung zusenden können:
+                            {insuranceFor === 'self'
+                                ? 'Um dir passende Versicherungs-Lösungen zu zeigen, lass uns wissen, wie wir dir deine Empfehlung zusenden können:'
+                                : 'Gib jetzt deine Kontaktdaten als Versicherungsnehmer/in ein, um die Empfehlung zu erhalten:'
+                            }
                         </h3>
 
                         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
@@ -436,8 +500,8 @@ export default function Rechner() {
                     </motion.div>
                 )}
 
-                {/* Schritt 6: Ergebnis */}
-                {step === 6 && (() => {
+                {/* Schritt 7: Ergebnis */}
+                {step === 7 && (() => {
                     const selectedSport = sports.find(s => s.name === sport)
 
                     // Generiere Video-Pfad basierend auf Sport und Tarif
@@ -475,7 +539,7 @@ export default function Rechner() {
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
                                         "Happy Holiday: Extra-Schutz im Urlaub",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -490,7 +554,7 @@ export default function Rechner() {
                                         "Krankenhaustagegeld: 30€",
                                         "Schwerverletzung: 7.000€",
                                         "Happy Holiday: Extra-Schutz im Urlaub",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -506,7 +570,7 @@ export default function Rechner() {
                                         "Krankenhaustagegeld: 50€",
                                         "Schwerverletzung: 12.000€",
                                         "Happy Holiday: Extra-Schutz im Urlaub",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -520,7 +584,7 @@ export default function Rechner() {
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
                                         "Happy Holiday: Extra-Schutz im Urlaub",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -646,7 +710,7 @@ export default function Rechner() {
                                             <Button
                                                 variant="v3"
                                                 text="Jetzt Antrag erstellen"
-                                                href={`/angebot?name=${name}&email=${email}&phone=${phone}&birthDate=${birthDate}&tarif=${tariff.title}&gender=${gender}`}
+                                                href={`/angebot?name=${name}&email=${email}&phone=${phone}&birthDate=${birthDate}&tarif=${tariff.title}&gender=${gender}&insuranceFor=${insuranceFor}`}
                                             />
                                         </div>
                                     </div>
@@ -698,7 +762,7 @@ export default function Rechner() {
                                     text={"Jetzt Antrag erstellen"}
                                     variant={"primary"}
                                     size={"lg"}
-                                    href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                                    href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}&insuranceFor=${encodeURIComponent(insuranceFor)}`}
                                     onClick={() => trackOfferPageVisited(tariff.title)}
                                 />
                             </motion.div>
@@ -813,7 +877,7 @@ export default function Rechner() {
                                 text={"Jetzt Antrag erstellen"}
                                 variant={"primary"}
                                 size={"lg"}
-                                href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}`}
+                                href={`/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&gender=${encodeURIComponent(gender)}&tarif=${encodeURIComponent(tariff.title)}&insuranceFor=${encodeURIComponent(insuranceFor)}`}
                                 onClick={() => trackOfferPageVisited(tariff.title)}
                             />
                         </motion.div>

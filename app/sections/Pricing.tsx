@@ -18,7 +18,7 @@ export default function Pricing() {
                 "Krankenhaustagegeld: 10€",
                 "Schwerverletzung: 2.500€",
                 "Happy Holiday: Extra-Schutz im Urlaub",
-                "Zahnersatz: 5.000€",
+                "Zahnersatz: 20.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],
             isPopular: false
@@ -35,7 +35,7 @@ export default function Pricing() {
                 "Krankenhaustagegeld: 30€", 
                 "Schwerverletzung: 7.000€",
                 "Happy Holiday: Extra-Schutz im Urlaub",
-                "Zahnersatz: 5.000€",
+                "Zahnersatz: 20.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],
             isPopular: true
@@ -52,7 +52,7 @@ export default function Pricing() {
                 "Krankenhaustagegeld: 50€",
                 "Schwerverletzung: 12.000€",
                 "Happy Holiday: Extra-Schutz im Urlaub",
-                "Zahnersatz: 5.000€",
+                "Zahnersatz: 20.000€",
                 "Premium Leistungen der SIGNAL IDUNA"
             ],
             isPopular: false

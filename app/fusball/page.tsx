@@ -384,7 +384,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                         "Krankenhaustagegeld: 10€",
                                         "Schwerverletzung: 2.500€",
                                         "Happy Holiday",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -398,7 +398,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                         "Krankenhaustagegeld: 30€",
                                         "Schwerverletzung: 7.000€",
                                         "Happy Holiday",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }
@@ -413,7 +413,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                                         "Krankenhaustagegeld: 50€",
                                         "Schwerverletzung: 12.000€",
                                         "Happy Holiday",
-                                        "Zahnersatz: 5.000€",
+                                        "Zahnersatz: 20.000€",
                                         "Premium Leistungen der SIGNAL IDUNA"
                                     ]
                                 }

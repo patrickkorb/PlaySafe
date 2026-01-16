@@ -55,6 +55,7 @@ function AngebotContent() {
     const birthDate = searchParams.get('birthDate');
     const gender = searchParams.get('gender');
     const tarif = searchParams.get('tarif');
+    const insuranceForParam = searchParams.get('insuranceFor');
 
     // Map gender to salutation
     let salutation = '';
@@ -64,15 +65,64 @@ function AngebotContent() {
       salutation = 'Frau';
     }
 
-    if (name || email || phone || birthDate || salutation || tarif) {
+    // Map insuranceFor from Rechner to Angebot format
+    // Rechner: 'self', 'child', 'spouse', 'partner'
+    // Angebot: 'self', 'other'
+    const isForSelf = insuranceForParam === 'self';
+    const insuranceFor = isForSelf ? 'self' : (insuranceForParam ? 'other' : '');
+
+    // Map relationship
+    let relationshipToInsured = '';
+    if (insuranceForParam === 'child') {
+      relationshipToInsured = 'Kind';
+    } else if (insuranceForParam === 'spouse') {
+      relationshipToInsured = 'Verheiratet';
+    } else if (insuranceForParam === 'partner') {
+      relationshipToInsured = 'Lebensgemeinschaft';
+    }
+
+    if (insuranceForParam) {
+      if (isForSelf) {
+        // Für sich selbst: Alle Daten gehören zur versicherten Person (= Versicherungsnehmer)
+        setFormData(prev => ({
+          ...prev,
+          insuranceFor: 'self',
+          salutation: salutation || prev.salutation,
+          name: name || prev.name,
+          birthDate: birthDate || prev.birthDate,
+          email: email || prev.email,
+          phone: phone || prev.phone,
+          tarif: tarif || prev.tarif,
+        }));
+      } else {
+        // Für jemand anderen:
+        // - Versicherte Person: Geschlecht (salutation) und Geburtsdatum aus Rechner
+        // - Versicherungsnehmer: Name, Email, Phone aus Rechner
+        setFormData(prev => ({
+          ...prev,
+          insuranceFor: 'other',
+          relationshipToInsured: relationshipToInsured,
+          // Versicherungsnehmer-Daten (die Person, die den Antrag stellt)
+          policyHolderName: name || prev.policyHolderName,
+          // Versicherte Person-Daten
+          salutation: salutation || prev.salutation,
+          birthDate: birthDate || prev.birthDate,
+          // Kontaktdaten (gehören zum Versicherungsnehmer)
+          email: email || prev.email,
+          phone: phone || prev.phone,
+          tarif: tarif || prev.tarif,
+        }));
+      }
+    } else if (name || email || phone || birthDate || salutation || tarif) {
+      // Fallback für alte Links ohne insuranceFor
       setFormData(prev => ({
         ...prev,
         salutation: salutation || prev.salutation,
-        name: name || '',
-        email: email || '',
-        phone: phone || '',
-        birthDate: birthDate || '',
-        tarif: tarif || '',
+        name: name || prev.name,
+        email: email || prev.email,
+        phone: phone || prev.phone,
+        birthDate: birthDate || prev.birthDate,
+        tarif: tarif || prev.tarif,
       }));
     }
   }, [searchParams]);

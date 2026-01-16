@@ -7,7 +7,7 @@ import { Resend } from 'resend';
 const tariffData = {
     Small: {
         price: '10€',
-        invaliditaet: '250.000 EUR',
+        invaliditaet: '500.000 EUR',
         gipsgeld: '1.000 EUR',
         schwerverletzung: '2.500 EUR',
         krankenhaus: '10 EUR',
@@ -15,7 +15,7 @@ const tariffData = {
     },
     Medium: {
         price: '15€',
-        invaliditaet: '375.000 EUR',
+        invaliditaet: '750.000 EUR',
         gipsgeld: '1.500 EUR',
         schwerverletzung: '7.000 EUR',
         krankenhaus: '30 EUR',
@@ -23,7 +23,7 @@ const tariffData = {
     },
     Large: {
         price: '20€',
-        invaliditaet: '500.000 EUR',
+        invaliditaet: '1.000.000 EUR',
         gipsgeld: '2.000 EUR',
         schwerverletzung: '12.000 EUR',
         krankenhaus: '50 EUR',
@@ -31,9 +31,17 @@ const tariffData = {
     },
 };
 
+// Mapping für insuranceFor zur Anzeige
+const insuranceForLabels: { [key: string]: string } = {
+    'self': 'Für sich selbst',
+    'child': 'Für Kind',
+    'spouse': 'Für Ehepartner/in',
+    'partner': 'Für Lebenspartner/in',
+};
+
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, phone, birthDate, gender, tarif } = await request.json();
+        const { name, email, phone, birthDate, gender, tarif, insuranceFor } = await request.json();
 
         if (!name || !email || !phone) {
             return NextResponse.json(
@@ -44,6 +52,9 @@ export async function POST(request: NextRequest) {
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
+        // Label für insuranceFor
+        const insuranceForLabel = insuranceForLabels[insuranceFor] || insuranceFor || 'Nicht angegeben';
+
         // 1. E-Mail an dich (Admin)
         const adminEmail = await resend.emails.send({
             from: 'PlaySafe <info@mail.playsafe.fit>',
@@ -52,10 +63,12 @@ export async function POST(request: NextRequest) {
             html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
-          <p><strong>Name:</strong> ${gender} ${name}</p>
+          <p><strong>Versicherung für:</strong> ${insuranceForLabel}</p>
+          <p><strong>Name (Versicherungsnehmer):</strong> ${name}</p>
           <p><strong>E-Mail:</strong> ${email}</p>
           <p><strong>Telefon:</strong> ${phone}</p>
-          <p><strong>Geburtsdatum:</strong> ${birthDate}</p>
+          <p><strong>Geschlecht (versicherte Person):</strong> ${gender}</p>
+          <p><strong>Geburtsdatum (versicherte Person):</strong> ${birthDate}</p>
           <p><strong>Tarif:</strong> ${tarif}</p>
         </div>
       `,
@@ -73,13 +86,11 @@ export async function POST(request: NextRequest) {
         }
 
         // Erstelle den CTA-Link
-        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}`;
+        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
 
-        const anrede = gender == "Männlich" ? "Lieber" : "Liebe";
 
         // Ersetze alle Platzhalter im Template
         emailTemplate = emailTemplate
-            .replace(/{{ANREDE}}/g, anrede)
             .replace(/{{NAME}}/g, name)
             .replace(/{{TARIFF}}/g, tarif)
             .replace(/{{PRICE}}/g, tariffInfo.price)
