@@ -315,7 +315,7 @@ export default function Rechner() {
                         className="pt-8"
                     >
                         <h2 className="text-3xl font-semibold text-gray-900 mb-8 text-center">
-                            {insuranceFor === 'self' ? 'Welches Geschlecht hast du?' : `Welches Geschlecht hat ${getInsuredPersonPronoun()}?`}
+                            {insuranceFor === 'self' ? 'Welches Geschlecht hast du?' : `Welches Geschlecht hat dein Kind?`}
                         </h2>
                         <div className="flex flex-row justify-center gap-4 max-w-2xl mx-auto">
                             {genderOptions.map((option) => (
