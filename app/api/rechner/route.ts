@@ -111,6 +111,24 @@ export async function POST(request: NextRequest) {
 
         console.log('Email erfolgreich gesendet:', customerEmail.data?.id);
 
+        // 4. Kontakt in Resend Audience speichern
+        const nameParts = name.trim().split(' ');
+        const lastName = nameParts[nameParts.length - 1];
+        const firstName = nameParts.slice(0, -1).join(' ');
+
+        try {
+            await resend.contacts.create({
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                unsubscribed: false,
+            });
+            console.log('Kontakt in Resend gespeichert:', email);
+        } catch (contactError) {
+            // Kontakt existiert möglicherweise bereits - kein kritischer Fehler
+            console.log('Kontakt konnte nicht gespeichert werden (existiert evtl. bereits):', contactError);
+        }
+
         return NextResponse.json({
             success: true,
             message: 'Nachricht erfolgreich gesendet',
