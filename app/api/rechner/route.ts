@@ -55,26 +55,7 @@ export async function POST(request: NextRequest) {
         // Label für insuranceFor
         const insuranceForLabel = insuranceForLabels[insuranceFor] || insuranceFor || 'Nicht angegeben';
 
-        // 1. E-Mail an dich (Admin)
-        const adminEmail = await resend.emails.send({
-            from: 'PlaySafe <info@mail.playsafe.fit>',
-            to: ['korbpatrick@web.de'],
-            subject: `Neue Angebotsanfrage von ${name}`,
-            html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
-          <p><strong>Versicherung für:</strong> ${insuranceForLabel}</p>
-          <p><strong>Name (Versicherungsnehmer):</strong> ${name}</p>
-          <p><strong>E-Mail:</strong> ${email}</p>
-          <p><strong>Telefon:</strong> ${phone}</p>
-          <p><strong>Geschlecht (versicherte Person):</strong> ${gender}</p>
-          <p><strong>Geburtsdatum (versicherte Person):</strong> ${birthDate}</p>
-          <p><strong>Tarif:</strong> ${tarif}</p>
-        </div>
-      `,
-        });
-
-        // 2. Lade das detaillierte Email-Template
+        // 1. Lade das detaillierte Email-Template für Kunden
         const templatePath = path.join(process.cwd(), 'emails', 'tariff-details.html');
         let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
 
@@ -88,7 +69,6 @@ export async function POST(request: NextRequest) {
         // Erstelle den CTA-Link
         const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
 
-
         // Ersetze alle Platzhalter im Template
         emailTemplate = emailTemplate
             .replace(/{{NAME}}/g, name)
@@ -101,15 +81,38 @@ export async function POST(request: NextRequest) {
             .replace(/{{ZAHNERSATZ}}/g, tariffInfo.zahnersatz)
             .replace(/{{CTA_LINK}}/g, ctaLink);
 
-        // 3. Sende die Email mit dem detaillierten Template (ohne PDF-Anhang)
-        const customerEmail = await resend.emails.send({
-            from: 'PlaySafe <info@mail.playsafe.fit>',
-            to: email,
-            subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
-            html: emailTemplate,
-        });
+        // 2. Sende beide E-Mails als Batch (Admin + Kunde)
+        const { data: batchData, error: batchError } = await resend.batch.send([
+            {
+                from: 'PlaySafe <info@mail.playsafe.fit>',
+                to: ['korbpatrick@web.de'],
+                subject: `Neue Angebotsanfrage von ${name}`,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                      <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
+                      <p><strong>Versicherung für:</strong> ${insuranceForLabel}</p>
+                      <p><strong>Name (Versicherungsnehmer):</strong> ${name}</p>
+                      <p><strong>E-Mail:</strong> ${email}</p>
+                      <p><strong>Telefon:</strong> ${phone}</p>
+                      <p><strong>Geschlecht (versicherte Person):</strong> ${gender}</p>
+                      <p><strong>Geburtsdatum (versicherte Person):</strong> ${birthDate}</p>
+                      <p><strong>Tarif:</strong> ${tarif}</p>
+                    </div>
+                `,
+            },
+            {
+                from: 'PlaySafe <info@mail.playsafe.fit>',
+                to: [email],
+                subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
+                html: emailTemplate,
+            },
+        ]);
 
-        console.log('Email erfolgreich gesendet:', customerEmail.data?.id);
+        if (batchError) {
+            throw new Error(`Batch-Email Fehler: ${batchError.message}`);
+        }
+
+        console.log('Emails erfolgreich gesendet:', batchData);
 
         // 4. Kontakt in Resend Audience speichern
         const nameParts = name.trim().split(' ');
@@ -132,10 +135,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             message: 'Nachricht erfolgreich gesendet',
-            emailsSent: {
-                admin: adminEmail.data?.id,
-                customer: customerEmail.data?.id
-            }
+            emailsSent: batchData
         });
 
     } catch (error) {
