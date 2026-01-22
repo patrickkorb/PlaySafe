@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     // 1. E-Mail an dich (Admin)
     const adminEmail = await resend.emails.send({
-      from: 'PlaySafe <info@mail.playsafe.fit>',
+      from: 'PlaySafe <info@playsafe.fit>',
       to: ['korbpatrick@web.de'],
       subject: `Neue Kontaktanfrage von ${name}`,
       html: `
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     emailTemplate = emailTemplate.replace(/{{NAME}}/g, name);
 
     const customerEmail = await resend.emails.send({
-      from: 'PlaySafe <info@mail.playsafe.fit>',
+      from: 'PlaySafe <info@playsafe.fit>',
       to: email,
       subject: 'Vielen Dank für Ihre Nachricht - PlaySafe',
       html: emailTemplate,

@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
             : '-';
 
         const adminEmail = await resend.emails.send({
-            from: 'PlaySafe <info@mail.playsafe.fit>',
+            from: 'PlaySafe <info@playsafe.fit>',
             to: ['korbpatrick@web.de'],
             subject: `Neue Antragsanfrage von ${name}`,
             html: `
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
 
         // 2. Bestätigungsmail an Kunden
         const customerEmail = await resend.emails.send({
-            from: 'PlaySafe <info@mail.playsafe.fit>',
+            from: 'PlaySafe <info@playsafe.fit>',
             to: email,
             subject: 'Dein Antrag ist auf dem Weg',
             html: `

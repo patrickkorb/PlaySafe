@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         // 2. Sende beide E-Mails als Batch (Admin + Kunde)
         const { data: batchData, error: batchError } = await resend.batch.send([
             {
-                from: 'PlaySafe <info@mail.playsafe.fit>',
+                from: 'PlaySafe <info@playsafe.fit>',
                 to: ['korbpatrick@web.de'],
                 subject: `Neue Angebotsanfrage von ${name}`,
                 html: `
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
                 `,
             },
             {
-                from: 'PlaySafe <info@mail.playsafe.fit>',
+                from: 'PlaySafe <info@playsafe.fit>',
                 to: [email],
                 subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
                 html: emailTemplate,

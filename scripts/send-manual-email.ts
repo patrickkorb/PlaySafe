@@ -26,7 +26,7 @@ async function sendManualEmail() {
 
     try {
         const result = await resend.emails.send({
-            from: 'PlaySafe <info@mail.playsafe.fit>',
+            from: 'PlaySafe <info@playsafe.fit>',
             to: recipientEmail,
             subject: 'Dein PlaySafe Angebot & Terminbestätigung',
             html: htmlContent,
