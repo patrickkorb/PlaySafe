@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const resend = new Resend("re_b2zouebu_9ukpdBcNb3q2uGVdS3w5pLLM");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendManualEmail() {
     const recipientEmail = 't.duarte222@googlemail.com';
