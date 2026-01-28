@@ -33,7 +33,7 @@ export default function Step6Contact() {
     setIsSubmitting(true);
 
     try {
-      const tariff = calculateTariff(data.frequency);
+      const tariff = calculateTariff(data.frequency, data.insuranceFor);
 
       const response = await fetch('/api/rechner', {
         method: 'POST',

@@ -106,3 +106,51 @@ export const TARIFFS = {
     ],
   },
 } as const;
+
+export const CHILD_TARIFFS = {
+  'Small Kids': {
+    title: 'Small Kids' as const,
+    price: '13€',
+    features: [
+      '1.000€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 500.000€',
+      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 10€',
+      'Schwerverletzung: 2.500€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+  'Medium Kids': {
+    title: 'Medium Kids' as const,
+    price: '20€',
+    features: [
+      '1.500€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 750.000€',
+      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 30€',
+      'Schwerverletzung: 7.000€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+  'Large Kids': {
+    title: 'Large Kids' as const,
+    price: '26€',
+    features: [
+      '2.000€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 1.000.000€',
+      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 50€',
+      'Schwerverletzung: 12.000€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+} as const;

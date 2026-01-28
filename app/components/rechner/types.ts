@@ -16,7 +16,7 @@ export interface RechnerData {
 }
 
 export interface TariffInfo {
-  title: 'Small' | 'Medium' | 'Large';
+  title: 'Small' | 'Medium' | 'Large' | 'Small Kids' | 'Medium Kids' | 'Large Kids';
   price: string;
   features: readonly string[];
 }

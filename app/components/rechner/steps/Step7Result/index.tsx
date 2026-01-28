@@ -17,7 +17,7 @@ import GoogleReviewBadge from './GoogleReviewBadge';
 export default function Step7Result() {
   const { data, resetRechner } = useRechner();
 
-  const tariff = calculateTariff(data.frequency);
+  const tariff = calculateTariff(data.frequency, data.insuranceFor);
   const sport = getSportByName(data.sport);
   const offerUrl = buildOfferUrl({
     name: data.name,
@@ -62,7 +62,7 @@ export default function Step7Result() {
           transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
         >
           <Button
-            text="Jetzt Tarif reservieren"
+            text="Jetzt Schutz erhalten"
             variant="primary"
             size="lg"
             href={offerUrl}
@@ -88,7 +88,7 @@ export default function Step7Result() {
         transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
       >
         <Button
-          text="Jetzt Tarif reservieren"
+          text="Jetzt Schutz erhalten"
           variant="primary"
           size="lg"
           href={offerUrl}

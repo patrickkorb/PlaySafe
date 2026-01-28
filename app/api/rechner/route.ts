@@ -29,6 +29,30 @@ const tariffData = {
         krankenhaus: '50 EUR',
         zahnersatz: '20.000 EUR',
     },
+    'Small Kids': {
+        price: '13€',
+        invaliditaet: '500.000 EUR',
+        gipsgeld: '1.000 EUR',
+        schwerverletzung: '2.500 EUR',
+        krankenhaus: '10 EUR',
+        zahnersatz: '20.000 EUR',
+    },
+    'Medium Kids': {
+        price: '20€',
+        invaliditaet: '750.000 EUR',
+        gipsgeld: '1.500 EUR',
+        schwerverletzung: '7.000 EUR',
+        krankenhaus: '30 EUR',
+        zahnersatz: '20.000 EUR',
+    },
+    'Large Kids': {
+        price: '26€',
+        invaliditaet: '1.000.000 EUR',
+        gipsgeld: '2.000 EUR',
+        schwerverletzung: '12.000 EUR',
+        krankenhaus: '50 EUR',
+        zahnersatz: '20.000 EUR',
+    },
 };
 
 // Mapping für insuranceFor zur Anzeige

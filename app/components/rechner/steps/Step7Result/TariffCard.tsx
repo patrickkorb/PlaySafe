@@ -15,6 +15,7 @@ interface TariffCardProps {
 
 export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: TariffCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false);
 
   return (
     <motion.div
@@ -79,6 +80,25 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: Tari
                           </div>
                         </div>
                       )}
+                      {feature.includes('Sicherheitsbudget') && (
+                        <div className="relative inline-flex">
+                          <Info
+                            className="w-4 h-4 text-foreground cursor-pointer mb-3 active:scale-95 transition-transform"
+                            onClick={() => setShowSicherheitsTooltip(!showSicherheitsTooltip)}
+                            onMouseEnter={() => setShowSicherheitsTooltip(true)}
+                            onMouseLeave={() => setShowSicherheitsTooltip(false)}
+                          />
+                          <div
+                            className={`fixed left-4 right-4 sm:absolute sm:left-auto sm:right-auto sm:bottom-full sm:left-1/2 sm:-translate-x-1/2 bottom-auto top-1/2 -translate-y-1/2 sm:translate-y-0 sm:mb-2 max-w-xs bg-foreground text-background text-xs rounded-lg p-3 transition-all duration-200 z-50 shadow-xl ${
+                              showSicherheitsTooltip ? 'opacity-100 visible' : 'opacity-0 invisible'
+                            }`}
+                          >
+                            <div className="text-left leading-relaxed">
+                              Dieses Budget ist jährlich frei verfügbar für Präventionsmaßnahmen wie z.B. Schienbeinschoner, Protektoren, Helme, Skikurse oder andere Schutzausrüstung.
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {index === 0 && sport?.catch && (
                       <span className="text-muted-foreground text-sm mt-1 text-left">
@@ -94,7 +114,7 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: Tari
           <div className="w-full">
             <Button
               variant="v3"
-              text="Jetzt Antrag erstellen"
+              text="Jetzt Schutz erhalten"
               href={offerUrl}
               onClick={onCtaClick}
             />

@@ -1,5 +1,5 @@
 import { InsuranceFor, Gender, TariffInfo } from './types';
-import { TARIFFS, SPORTS } from './constants';
+import { TARIFFS, CHILD_TARIFFS, SPORTS } from './constants';
 
 export function getInsuredPersonLabel(insuranceFor: InsuranceFor, gender: Gender): string {
   const isMale = gender === 'Männlich';
@@ -81,7 +81,21 @@ export function getSportFrequencyQuestion(
   return `Wie oft ${erSieVerb} ${subject} ${sport}?`;
 }
 
-export function calculateTariff(frequency: string): TariffInfo {
+export function calculateTariff(frequency: string, insuranceFor: InsuranceFor = 'self'): TariffInfo {
+  const isChild = insuranceFor === 'child';
+
+  if (isChild) {
+    switch (frequency) {
+      case '2-3x pro Woche':
+        return CHILD_TARIFFS['Medium Kids'];
+      case '4-5x pro Woche':
+      case 'Täglich':
+        return CHILD_TARIFFS['Large Kids'];
+      default:
+        return CHILD_TARIFFS['Small Kids'];
+    }
+  }
+
   switch (frequency) {
     case '2-3x pro Woche':
       return TARIFFS.Medium;
