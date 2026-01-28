@@ -189,7 +189,7 @@ export default function AngebotErfolg() {
 
               {/* Review Count */}
               <p className="text-gray-600 font-semibold text-sm">
-                80+ Rezensionen
+                90+ Rezensionen
               </p>
             </a>
           </div>

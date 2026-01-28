@@ -4,7 +4,14 @@
 @theme {
     --color-primary: #1a3691;
     --color-secondary: #f97316;
-
+    --color-background: #ffffff;
+    --color-foreground: #111827;
+    --color-muted: #f9fafb;
+    --color-muted-foreground: #6b7280;
+    --color-border: #e5e7eb;
+    --color-error: #dc2626;
+    --color-success: #16a34a;
+    --color-success-light: #dcfce7;
 }
 
 html {
