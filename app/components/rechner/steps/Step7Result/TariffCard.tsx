@@ -13,9 +13,25 @@ interface TariffCardProps {
   onCtaClick: () => void;
 }
 
+function formatPrice(price: string): { main: string; decimal: string } {
+  // Entferne das €-Zeichen und trimme
+  const cleanPrice = price.replace('€', '').trim();
+
+  // Prüfe ob ein Komma vorhanden ist
+  if (cleanPrice.includes(',')) {
+    const [main, decimal] = cleanPrice.split(',');
+    return { main, decimal };
+  }
+
+  // Kein Komma -> füge ,00 hinzu
+  return { main: cleanPrice, decimal: '00' };
+}
+
 export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: TariffCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false);
+
+  const { main: priceMain, decimal: priceDecimal } = formatPrice(tariff.price);
 
   return (
     <motion.div
@@ -33,7 +49,8 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: Tari
             </h3>
             <div className="flex items-baseline justify-center gap-1">
               <span className="text-4xl md:text-5xl font-bold text-foreground">
-                {tariff.price}
+                {priceMain}
+                <span className="text-2xl md:text-3xl">,{priceDecimal}€</span>
               </span>
               <span className="text-muted-foreground text-lg">/Monat</span>
             </div>
@@ -114,7 +131,7 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: Tari
           <div className="w-full">
             <Button
               variant="v3"
-              text="Jetzt Schutz erhalten"
+              text="Jetzt Tarif reservieren"
               href={offerUrl}
               onClick={onCtaClick}
             />

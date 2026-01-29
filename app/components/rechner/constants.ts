@@ -65,7 +65,7 @@ export const FREQUENCIES = [
 export const TARIFFS = {
   Small: {
     title: 'Small' as const,
-    price: '10€',
+    price: '10,00€',
     features: [
       '1.000€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
@@ -79,7 +79,7 @@ export const TARIFFS = {
   },
   Medium: {
     title: 'Medium' as const,
-    price: '15€',
+    price: '15,01€',
     features: [
       '1.500€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
@@ -93,13 +93,13 @@ export const TARIFFS = {
   },
   Large: {
     title: 'Large' as const,
-    price: '20€',
+    price: '20,03€',
     features: [
       '2.000€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
       'Vollinvalidität: 1.000.000€',
       'Krankenhaustagegeld: 50€',
-      'Schwerverletzung: 12.000€',
+      'Schwerverletzung: 12000',
       'Happy Holiday: Extra-Schutz im Urlaub',
       'Zahnersatz: 20.000€',
       'Premium Leistungen der SIGNAL IDUNA',
@@ -107,15 +107,16 @@ export const TARIFFS = {
   },
 } as const;
 
+// Kinder-Tarife für 16-17 Jahre
 export const CHILD_TARIFFS = {
   'Small Kids': {
     title: 'Small Kids' as const,
-    price: '13€',
+    price: '12,79€',
     features: [
       '1.000€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
       'Vollinvalidität: 500.000€',
-      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
       'Krankenhaustagegeld: 10€',
       'Schwerverletzung: 2.500€',
       'Happy Holiday: Extra-Schutz im Urlaub',
@@ -125,12 +126,12 @@ export const CHILD_TARIFFS = {
   },
   'Medium Kids': {
     title: 'Medium Kids' as const,
-    price: '20€',
+    price: '19,39€',
     features: [
       '1.500€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
       'Vollinvalidität: 750.000€',
-      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
       'Krankenhaustagegeld: 30€',
       'Schwerverletzung: 7.000€',
       'Happy Holiday: Extra-Schutz im Urlaub',
@@ -140,12 +141,61 @@ export const CHILD_TARIFFS = {
   },
   'Large Kids': {
     title: 'Large Kids' as const,
-    price: '26€',
+    price: '26,03€',
     features: [
       '2.000€ sofort aufs Konto',
       'Sicherheitsbudget: 30€',
       'Vollinvalidität: 1.000.000€',
-      'Nur für Kinder: 24/7 Schutz beim Sport, in der Schule, im Studium & in der Freizeit',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 50€',
+      'Schwerverletzung: 12.000€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+} as const;
+
+// Kinder-Tarife für 0-15 Jahre (günstiger)
+export const CHILD_UNDER_16_TARIFFS = {
+  'Small Kids': {
+    title: 'Small Kids' as const,
+    price: '10,42€',
+    features: [
+      '1.000€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 500.000€',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 10€',
+      'Schwerverletzung: 2.500€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+  'Medium Kids': {
+    title: 'Medium Kids' as const,
+    price: '15,78€',
+    features: [
+      '1.500€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 750.000€',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
+      'Krankenhaustagegeld: 30€',
+      'Schwerverletzung: 7.000€',
+      'Happy Holiday: Extra-Schutz im Urlaub',
+      'Zahnersatz: 20.000€',
+      'Premium Leistungen der SIGNAL IDUNA',
+    ],
+  },
+  'Large Kids': {
+    title: 'Large Kids' as const,
+    price: '21,17€',
+    features: [
+      '2.000€ sofort aufs Konto',
+      'Sicherheitsbudget: 30€',
+      'Vollinvalidität: 1.000.000€',
+      'Nur für Kinder: 24/7 Extra-Schutz in der Schule, im Studium & in der Freizeit',
       'Krankenhaustagegeld: 50€',
       'Schwerverletzung: 12.000€',
       'Happy Holiday: Extra-Schutz im Urlaub',

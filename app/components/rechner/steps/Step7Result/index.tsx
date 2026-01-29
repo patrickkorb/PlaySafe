@@ -9,6 +9,7 @@ import Button from '@/app/components/ui/Button';
 import Footer from '@/app/sections/Footer';
 import FAQ from '@/app/sections/FAQ';
 import TariffCard from './TariffCard';
+import UrgencyTimer from './UrgencyTimer';
 import VideoSection from './VideoSection';
 import SocialProof from './SocialProof';
 import Testimonials from './Testimonials';
@@ -17,7 +18,7 @@ import GoogleReviewBadge from './GoogleReviewBadge';
 export default function Step7Result() {
   const { data, resetRechner } = useRechner();
 
-  const tariff = calculateTariff(data.frequency, data.insuranceFor);
+  const tariff = calculateTariff(data.frequency, data.insuranceFor, data.birthDate);
   const sport = getSportByName(data.sport);
   const offerUrl = buildOfferUrl({
     name: data.name,
@@ -28,6 +29,9 @@ export default function Step7Result() {
     tarif: tariff.title,
     insuranceFor: data.insuranceFor,
   });
+
+  // URL mit Rabatt-Parameter für den UrgencyTimer
+  const discountOfferUrl = `${offerUrl}&discount=10`;
 
   const handleCtaClick = () => {
     trackOfferPageVisited(tariff.title);
@@ -50,6 +54,8 @@ export default function Step7Result() {
           offerUrl={offerUrl}
           onCtaClick={handleCtaClick}
         />
+
+        <UrgencyTimer initialMinutes={5} discountPercent={10} offerUrl={discountOfferUrl} />
 
         <VideoSection sport={data.sport} tariffTitle={tariff.title} />
 

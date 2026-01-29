@@ -35,10 +35,10 @@ export default function SocialProof() {
           </div>
         ))}
         <div
-          className="relative w-12 h-12 rounded-full border-3 border-background shadow-md bg-primary flex items-center justify-center"
+          className="relative w-12 h-12 rounded-full border-3 border-background shadow-md bg-primary flex items-center justify-center ml-1"
           style={{ zIndex: 0 }}
         >
-          <span className="text-white text-xs font-bold">+240</span>
+          <span className="text-white text-xs font-bold">+200</span>
         </div>
       </div>
 

@@ -1,5 +1,30 @@
 import { InsuranceFor, Gender, TariffInfo } from './types';
-import { TARIFFS, CHILD_TARIFFS, SPORTS } from './constants';
+import { TARIFFS, CHILD_TARIFFS, CHILD_UNDER_16_TARIFFS, SPORTS } from './constants';
+
+export function getAgeFromBirthDate(birthDate: string): number | null {
+  if (!birthDate || birthDate.length !== 10) return null;
+
+  const parts = birthDate.split('.');
+  if (parts.length !== 3) return null;
+
+  const day = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const year = parseInt(parts[2]);
+
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+
+  const birthDateObj = new Date(year, month - 1, day);
+  const today = new Date();
+
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+    age--;
+  }
+
+  return age;
+}
 
 export function getInsuredPersonLabel(insuranceFor: InsuranceFor, gender: Gender): string {
   const isMale = gender === 'Männlich';
@@ -81,18 +106,27 @@ export function getSportFrequencyQuestion(
   return `Wie oft ${erSieVerb} ${subject} ${sport}?`;
 }
 
-export function calculateTariff(frequency: string, insuranceFor: InsuranceFor = 'self'): TariffInfo {
+export function calculateTariff(
+  frequency: string,
+  insuranceFor: InsuranceFor = 'self',
+  birthDate?: string
+): TariffInfo {
   const isChild = insuranceFor === 'child';
 
   if (isChild) {
+    // Prüfe ob Kind unter 16 Jahre alt ist
+    const age = birthDate ? getAgeFromBirthDate(birthDate) : null;
+    const isUnder16 = age !== null && age < 16;
+    const childTariffs = isUnder16 ? CHILD_UNDER_16_TARIFFS : CHILD_TARIFFS;
+
     switch (frequency) {
       case '2-3x pro Woche':
-        return CHILD_TARIFFS['Medium Kids'];
+        return childTariffs['Medium Kids'];
       case '4-5x pro Woche':
       case 'Täglich':
-        return CHILD_TARIFFS['Large Kids'];
+        return childTariffs['Large Kids'];
       default:
-        return CHILD_TARIFFS['Small Kids'];
+        return childTariffs['Small Kids'];
     }
   }
 

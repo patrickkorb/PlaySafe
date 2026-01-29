@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useRechner } from '../RechnerProvider';
 import { calculateTariff } from '../utils';
 import { trackLead } from '@/app/components/MetaPixel';
@@ -19,21 +20,29 @@ export default function Step6Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [privacyError, setPrivacyError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPhoneError('');
     setSubmitError('');
+    setPrivacyError('');
 
     if (!isValidPhoneNumber(data.phone)) {
       setPhoneError('Bitte gib eine gültige Telefonnummer ein');
       return;
     }
 
+    if (!privacyAccepted) {
+      setPrivacyError('Bitte bestätige die Datenschutzerklärung');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const tariff = calculateTariff(data.frequency, data.insuranceFor);
+      const tariff = calculateTariff(data.frequency, data.insuranceFor, data.birthDate);
 
       const response = await fetch('/api/rechner', {
         method: 'POST',
@@ -159,6 +168,34 @@ export default function Step6Contact() {
               <p className="text-error font-semibold">{submitError}</p>
             </div>
           )}
+
+          <div className="mt-2">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={privacyAccepted}
+                onChange={(e) => {
+                  setPrivacyAccepted(e.target.checked);
+                  if (privacyError) setPrivacyError('');
+                }}
+                className="mt-1 w-5 h-5 rounded border-2 border-border text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer"
+              />
+              <span className="text-sm text-muted-foreground leading-relaxed">
+                Ich stimme der{' '}
+                <Link
+                  href="/datenschutz"
+                  target="_blank"
+                  className="text-primary underline hover:text-primary/80"
+                >
+                  Datenschutzerklärung
+                </Link>{' '}
+                zu und bin damit einverstanden, dass PlaySafe mich per E-Mail und Telefon kontaktieren darf.
+              </span>
+            </label>
+            {privacyError && (
+              <p className="text-error text-sm mt-1 ml-8">{privacyError}</p>
+            )}
+          </div>
 
           <button
             type="submit"

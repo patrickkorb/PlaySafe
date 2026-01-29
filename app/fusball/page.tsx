@@ -377,7 +377,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             case '1x pro Woche':
                                 return {
                                     title: 'Small',
-                                    price: '10€',
+                                    price: '10,00€',
                                     features: [
                                         "1.000€ sofort aufs Konto",
                                         "Vollinvalidität: 500.000€",
@@ -391,7 +391,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             case '2-3x pro Woche':
                                 return {
                                     title: 'Medium',
-                                    price: '15€',
+                                    price: '15,01€',
                                     features: [
                                         "1.500€ sofort aufs Konto",
                                         "Vollinvalidität: 750.000€",
@@ -406,7 +406,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             case 'Täglich':
                                 return {
                                     title: 'Large',
-                                    price: '20€',
+                                    price: '20,03€',
                                     features: [
                                         "2.000€ sofort aufs Konto",
                                         "Vollinvalidität: 1.000.000€",
@@ -420,7 +420,7 @@ Empfohlener Tarif: ${tariffName} - ${tariffPrice}€/Monat
                             default:
                                 return {
                                     title: 'Small',
-                                    price: '10€',
+                                    price: '10,00€',
                                     features: [
                                         "1.000€ sofort aufs Konto",
                                         "Vollinvalidität: 500.000€",

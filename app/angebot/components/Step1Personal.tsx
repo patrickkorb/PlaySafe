@@ -197,7 +197,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                 onUpdate({ insuranceFor: 'other' });
                 if (errors.insuranceFor) setErrors({ ...errors, insuranceFor: '' });
               }}
-              className={`py-4 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
+              className={`py-2 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
                 formData.insuranceFor === 'other'
                   ? 'border-primary bg-primary text-white'
                   : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'

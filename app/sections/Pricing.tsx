@@ -8,7 +8,7 @@ export default function Pricing() {
     const pricingPlans = [
         {
             title: "Small",
-            price: "10€",
+            price: "10,00€",
             priceSubtext: "/Monat",
             description: "Der Einstieg in deinen Schutz: Kompakt",
             features: [
@@ -25,7 +25,7 @@ export default function Pricing() {
         },
         {
             title: "Medium",
-            price: "15€",
+            price: "15,01€",
             priceSubtext: "/Monat", 
             description: "Mehr Sicherheit für dich und deine Ziele",
             features: [
@@ -42,7 +42,7 @@ export default function Pricing() {
         },
         {
             title: "Large", 
-            price: "20€",
+            price: "20,03€",
             priceSubtext: "/Monat",
             description: "Unser Komplettpaket für maximale Sicherheit und Sorgenfreiheit.",
             features: [

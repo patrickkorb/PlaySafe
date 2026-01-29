@@ -3,10 +3,36 @@ import fs from 'fs';
 import path from 'path';
 import { Resend } from 'resend';
 
+// Hilfsfunktion um Alter aus Geburtsdatum zu berechnen
+function getAgeFromBirthDate(birthDate: string): number | null {
+    if (!birthDate || birthDate.length !== 10) return null;
+
+    const parts = birthDate.split('.');
+    if (parts.length !== 3) return null;
+
+    const day = parseInt(parts[0]);
+    const month = parseInt(parts[1]);
+    const year = parseInt(parts[2]);
+
+    if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+
+    const birthDateObj = new Date(year, month - 1, day);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+        age--;
+    }
+
+    return age;
+}
+
 // Tarif-Daten basierend auf den offiziellen Dokumenten
 const tariffData = {
     Small: {
-        price: '10€',
+        price: '10,00€',
         invaliditaet: '500.000 EUR',
         gipsgeld: '1.000 EUR',
         schwerverletzung: '2.500 EUR',
@@ -14,7 +40,7 @@ const tariffData = {
         zahnersatz: '20.000 EUR',
     },
     Medium: {
-        price: '15€',
+        price: '15,01€',
         invaliditaet: '750.000 EUR',
         gipsgeld: '1.500 EUR',
         schwerverletzung: '7.000 EUR',
@@ -22,7 +48,7 @@ const tariffData = {
         zahnersatz: '20.000 EUR',
     },
     Large: {
-        price: '20€',
+        price: '20,03€',
         invaliditaet: '1.000.000 EUR',
         gipsgeld: '2.000 EUR',
         schwerverletzung: '12.000 EUR',
@@ -30,7 +56,7 @@ const tariffData = {
         zahnersatz: '20.000 EUR',
     },
     'Small Kids': {
-        price: '13€',
+        price: '12,79€',
         invaliditaet: '500.000 EUR',
         gipsgeld: '1.000 EUR',
         schwerverletzung: '2.500 EUR',
@@ -38,7 +64,7 @@ const tariffData = {
         zahnersatz: '20.000 EUR',
     },
     'Medium Kids': {
-        price: '20€',
+        price: '19,39€',
         invaliditaet: '750.000 EUR',
         gipsgeld: '1.500 EUR',
         schwerverletzung: '7.000 EUR',
@@ -46,13 +72,20 @@ const tariffData = {
         zahnersatz: '20.000 EUR',
     },
     'Large Kids': {
-        price: '26€',
+        price: '26,03€',
         invaliditaet: '1.000.000 EUR',
         gipsgeld: '2.000 EUR',
         schwerverletzung: '12.000 EUR',
         krankenhaus: '50 EUR',
         zahnersatz: '20.000 EUR',
     },
+};
+
+// Günstigere Preise für Kinder unter 16 Jahren
+const childUnder16Prices: { [key: string]: string } = {
+    'Small Kids': '10,42€',
+    'Medium Kids': '15,78€',
+    'Large Kids': '21,17€',
 };
 
 // Mapping für insuranceFor zur Anzeige
@@ -90,6 +123,15 @@ export async function POST(request: NextRequest) {
             throw new Error(`Ungültiger Tarif: ${tarif}`);
         }
 
+        // Prüfe ob Kind unter 16 Jahre und passe den Preis an
+        let finalPrice = tariffInfo.price;
+        if (tarif.includes('Kids') && birthDate) {
+            const age = getAgeFromBirthDate(birthDate);
+            if (age !== null && age < 16 && childUnder16Prices[tarif]) {
+                finalPrice = childUnder16Prices[tarif];
+            }
+        }
+
         // Erstelle den CTA-Link
         const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
 
@@ -97,7 +139,7 @@ export async function POST(request: NextRequest) {
         emailTemplate = emailTemplate
             .replace(/{{NAME}}/g, name)
             .replace(/{{TARIFF}}/g, tarif)
-            .replace(/{{PRICE}}/g, tariffInfo.price)
+            .replace(/{{PRICE}}/g, finalPrice)
             .replace(/{{INVALIDITAET}}/g, tariffInfo.invaliditaet)
             .replace(/{{GIPSGELD}}/g, tariffInfo.gipsgeld)
             .replace(/{{SCHWERVERLETZUNG}}/g, tariffInfo.schwerverletzung)

@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Gift } from 'lucide-react';
 import { AngebotFormData } from '@/types/angebot';
 import Step1Personal from './components/Step1Personal';
 import Step2Contact from './components/Step2Contact';
@@ -46,6 +47,7 @@ function AngebotContent() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<AngebotFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [discount, setDiscount] = useState<number | null>(null);
 
   // Pre-fill form data from URL parameters (from Rechner)
   useEffect(() => {
@@ -56,6 +58,15 @@ function AngebotContent() {
     const gender = searchParams.get('gender');
     const tarif = searchParams.get('tarif');
     const insuranceForParam = searchParams.get('insuranceFor');
+    const discountParam = searchParams.get('discount');
+
+    // Rabatt setzen wenn vorhanden
+    if (discountParam) {
+      const discountValue = parseInt(discountParam);
+      if (!isNaN(discountValue) && discountValue > 0) {
+        setDiscount(discountValue);
+      }
+    }
 
     // Map gender to salutation
     let salutation = '';
@@ -221,6 +232,28 @@ function AngebotContent() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Rabatt Banner */}
+        {discount && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            className="mb-6 bg-primary rounded-xl p-4 shadow-lg"
+          >
+            <div className="flex items-center justify-center gap-3 text-white">
+              <Gift className="w-6 h-6" />
+              <div className="text-center">
+                <p className="font-bold text-lg">
+                  {discount}% Rabatt aktiviert!
+                </p>
+                <p className="text-sm text-green-100">
+                  Dein exklusiver Rabatt wird automatisch angewendet
+                </p>
+              </div>
+              <Gift className="w-6 h-6" />
+            </div>
+          </motion.div>
+        )}
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

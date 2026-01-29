@@ -15,6 +15,15 @@ interface PricingCardProps {
     showButton?: boolean;
 }
 
+function formatPrice(price: string): { main: string; decimal: string } {
+    const cleanPrice = price.replace('€', '').trim();
+    if (cleanPrice.includes(',')) {
+        const [main, decimal] = cleanPrice.split(',');
+        return { main, decimal };
+    }
+    return { main: cleanPrice, decimal: '00' };
+}
+
 export default function PricingCard({
     title,
     price,
@@ -28,6 +37,7 @@ export default function PricingCard({
     showButton=true
 }: PricingCardProps) {
     const [showTooltip, setShowTooltip] = useState(false);
+    const { main: priceMain, decimal: priceDecimal } = formatPrice(price);
 
     return (
         <div className={`relative bg-white rounded-2xl shadow-xl ring-3 ${buttonVariant === "v3"? "ring-green-200": "ring-gray-200"} p-8 transition-all duration-300 hover:shadow-2xl ${
@@ -50,7 +60,8 @@ export default function PricingCard({
                 <div className="flex items-baseline justify-center gap-1">
                     <span className={"text-sm text-gray-500"}>ab</span>
                     <span className="text-4xl md:text-5xl font-bold text-gray-900">
-                        {price}
+                        {priceMain}
+                        <span className="text-2xl md:text-3xl">,{priceDecimal}€</span>
                     </span>
                     <span className="text-gray-500 text-lg">
                         {priceSubtext}
