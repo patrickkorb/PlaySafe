@@ -10,7 +10,7 @@ import Step2Contact from './components/Step2Contact';
 import Step3Bank from './components/Step3Bank';
 import Step4Confirmation from './components/Step4Confirmation';
 import { trackLead } from '@/app/components/MetaPixel';
-import { trackOfferFormSubmitted } from '@/app/components/Datafast';
+import { trackOfferFormSubmitted, trackOfferPageVisited } from '@/app/components/Datafast';
 
 const initialFormData: AngebotFormData = {
   insuranceFor: '',
@@ -48,6 +48,12 @@ function AngebotContent() {
   const [formData, setFormData] = useState<AngebotFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [discount, setDiscount] = useState<number | null>(null);
+
+  // Track page visit
+  useEffect(() => {
+    const tarif = searchParams.get('tarif');
+    trackOfferPageVisited(tarif || '');
+  }, [searchParams]);
 
   // Pre-fill form data from URL parameters (from Rechner)
   useEffect(() => {

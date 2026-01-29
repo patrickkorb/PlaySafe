@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateBirthDate } from '@/lib/validation';
+import { trackOfferStep1Completed } from '@/app/components/Datafast';
 
 // Berufsstand-Optionen
 const JOB_OPTIONS = [
@@ -161,6 +162,8 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
 
   const handleNext = () => {
     if (validateForm()) {
+      // Track step completion
+      trackOfferStep1Completed(formData.insuranceFor, formData.tarif);
       onNext();
     }
   };

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateEmail, validatePhone, validatePLZ } from '@/lib/validation';
+import { trackOfferStep2Completed } from '@/app/components/Datafast';
 
 export default function Step2Contact({ formData, onUpdate, onNext, onBack }: FormStepProps) {
   const [errors, setErrors] = useState<FormErrors>({});
@@ -41,6 +42,8 @@ export default function Step2Contact({ formData, onUpdate, onNext, onBack }: For
 
   const handleNext = () => {
     if (validateForm()) {
+      // Track step completion
+      trackOfferStep2Completed(formData.email, formData.tarif);
       onNext();
     }
   };

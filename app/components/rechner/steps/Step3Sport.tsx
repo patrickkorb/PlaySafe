@@ -50,7 +50,7 @@ export default function Step3Sport() {
 
       <div className="mt-8 max-w-2xl mx-auto bg-muted border border-border rounded-xl p-4 flex flex-col items-center">
         <p className="text-sm text-muted-foreground text-center">
-          Die Vereins-Versicherung deckt nur sehr wenig ab. Bei Verletzungen an dir selbst bist du oft nicht richtig abgesichert.
+          Die Vereins-Versicherung deckt nur sehr wenig ab. Bei Verletzungen ohne bleibende Schäden (z.B. Kreuzbandrisse, Muskelrisse, etc.) ist man oft nicht richtig abgesichert.
         </p>
       </div>
     </motion.div>

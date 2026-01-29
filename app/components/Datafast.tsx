@@ -101,3 +101,32 @@ export const trackOfferFormSubmitted = async (
     tariff: tariff || '',
   });
 };
+
+// Angebot Step Tracking - für detaillierte Funnel-Analyse
+export const trackOfferStep1Completed = async (
+  insuranceFor?: string,
+  tariff?: string
+) => {
+  return await trackDatafastGoal('offer_step1_completed', {
+    insurance_for: insuranceFor || '',
+    tariff: tariff || '',
+  });
+};
+
+export const trackOfferStep2Completed = async (
+  email?: string,
+  tariff?: string
+) => {
+  return await trackDatafastGoal('offer_step2_completed', {
+    email: email || '',
+    tariff: tariff || '',
+  });
+};
+
+export const trackOfferStep3Completed = async (
+  tariff?: string
+) => {
+  return await trackDatafastGoal('offer_step3_completed', {
+    tariff: tariff || '',
+  });
+};

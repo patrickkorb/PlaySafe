@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateIBAN, formatIBAN } from '@/lib/validation';
+import { trackOfferStep3Completed } from '@/app/components/Datafast';
 
 export default function Step3Bank({ formData, onUpdate, onNext, onBack }: FormStepProps) {
   const [errors, setErrors] = useState<FormErrors>({});
@@ -46,6 +47,8 @@ export default function Step3Bank({ formData, onUpdate, onNext, onBack }: FormSt
 
   const handleNext = () => {
     if (validateForm()) {
+      // Track step completion
+      trackOfferStep3Completed(formData.tarif);
       onNext();
     }
   };
