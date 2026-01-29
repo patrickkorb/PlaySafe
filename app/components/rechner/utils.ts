@@ -214,7 +214,8 @@ export function getVideoPath(sportName: string, tariffTitle: string): string {
   };
 
   const normalizedSport = sportMap[sportName] || 'sonstiges';
-  const normalizedTariff = tariffTitle.toLowerCase();
+  // Remove " Kids" suffix for video path - kids tariffs use same videos as adult tariffs
+  const normalizedTariff = tariffTitle.toLowerCase().replace(' kids', '');
   const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo';
 
   return `https://res.cloudinary.com/${cloudinaryCloudName}/video/upload/v1768247662/${normalizedSport}-${normalizedTariff}.mp4`;

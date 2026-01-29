@@ -86,7 +86,7 @@ export default function Step4Confirmation({
         {/* Policy Holder Data - Only shown when insuring someone else */}
         {formData.insuranceFor === 'other' && (
           <div className="border-b border-gray-200 pb-4">
-            <h4 className="font-semibold text-gray-700 mb-2">Versicherungsnehmer (Person, die die Versicherung abschließt)</h4>
+            <h4 className="font-semibold text-gray-700 mb-2">Versicherungsnehmer (Die Person, über die der Vertrag laufen wird)</h4>
             <div className="text-sm text-gray-600 space-y-1">
               <p><span className="font-medium">Anrede:</span> {formData.policyHolderSalutation}</p>
               <p><span className="font-medium">Name:</span> {formData.policyHolderName}</p>

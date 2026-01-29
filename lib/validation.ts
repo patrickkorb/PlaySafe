@@ -82,11 +82,11 @@ export function validatePhone(phone: string): boolean {
 
 /**
  * Validates birth date (DD.MM.YYYY format)
- * Checks if date is valid and person is at least 18 years old
  * @param birthDate - Birth date in DD.MM.YYYY format
+ * @param requireMinAge18 - If true, checks if person is at least 18 years old (default: true)
  * @returns { valid: boolean, error?: string }
  */
-export function validateBirthDate(birthDate: string): { valid: boolean; error?: string } {
+export function validateBirthDate(birthDate: string, requireMinAge18: boolean = true): { valid: boolean; error?: string } {
   if (birthDate.length !== 10) {
     return { valid: false, error: 'Bitte gib ein vollständiges Datum ein (TT.MM.JJJJ)' };
   }
@@ -111,18 +111,27 @@ export function validateBirthDate(birthDate: string): { valid: boolean; error?: 
     return { valid: false, error: 'Ungültiges Datum' };
   }
 
-  // Check if person is at least 18
-  const eighteenYearsAgo = new Date();
-  eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+  // Check if person is at least 18 (only if required)
+  if (requireMinAge18) {
+    const eighteenYearsAgo = new Date();
+    eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
 
-  if (selectedDate > eighteenYearsAgo) {
-    return { valid: false, error: 'Du musst mindestens 18 Jahre alt sein' };
+    if (selectedDate > eighteenYearsAgo) {
+      return { valid: false, error: 'Der Versicherungsnehmer muss mindestens 18 Jahre alt sein' };
+    }
   }
 
-  // Check cutoff date (1.1.1958)
-  const cutoffDate = new Date(1958, 0, 1);
-  if (selectedDate < cutoffDate) {
-    return { valid: false, error: 'Leider können wir für Personen, die vor dem 1.1.1958 geboren wurden, kein Angebot erstellen.' };
+  // Check if date is not in the future
+  if (selectedDate > new Date()) {
+    return { valid: false, error: 'Das Geburtsdatum darf nicht in der Zukunft liegen' };
+  }
+
+  // Check cutoff date (1.1.1958) - only for adults
+  if (requireMinAge18) {
+    const cutoffDate = new Date(1958, 0, 1);
+    if (selectedDate < cutoffDate) {
+      return { valid: false, error: 'Leider können wir für Personen, die vor dem 1.1.1958 geboren wurden, kein Angebot erstellen.' };
+    }
   }
 
   return { valid: true };

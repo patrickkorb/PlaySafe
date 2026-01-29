@@ -260,11 +260,18 @@ function AngebotContent() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            Dein persönliches Angebot
-          </h1>
-          <p className="text-gray-600">
-            Nur noch wenige Schritte zu deiner maßgeschneiderten Sportversicherung
+        </motion.div>
+
+        {/* Hinweis: Kein Vertragsabschluss */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4"
+        >
+          <p className="text-blue-800 text-sm text-center">
+            <span className="font-semibold">Hinweis:</span> Mit dem Ausfüllen dieses Formulars schließt du noch keinen Vertrag ab.
+            Deine Angaben dienen ausschließlich zur Erstellung eines unverbindlichen Angebots.
           </p>
         </motion.div>
 

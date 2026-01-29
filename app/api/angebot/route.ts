@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       
       <h2 style="color: #1a3691;">Vielen Dank für Dein Interesse an einer Sportversicherung!</h2>
 
-      <p>Hallo ${name},</p>
+      <p><strong>Hallo ${policyHolderName}</strong>,</p>
 
       <p>
         wir bestätigen dir hiermit, dass wir deine Angaben erfolgreich und sicher erhalten haben.

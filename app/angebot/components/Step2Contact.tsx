@@ -55,8 +55,11 @@ export default function Step2Contact({ formData, onUpdate, onNext, onBack }: For
     >
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Kontaktdaten des Versicherungsnehmers (Person, welche die Versicherung abschließt)
+          Kontaktdaten des Versicherungsnehmers
         </h2>
+        <h3>
+          (Person, welche die Versicherung abschließt)
+        </h3>
       </div>
 
       <div className="space-y-4">

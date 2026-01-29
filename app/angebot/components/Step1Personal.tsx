@@ -122,7 +122,10 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
       newErrors.name = 'Bitte gib den Namen ein';
     }
 
-    const birthDateValidation = validateBirthDate(formData.birthDate);
+    // Bei "self" muss die Person 18+ sein (ist gleichzeitig Versicherungsnehmer)
+    // Bei "other" darf die versicherte Person auch jünger sein (z.B. Kind)
+    const requireMinAge18ForInsured = formData.insuranceFor === 'self';
+    const birthDateValidation = validateBirthDate(formData.birthDate, requireMinAge18ForInsured);
     if (!birthDateValidation.valid) {
       newErrors.birthDate = birthDateValidation.error || 'Ungültiges Geburtsdatum';
     }
@@ -174,7 +177,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
         {/* Insurance Type Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-3">
-            Für wen soll die Versicherung abgeschlossen werden? <span className="text-red-500">*</span>
+            Wer muss beim Sport abgesichert werden? <span className="text-red-500">*</span>
           </label>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -183,13 +186,13 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                 onUpdate({ insuranceFor: 'self' });
                 if (errors.insuranceFor) setErrors({ ...errors, insuranceFor: '' });
               }}
-              className={`py-4 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
+              className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
                 formData.insuranceFor === 'self'
                   ? 'border-primary bg-primary text-white'
                   : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'
               }`}
             >
-              Für mich selbst
+              Ich
             </button>
             <button
               type="button"
@@ -203,7 +206,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                   : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'
               }`}
             >
-              Für jemand anderen
+              Jemand anderes
             </button>
           </div>
           {errors.insuranceFor && (
@@ -215,7 +218,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
         {formData.insuranceFor === 'other' && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
-              Beziehung zum Versicherungsnehmer <span className="text-red-500">*</span>
+              Welche Beziehung hat die Person zu dir? <span className="text-red-500">*</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               {['Verheiratet', 'Lebensgemeinschaft', 'Kind', 'Sonstige'].map((rel) => (
@@ -245,7 +248,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
         {/* Policy Holder Section - Only shown when insuring someone else */}
         {formData.insuranceFor === 'other' && (
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4 border-b-2 border-gray-900 pb-2">Versicherungsnehmer (Person, die die Versicherung abschließt)</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4 border-b-2 border-gray-300 pb-2">Versicherungsnehmer (Person, die die Versicherung abschließt)</h3>
 
             {/* Policy Holder Salutation */}
             <div>
@@ -373,7 +376,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
         {formData.insuranceFor && (
           <div className="space-y-4">
             {formData.insuranceFor === 'other' && (
-              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4 border-b-2 border-gray-900 pb-2">Versicherte Person</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4 border-b-2 border-gray-300 pb-2">Versicherte Person</h3>
             )}
 
             {/* Salutation */}
@@ -501,7 +504,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
         {/* Insurance Start - Shown after selecting insurance type */}
         {formData.insuranceFor && (
           <div className="space-y-4 mt-6">
-            <h3 className="text-lg font-semibold text-gray-900 border-b-2 border-gray-900 pb-2">Versicherungsdetails</h3>
+            <h3 className="text-lg font-semibold text-gray-900 border-b-2 border-gray-300 pb-2">Versicherungsdetails</h3>
 
             {/* Start Type Selection */}
             <div>
