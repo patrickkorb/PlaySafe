@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
         const { data: batchData, error: batchError } = await resend.batch.send([
             {
                 from: 'PlaySafe <info@playsafe.fit>',
-                to: ['korbpatrick@web.de'],
+                to: ['korbpatrick@web.de', 'mike.allmendinger@signal-iduna.net'],
                 subject: `Neue Angebotsanfrage von ${name}`,
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
