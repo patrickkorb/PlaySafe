@@ -31,8 +31,8 @@ export default function FAQ() {
             answer: "Ja, unser Versicherungsschutz gilt weltweit. Egal ob du in Deutschland oder im Ausland unterwegs bist - du bist rundum geschützt."
         },
         {
-            question: "Was kostet PlaySafe?",
-            answer: "Die Kosten sind individuell und hängen von verschiedenen Faktoren ab. Kontaktiere uns für ein persönliches Angebot, das genau auf deine Bedürfnisse zugeschnitten ist."
+            question: "Welchen Schutz erhalten meine Kinder?",
+            answer: "Kinder erhalten zusätzlich zu unserem Premium Schutz, einen erweiterten Schutz, welcher auch in der Schule, im Studium und in der Freizeit 24/7 absichert."
         },
         {
             question: "Welche Unterlagen muss ich zur Auszahlung des Schmerzensgeldes einreichen?",
@@ -65,7 +65,7 @@ export default function FAQ() {
     return (
         <motion.section 
             id="faq" 
-            className="py-16 md:py-20 lg:py-28 bg-gray-50"
+            className="py-16 md:py-20 lg:py-28 bg-background"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

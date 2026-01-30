@@ -41,7 +41,7 @@ export default function Step5BirthDate() {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="text-center pt-8"
+      className="text-center px-4"
     >
       <h1 className="text-3xl font-bold mb-8 text-foreground">Fast geschafft!</h1>
 

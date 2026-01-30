@@ -521,7 +521,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                     onUpdate({ insuranceStartType: 'immediate', insuranceStartDate: '' });
                     if (errors.insuranceStartType) setErrors({ ...errors, insuranceStartType: '' });
                   }}
-                  className={`py-4 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
+                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
                     formData.insuranceStartType === 'immediate'
                       ? 'border-primary bg-primary text-white'
                       : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'
@@ -535,7 +535,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                     onUpdate({ insuranceStartType: 'date' });
                     if (errors.insuranceStartType) setErrors({ ...errors, insuranceStartType: '' });
                   }}
-                  className={`py-4 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
+                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
                     formData.insuranceStartType === 'date'
                       ? 'border-primary bg-primary text-white'
                       : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'

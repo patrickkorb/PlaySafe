@@ -34,7 +34,7 @@ export default function Step2Gender() {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="pt-8"
+      className="px-4"
     >
       <h2 className="text-3xl font-semibold text-foreground mb-8 text-center">
         {getTitle()}

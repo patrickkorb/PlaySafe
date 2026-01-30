@@ -99,7 +99,7 @@ export const TARIFFS = {
       'Sicherheitsbudget: 30€',
       'Vollinvalidität: 1.000.000€',
       'Krankenhaustagegeld: 50€',
-      'Schwerverletzung: 12000',
+      'Schwerverletzung: 12000€',
       'Happy Holiday: Extra-Schutz im Urlaub',
       'Zahnersatz: 20.000€',
       'Premium Leistungen der SIGNAL IDUNA',

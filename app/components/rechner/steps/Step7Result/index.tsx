@@ -124,7 +124,6 @@ export default function Step7Result() {
         <FAQ />
       </div>
 
-      <Footer />
     </motion.div>
   );
 }

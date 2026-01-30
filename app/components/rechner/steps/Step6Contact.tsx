@@ -89,9 +89,9 @@ export default function Step6Contact() {
 
   const getSubtitle = () => {
     if (data.insuranceFor === 'self') {
-      return 'Um dir passende Versicherungs-Lösungen zu zeigen, lass uns wissen, wie wir dir deine Empfehlung zusenden können:';
+      return 'Wohin sollen wir dir deine persönliche Empfehlung schicken?';
     }
-    return 'Gib jetzt deine Kontaktdaten als Versicherungsnehmer/in ein, um die Empfehlung zu erhalten:';
+    return 'An wen sollen wir die persönliche Empfehlung schicken?';
   };
 
   return (
@@ -99,7 +99,7 @@ export default function Step6Contact() {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="pt-8"
+      className="px-4"
     >
       <h2 className="text-xl font-medium text-foreground mb-2 text-center">
         Super, nur noch 1 Schritt bis zu Deiner persönlichen Sportversicherungsberatung
@@ -202,7 +202,7 @@ export default function Step6Contact() {
             disabled={isSubmitting}
             className="w-full bg-primary hover:bg-primary/90 disabled:bg-muted-foreground disabled:cursor-not-allowed text-white font-bold py-5 px-6 rounded-lg text-lg transition-colors duration-200 hover:cursor-pointer"
           >
-            {isSubmitting ? 'Wird berechnet...' : 'Meine Empfehlung erhalten'}
+            {isSubmitting ? 'Wird berechnet...' : 'Meine Empfehlung erhalten 👉'}
           </button>
         </div>
       </form>

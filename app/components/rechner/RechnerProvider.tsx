@@ -93,27 +93,27 @@ export function RechnerProvider({ children }: { children: ReactNode }) {
   }, [data]);
 
   const nextStep = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setData(prev => ({
       ...prev,
       step: prev.step + 1,
       lastUpdated: new Date().toISOString(),
     }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const goToStep = useCallback((step: number) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setData(prev => ({
       ...prev,
       step,
       lastUpdated: new Date().toISOString(),
     }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const resetRechner = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     localStorage.removeItem(STORAGE_KEY);
     setData({ ...INITIAL_DATA, lastUpdated: new Date().toISOString() });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   return (

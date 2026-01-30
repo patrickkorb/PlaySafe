@@ -22,7 +22,7 @@ export default function Step4Frequency() {
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
-      className="pt-8"
+      className="px-4"
     >
       <h2 className="text-3xl font-bold text-foreground mb-8 text-center">
         {title}
@@ -33,7 +33,7 @@ export default function Step4Frequency() {
           <button
             key={freq}
             onClick={() => handleSelect(freq)}
-            className="bg-background border-2 border-border hover:cursor-pointer hover:border-primary hover:shadow-lg rounded-xl p-6 transition-all duration-200 text-xl font-semibold text-foreground hover:text-primary"
+            className="bg-background border-2 border-border hover:cursor-pointer hover:border-primary hover:shadow-lg rounded-xl p-3 transition-all duration-200 text-xl font-semibold text-foreground hover:text-primary"
           >
             {freq}
           </button>

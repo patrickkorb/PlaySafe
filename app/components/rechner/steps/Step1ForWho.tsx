@@ -19,16 +19,13 @@ export default function Step1ForWho() {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="text-center mb-12 pt-8">
-        <h1 className="text-2xl font-extrabold text-foreground mb-4">
-          Finde Deine Perfekte Sportversicherung!
+      <div className="text-center mb-6 px-4">
+        <h1 className="text-2xl font-extrabold text-foreground mb-2">
+          Finde Deine Perfekte Absicherung Beim Sport!
         </h1>
-        <h2 className="font-medium text-foreground">
-          Erhalte deine persönliche Versicherungsempfehlung, perfekt abgestimmt auf deinen aktiven Lebensstil - völlig kostenlos und unverbindlich.
-        </h2>
       </div>
 
-      <h2 className="text-3xl font-semibold text-foreground mb-8 text-center">
+      <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
         Für wen soll der Sport-Schutz gelten?
       </h2>
 
@@ -37,7 +34,7 @@ export default function Step1ForWho() {
           <button
             key={option.value}
             onClick={() => handleSelect(option.value as InsuranceFor)}
-            className="bg-background border-2 border-border hover:cursor-pointer hover:border-primary hover:shadow-lg rounded-xl p-6 transition-all duration-200 text-xl font-semibold text-foreground hover:text-primary"
+            className="bg-background border-2 border-border hover:cursor-pointer hover:border-primary hover:shadow-lg rounded-xl p-4 transition-all duration-200 text-xl font-semibold text-foreground hover:text-primary"
           >
             {option.name}
           </button>
