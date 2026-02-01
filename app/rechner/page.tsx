@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 
 import { Toaster } from 'sonner';
 import { RechnerProvider, RechnerStepper } from '@/app/components/rechner';

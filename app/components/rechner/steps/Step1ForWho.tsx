@@ -21,8 +21,11 @@ export default function Step1ForWho() {
     >
       <div className="text-center mb-6 px-4">
         <h1 className="text-2xl font-extrabold text-foreground mb-2">
-          Finde Deine Perfekte Absicherung Beim Sport!
+          Finde Deine Perfekte Sportversicherung!
         </h1>
+        <h2 className="font-medium text-foreground">
+          Erhalte deine persönliche Versicherungsempfehlung, perfekt abgestimmt auf deinen aktiven Lebensstil - völlig kostenlos und unverbindlich.
+        </h2>
       </div>
 
       <h2 className="text-2xl font-semibold text-foreground mb-8 text-center">
