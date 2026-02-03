@@ -55,6 +55,7 @@ export default function Step6Contact() {
           gender: data.gender,
           tarif: tariff.title,
           insuranceFor: data.insuranceFor,
+          sport: data.sport,
         }),
       });
 

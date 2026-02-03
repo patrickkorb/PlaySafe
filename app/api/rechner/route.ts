@@ -98,7 +98,7 @@ const insuranceForLabels: { [key: string]: string } = {
 
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, phone, birthDate, gender, tarif, insuranceFor } = await request.json();
+        const { name, email, phone, birthDate, gender, tarif, insuranceFor, sport } = await request.json();
 
         if (!name || !email || !phone) {
             return NextResponse.json(
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
         const { data: batchData, error: batchError } = await resend.batch.send([
             {
                 from: 'PlaySafe <info@playsafe.fit>',
-                to: ['korbpatrick@web.de', 'mike.allmendinger@signal-iduna.net'],
+                to: ['korbpatrick@web.de', "mike.allmendinger@signal-iduna.net"],
                 subject: `Neue Angebotsanfrage von ${name}`,
                 html: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -180,7 +180,30 @@ export async function POST(request: NextRequest) {
 
         console.log('Emails erfolgreich gesendet:', batchData);
 
-        // 4. Kontakt in Resend Audience speichern
+        //4. Lead im LeadTool speichern
+
+
+        const response = await fetch('https://leadtool.vercel.app/api/leads', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': process.env.LEADTOOL_API_KEY || '',
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                telefon: phone,
+                quelle: 'PlaySafe.fit',
+                notiz: sport + " für " + insuranceFor + " Tarif:" + tarif,
+            }),
+        });
+
+        if (!response.ok) {
+            console.error('LeadTool Fehler:', await response.text());
+            // Kein Return hier - Lead-Fehler soll den Rest nicht blockieren
+        }
+
+        // 5. Kontakt in Resend Audience speichern
         const nameParts = name.trim().split(' ');
         const lastName = nameParts[nameParts.length - 1];
         const firstName = nameParts.slice(0, -1).join(' ');

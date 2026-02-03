@@ -94,28 +94,6 @@ export default function RootLayout({
   return (
     <html lang="de">
     <head>
-        {/* Regular tracking code from modal works here too */}
-        <script
-            dangerouslySetInnerHTML={{
-                __html: `
-                (function() {
-                  var script = document.createElement('script');
-                  script.src = 'https://lead-fuchs.vercel.app/track.js';
-                  script.dataset.siteId = 'playsafefit-41n8wx9';
-                  script.dataset.apiUrl = 'https://lead-fuchs.vercel.app';
-                  script.async = true;
-                  document.head.appendChild(script);
-                })();
-              `
-            }}
-        />
-        <script
-            defer
-            data-website-id="playsafefit-41n8wx9"
-            data-domain="playsafe.fit"
-            src="https://lead-fuchs.vercel.app/js/script.js">
-        </script>
-
       <script
           defer
           data-website-id="dfid_OxxKdd3S7HRzcJoBeX8iM"
