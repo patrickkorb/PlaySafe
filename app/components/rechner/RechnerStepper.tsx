@@ -36,7 +36,6 @@ export default function RechnerStepper() {
       {showProgressAndTrust && (
         <div className="pt-4">
           <ProgressBar currentStep={data.step} totalSteps={TOTAL_STEPS} />
-          <TrustBadge />
         </div>
       )}
 
