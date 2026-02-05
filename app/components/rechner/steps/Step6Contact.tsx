@@ -90,7 +90,7 @@ export default function Step6Contact() {
 
   const getSubtitle = () => {
     if (data.insuranceFor === 'self') {
-      return 'Wohin sollen wir dir deine persönliche Empfehlung schicken?';
+      return 'Wohin sollen wir dir Deine persönliche Empfehlung schicken?';
     }
     return 'An wen sollen wir die persönliche Empfehlung schicken?';
   };
@@ -103,7 +103,7 @@ export default function Step6Contact() {
       className="px-4"
     >
       <h2 className="text-xl font-medium text-foreground mb-2 text-center">
-        Super, nur noch 1 Schritt bis zu Deiner persönlichen Sportversicherungsberatung
+        Super, nur noch 1 Schritt bis zu Deinem persönlichen Sportversicherungstarif!
       </h2>
 
       <h3 className="text-xl font-bold text-center mb-8 mt-4 text-foreground">
