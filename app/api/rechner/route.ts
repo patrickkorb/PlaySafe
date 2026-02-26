@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { Resend } from 'resend';
 
 // Hilfsfunktion um Alter aus Geburtsdatum zu berechnen
 function getAgeFromBirthDate(birthDate: string): number | null {
@@ -107,7 +106,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
+        const brevoApiKey = process.env.BREVO_API_KEY || '';
 
         // Label für insuranceFor
         const insuranceForLabel = insuranceForLabels[insuranceFor] || insuranceFor || 'Nicht angegeben';
@@ -147,13 +146,22 @@ export async function POST(request: NextRequest) {
             .replace(/{{ZAHNERSATZ}}/g, tariffInfo.zahnersatz)
             .replace(/{{CTA_LINK}}/g, ctaLink);
 
-        // 2. Sende beide E-Mails als Batch (Admin + Kunde)
-        const { data: batchData, error: batchError } = await resend.batch.send([
-            {
-                from: 'PlaySafe <info@playsafe.fit>',
-                to: ['korbpatrick@web.de', "mike.allmendinger@signal-iduna.net"],
+        // 2. Sende Admin-Mail via Brevo
+        const adminEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': brevoApiKey,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
+                to: [
+                    { email: 'korbpatrick@web.de' },
+                    { email: 'mike.allmendinger@signal-iduna.net' },
+                ],
                 subject: `Neue Angebotsanfrage von ${name}`,
-                html: `
+                htmlContent: `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                       <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
                       <p><strong>Versicherung für:</strong> ${insuranceForLabel}</p>
@@ -165,20 +173,34 @@ export async function POST(request: NextRequest) {
                       <p><strong>Tarif:</strong> ${tarif}</p>
                     </div>
                 `,
-            },
-            {
-                from: 'PlaySafe <info@playsafe.fit>',
-                to: [email],
-                subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
-                html: emailTemplate,
-            },
-        ]);
+            }),
+        });
 
-        if (batchError) {
-            throw new Error(`Batch-Email Fehler: ${batchError.message}`);
+        if (!adminEmailRes.ok) {
+            throw new Error(`Brevo Admin-Email Fehler: ${await adminEmailRes.text()}`);
         }
 
-        console.log('Emails erfolgreich gesendet:', batchData);
+        // 3. Sende Kunden-Mail via Brevo
+        const customerEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': brevoApiKey,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
+                to: [{ email: email }],
+                subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
+                htmlContent: emailTemplate,
+            }),
+        });
+
+        if (!customerEmailRes.ok) {
+            console.error(`Brevo Kunden-Email Fehler: ${await customerEmailRes.text()}`);
+        }
+
+        console.log('Emails erfolgreich gesendet via Brevo');
 
         //4. Lead im LeadTool speichern
 
@@ -203,28 +225,38 @@ export async function POST(request: NextRequest) {
             // Kein Return hier - Lead-Fehler soll den Rest nicht blockieren
         }
 
-        // 5. Kontakt in Resend Audience speichern
+        // 5. Kontakt in Brevo Liste 3 speichern
         const nameParts = name.trim().split(' ');
         const lastName = nameParts[nameParts.length - 1];
         const firstName = nameParts.slice(0, -1).join(' ');
 
         try {
-            await resend.contacts.create({
-                email: email,
-                firstName: firstName,
-                lastName: lastName,
-                unsubscribed: false,
+            const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'api-key': brevoApiKey,
+                    'content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    attributes: { FIRSTNAME: firstName, LASTNAME: lastName },
+                    listIds: [3],
+                    updateEnabled: true,
+                }),
             });
-            console.log('Kontakt in Resend gespeichert:', email);
+            if (contactRes.ok) {
+                console.log('Kontakt in Brevo gespeichert:', email);
+            } else {
+                console.log('Brevo Kontakt-Fehler:', await contactRes.text());
+            }
         } catch (contactError) {
-            // Kontakt existiert möglicherweise bereits - kein kritischer Fehler
-            console.log('Kontakt konnte nicht gespeichert werden (existiert evtl. bereits):', contactError);
+            console.log('Kontakt konnte nicht gespeichert werden:', contactError);
         }
 
         return NextResponse.json({
             success: true,
             message: 'Nachricht erfolgreich gesendet',
-            emailsSent: batchData
         });
 
     } catch (error) {
