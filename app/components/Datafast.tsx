@@ -1,21 +1,13 @@
 // Utility functions for tracking Datafast goals
+import { getAnalytics } from '@/lib/datafast';
 
-// Send goal event to Datafast via API route
 export async function trackDatafastGoal(
   goalName: string,
   metadata?: Record<string, string>
 ): Promise<void> {
   try {
-    await fetch('/api/datafast-goal', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        goalName,
-        metadata,
-      }),
-    });
+    const df = await getAnalytics();
+    df.track(goalName, metadata ?? {});
   } catch (error) {
     console.error('Error tracking Datafast goal:', error);
   }

@@ -5,7 +5,7 @@ import { useRechner } from '../RechnerProvider';
 import { SPORTS } from '../constants';
 import { getInsuredPersonPronoun } from '../utils';
 import { trackSportSelected } from '@/app/components/Datafast';
-import ChoiceCard from '@/app/fusball/components/ChoiceCard';
+import ChoiceCard from '@/app/components/ChoiceCard';
 import {InfoIcon} from "lucide-react";
 
 export default function Step3Sport() {

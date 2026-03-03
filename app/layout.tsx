@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "@/app/sections/Navigation";
 import Footer from "@/app/sections/Footer";
 import MetaPixel from "@/app/components/MetaPixel";
+import DatafastProvider from "@/app/components/DatafastProvider";
 import {Analytics} from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -93,18 +94,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-    <head>
-      <script
-          defer
-          data-website-id="dfid_OxxKdd3S7HRzcJoBeX8iM"
-          data-domain="playsafe.fit"
-          src="https://datafa.st/js/script.js">
-      </script>
-
-    </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      <DatafastProvider />
       <MetaPixel />
       <Analytics/>
       <Navigation />

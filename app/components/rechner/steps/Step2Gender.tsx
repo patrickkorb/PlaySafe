@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Mars, Venus } from 'lucide-react';
 import { useRechner } from '../RechnerProvider';
 import { Gender } from '../types';
-import ChoiceCard from '@/app/fusball/components/ChoiceCard';
+import ChoiceCard from '@/app/components/ChoiceCard';
 
 const GENDER_OPTIONS = [
   { name: 'Männlich', icon: Mars },
