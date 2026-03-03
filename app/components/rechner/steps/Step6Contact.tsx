@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRechner } from '../RechnerProvider';
 import { calculateTariff } from '../utils';
-import { trackLead } from '@/app/components/MetaPixel';
 import { trackContactDataSubmitted, trackCalculatorComplete } from '@/app/components/Datafast';
 
 function isValidPhoneNumber(phone: string): boolean {
@@ -63,18 +62,19 @@ export default function Step6Contact() {
         throw new Error('Fehler beim Senden');
       }
 
+      const responseData = await response.json();
+
       trackContactDataSubmitted(data.name, data.email, data.phone);
 
-      const leadValue = parseInt(tariff.price) || 10;
-      await trackLead(
-        {
-          email: data.email,
-          phone: data.phone,
-          firstName: data.name.split(' ')[0],
-          lastName: data.name.split(' ').slice(1).join(' '),
-        },
-        leadValue
-      );
+      // Browser-Pixel mit der server-seitig generierten Event-ID feuern (Deduplizierung mit CAPI)
+      if (typeof window !== 'undefined' && window.fbq) {
+        const leadValue = parseInt(tariff.price) || 10;
+        window.fbq('track', 'Lead', {
+          value: leadValue,
+          currency: 'EUR',
+          eventID: responseData.leadEventId,
+        });
+      }
 
       trackCalculatorComplete(data.sport, data.frequency, tariff.title);
 

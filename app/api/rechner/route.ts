@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { sendConversionAPIEvent, generateEventId } from '@/app/lib/meta-capi';
 
 // Hilfsfunktion um Alter aus Geburtsdatum zu berechnen
 function getAgeFromBirthDate(birthDate: string): number | null {
@@ -159,6 +160,7 @@ export async function POST(request: NextRequest) {
                 to: [
                     { email: 'korbpatrick@web.de' },
                     { email: 'mike.allmendinger@signal-iduna.net' },
+                    { email: 'ethem.goekce@signal-iduna.net' },
                 ],
                 subject: `Neue Angebotsanfrage von ${name}`,
                 htmlContent: `
@@ -254,9 +256,38 @@ export async function POST(request: NextRequest) {
             console.log('Kontakt konnte nicht gespeichert werden:', contactError);
         }
 
+        // 6. Meta Conversion API Lead Event (server-seitig, zuverlässig)
+        const leadEventId = generateEventId();
+        const nameParts2 = name.trim().split(' ');
+        const leadValue = parseInt(finalPrice) || 10;
+        try {
+            await sendConversionAPIEvent(
+                {
+                    eventName: 'Lead',
+                    eventId: leadEventId,
+                    eventSourceUrl: 'https://playsafe.fit/rechner',
+                    actionSource: 'website',
+                    userData: {
+                        email,
+                        phone,
+                        firstName: nameParts2.slice(0, -1).join(' ') || nameParts2[0],
+                        lastName: nameParts2[nameParts2.length - 1],
+                    },
+                    customData: {
+                        currency: 'EUR',
+                        value: leadValue,
+                    },
+                },
+                request
+            );
+        } catch (metaError) {
+            console.error('Meta CAPI Lead Fehler:', metaError);
+        }
+
         return NextResponse.json({
             success: true,
             message: 'Nachricht erfolgreich gesendet',
+            leadEventId,
         });
 
     } catch (error) {
