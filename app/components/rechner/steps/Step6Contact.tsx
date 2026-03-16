@@ -53,12 +53,19 @@ export default function Step6Contact() {
           birthDate: data.birthDate,
           gender: data.gender,
           tarif: tariff.title,
+          price: tariff.price,
           insuranceFor: data.insuranceFor,
           sport: data.sport,
+          frequency: data.frequency,
         }),
       });
 
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        if (errorData?.phoneError) {
+          setPhoneError(errorData.phoneError);
+          return;
+        }
         throw new Error('Fehler beim Senden');
       }
 

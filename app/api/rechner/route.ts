@@ -98,7 +98,7 @@ const insuranceForLabels: { [key: string]: string } = {
 
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, phone, birthDate, gender, tarif, insuranceFor, sport } = await request.json();
+        const { name, email, phone, birthDate, gender, tarif, price: clientPrice, insuranceFor, sport, frequency } = await request.json();
 
         if (!name || !email || !phone) {
             return NextResponse.json(
@@ -108,6 +108,11 @@ export async function POST(request: NextRequest) {
         }
 
         const brevoApiKey = process.env.BREVO_API_KEY || '';
+
+        // Telefonnummer normalisieren: führende 0 → +49, 0049 → +49
+        const normalizedPhone = phone
+            .replace(/^0049/, '+49')
+            .replace(/^0(?!0)/, '+49');
 
         // Label für insuranceFor
         const insuranceForLabel = insuranceForLabels[insuranceFor] || insuranceFor || 'Nicht angegeben';
@@ -147,6 +152,39 @@ export async function POST(request: NextRequest) {
             .replace(/{{ZAHNERSATZ}}/g, tariffInfo.zahnersatz)
             .replace(/{{CTA_LINK}}/g, ctaLink);
 
+        // 1. Kontakt in Brevo speichern (mit Telefon-Validierung)
+        const nameParts = name.trim().split(' ');
+        const lastName = nameParts[nameParts.length - 1];
+        const firstName = nameParts.slice(0, -1).join(' ');
+
+        const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': brevoApiKey,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                attributes: { FIRSTNAME: firstName, LASTNAME: lastName, SMS: normalizedPhone },
+                listIds: [3],
+                updateEnabled: true,
+            }),
+        });
+
+        if (!contactRes.ok) {
+            const contactError = await contactRes.json().catch(() => ({}));
+            const errorMessage: string = contactError?.message || '';
+            if (errorMessage.toLowerCase().includes('sms') || errorMessage.toLowerCase().includes('phone')) {
+                return NextResponse.json(
+                    { phoneError: 'Ungültige Telefonnummer. Bitte prüfe die Eingabe.' },
+                    { status: 400 }
+                );
+            }
+            // Anderer Brevo-Fehler – nicht blockierend, weiter machen
+            console.error('Brevo Kontakt-Fehler:', errorMessage);
+        }
+
         // 2. Sende Admin-Mail via Brevo
         const adminEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
@@ -159,8 +197,8 @@ export async function POST(request: NextRequest) {
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [
                     { email: 'korbpatrick@web.de' },
-                    { email: 'mike.allmendinger@signal-iduna.net' },
-                    { email: 'ethem.goekce@signal-iduna.net' },
+                    { email: 'mike.allemendinger@signal-iduna.net' },
+
                 ],
                 subject: `Neue Angebotsanfrage von ${name}`,
                 htmlContent: `
@@ -172,7 +210,10 @@ export async function POST(request: NextRequest) {
                       <p><strong>Telefon:</strong> ${phone}</p>
                       <p><strong>Geschlecht (versicherte Person):</strong> ${gender}</p>
                       <p><strong>Geburtsdatum (versicherte Person):</strong> ${birthDate}</p>
+                      <p><strong>Sport:</strong> ${sport || 'Nicht angegeben'}</p>
+                      <p><strong>Häufigkeit:</strong> ${frequency || 'Nicht angegeben'}</p>
                       <p><strong>Tarif:</strong> ${tarif}</p>
+                      <p><strong>Angezeigter Preis:</strong> ${clientPrice || finalPrice}</p>
                     </div>
                 `,
             }),
@@ -227,36 +268,7 @@ export async function POST(request: NextRequest) {
             // Kein Return hier - Lead-Fehler soll den Rest nicht blockieren
         }
 
-        // 5. Kontakt in Brevo Liste 3 speichern
-        const nameParts = name.trim().split(' ');
-        const lastName = nameParts[nameParts.length - 1];
-        const firstName = nameParts.slice(0, -1).join(' ');
-
-        try {
-            const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
-                method: 'POST',
-                headers: {
-                    'accept': 'application/json',
-                    'api-key': brevoApiKey,
-                    'content-type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    attributes: { FIRSTNAME: firstName, LASTNAME: lastName },
-                    listIds: [3],
-                    updateEnabled: true,
-                }),
-            });
-            if (contactRes.ok) {
-                console.log('Kontakt in Brevo gespeichert:', email);
-            } else {
-                console.log('Brevo Kontakt-Fehler:', await contactRes.text());
-            }
-        } catch (contactError) {
-            console.log('Kontakt konnte nicht gespeichert werden:', contactError);
-        }
-
-        // 6. Meta Conversion API Lead Event (server-seitig, zuverlässig)
+        // 5. Meta Conversion API Lead Event (server-seitig, zuverlässig)
         const leadEventId = generateEventId();
         const nameParts2 = name.trim().split(' ');
         const leadValue = parseInt(finalPrice) || 10;
