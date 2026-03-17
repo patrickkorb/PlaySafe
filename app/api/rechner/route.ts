@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [
                     { email: 'korbpatrick@web.de' },
-                    { email: 'mike.allemendinger@signal-iduna.net' },
+                    { email: 'mike.allmendinger@signal-iduna.net' },
 
                 ],
                 subject: `Neue Angebotsanfrage von ${name}`,
