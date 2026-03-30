@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+
+// Preise in € pro Monat
+const TARIFF_PRICES: Record<string, number> = {
+  'Small': 10.00,
+  'Medium': 15.01,
+  'Large': 20.03,
+};
+const CHILD_PRICES_OVER16: Record<string, number> = {
+  'Small Kids': 12.79,
+  'Medium Kids': 19.39,
+  'Large Kids': 26.03,
+};
+const CHILD_PRICES_UNDER16: Record<string, number> = {
+  'Small Kids': 10.42,
+  'Medium Kids': 15.78,
+  'Large Kids': 21.17,
+};
+
+function getAgeFromBirthDate(birthDate: string): number {
+  const [day, month, year] = birthDate.split('.').map(Number);
+  const birth = new Date(year, month - 1, day);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  if (today < new Date(today.getFullYear(), birth.getMonth(), birth.getDate())) age--;
+  return age;
+}
+
+function getTarifPrice(tarifTitle: string, birthDate: string): number | null {
+  if (TARIFF_PRICES[tarifTitle] !== undefined) return TARIFF_PRICES[tarifTitle];
+  if (CHILD_PRICES_OVER16[tarifTitle] !== undefined) {
+    const age = getAgeFromBirthDate(birthDate);
+    return age >= 16 ? CHILD_PRICES_OVER16[tarifTitle] : CHILD_PRICES_UNDER16[tarifTitle];
+  }
+  return null;
+}
 
 export async function POST(request: NextRequest) {
     try {
@@ -30,7 +63,8 @@ export async function POST(request: NextRequest) {
             accountHolder,
             privacyConsent,
             contactConsent,
-            riskExclusionConsent
+            riskExclusionConsent,
+            discount,
         } = await request.json();
 
         // Basic validation
@@ -59,9 +93,42 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Preisberechnung
+        const insuredBirthDate = birthDate || policyHolderBirthDate || '';
+        const originalPrice = getTarifPrice(tarif, insuredBirthDate);
+        const discountAmount = (discount && originalPrice) ? Math.round(originalPrice * discount) / 100 : 0;
+        const finalPrice = originalPrice !== null ? originalPrice - discountAmount : null;
+
+        const formatPrice = (p: number) =>
+          p.toFixed(2).replace('.', ',') + '€';
+
+        const discountSection = (discount && discount > 0 && originalPrice !== null)
+          ? `
+          <hr style="margin: 24px 0; border: none; border-top: 3px solid #f97316;" />
+          <div style="background: #fff7ed; border: 2px solid #f97316; border-radius: 12px; padding: 20px; margin: 16px 0;">
+            <h3 style="color: #f97316; margin: 0 0 12px 0; font-size: 18px;">🎁 Rabatt aktiviert!</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 6px 0; color: #555;">Normaler Monatsbeitrag:</td>
+                <td style="padding: 6px 0; text-align: right; color: #555;">${formatPrice(originalPrice)}/Monat</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; color: #f97316;">Rabatt (${discount}%):</td>
+                <td style="padding: 6px 0; text-align: right; color: #f97316;">− ${formatPrice(discountAmount)}/Monat</td>
+              </tr>
+              <tr style="border-top: 1px solid #f97316;">
+                <td style="padding: 10px 0 6px; font-weight: bold; font-size: 16px; color: #1a3691;">Finaler Monatsbeitrag:</td>
+                <td style="padding: 10px 0 6px; text-align: right; font-weight: bold; font-size: 20px; color: #16a34a;">${formatPrice(finalPrice!)}/Monat</td>
+              </tr>
+            </table>
+          </div>
+          <hr style="margin: 24px 0; border: none; border-top: 3px solid #f97316;" />
+          `
+          : '';
+
         const brevoApiKey = process.env.BREVO_API_KEY || '';
 
-        // 1. E-Mail an dich (Admin)
+        // 1. Vollständige E-Mail an Mike (mit allen Kundendaten)
         const policyHolderSection = insuranceFor === 'other' ? `
           <p><strong>Beziehung zum Versicherungsnehmer:</strong> ${relationshipToInsured}</p>
           <hr style="margin: 24px 0; border: none; border-top: 2px solid #1a3691;" />
@@ -81,7 +148,8 @@ export async function POST(request: NextRequest) {
             ? insuranceStartDate
             : '-';
 
-        const adminEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+        // E-Mail an Mike (vollständige Kundendaten)
+        const mikeEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
                 'accept': 'application/json',
@@ -90,8 +158,8 @@ export async function POST(request: NextRequest) {
             },
             body: JSON.stringify({
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
-                to: [{ email: 'korbpatrick@web.de' }],
-                subject: `Neue Antragsanfrage von ${name}`,
+                to: [{ email: 'mike.allmendinger@signal-iduna.net' }],
+                subject: discount && discount > 0 ? `🎁 Neue Antragsanfrage von ${name} (${discount}% Rabatt)` : `Neue Antragsanfrage von ${name}`,
                 htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neue Antragsanfrage - PlaySafe - Individuellen Antrag schicken</h2>
@@ -115,6 +183,7 @@ export async function POST(request: NextRequest) {
           <h3 style="color: #1a3691;">Versicherungsbeginn & Tarif:</h3>
           <p><strong>Beginn:</strong> ${insuranceStartSection}</p>
           <p><strong>Tarif:</strong> ${tarif}</p>
+          ${discountSection}
           <hr style="margin: 24px 0; border: none; border-top: 1px solid #ddd;" />
           <h3 style="color: #1a3691;">Einwilligungen:</h3>
           <p><strong>Datenschutz:</strong> ${privacyConsent ? '✓ Akzeptiert' : '✗ Nicht akzeptiert'}</p>
@@ -125,8 +194,38 @@ export async function POST(request: NextRequest) {
             }),
         });
 
-        if (!adminEmailRes.ok) {
-            throw new Error(`Brevo Admin-Email Fehler: ${await adminEmailRes.text()}`);
+        if (!mikeEmailRes.ok) {
+            throw new Error(`Brevo Mike-Email Fehler: ${await mikeEmailRes.text()}`);
+        }
+
+        // E-Mail an Patrick (nur Benachrichtigung, keine Kundendaten)
+        const notifyEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': brevoApiKey,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
+                to: [{ email: 'korbpatrick@web.de' }],
+                subject: discount && discount > 0 ? `🎁 Neuer Antrag eingegangen (${discount}% Rabatt)` : `Neuer Antrag eingegangen`,
+                htmlContent: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #1a3691;">Neuer Antrag eingegangen</h2>
+          <p><strong>Tarif:</strong> ${tarif}</p>
+          <p><strong>Versicherungsbeginn:</strong> ${insuranceStartSection}</p>
+          ${discountSection}
+          <p style="color: #6b7280; font-size: 13px; margin-top: 24px;">
+            Die vollständigen Kundendaten wurden an Mike weitergeleitet.
+          </p>
+        </div>
+      `,
+            }),
+        });
+
+        if (!notifyEmailRes.ok) {
+            throw new Error(`Brevo Notify-Email Fehler: ${await notifyEmailRes.text()}`);
         }
 
         // 2. Bestätigungsmail an Kunden

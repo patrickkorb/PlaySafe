@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPinned, Phone, Mail } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { CONSENT_KEY } from "@/app/components/CookieBanner";
 
 export default function Footer() {
     const pathname = usePathname();
@@ -76,7 +77,7 @@ export default function Footer() {
                         <ul className="space-y-3">
                             {legalLinks.map((link, index) => (
                                 <li key={index}>
-                                    <Link 
+                                    <Link
                                         href={link.href}
                                         className="text-gray-300 hover:text-white transition-colors duration-200"
                                     >
@@ -84,6 +85,17 @@ export default function Footer() {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                <button
+                                    onClick={() => {
+                                        localStorage.removeItem(CONSENT_KEY);
+                                        window.location.reload();
+                                    }}
+                                    className="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
+                                >
+                                    Cookie zurücksetzen
+                                </button>
+                            </li>
                         </ul>
                     </div>
 

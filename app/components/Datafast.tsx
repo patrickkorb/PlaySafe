@@ -1,6 +1,21 @@
 // Utility functions for tracking Datafast goals
 import { getAnalytics } from '@/lib/datafast';
 
+async function trackDatafastGoalServerSide(
+  goalName: string,
+  metadata?: Record<string, string>
+): Promise<void> {
+  try {
+    await fetch('/api/datafast-goal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: goalName, metadata: metadata ?? {} }),
+    });
+  } catch (error) {
+    console.error('Error tracking Datafast goal server-side:', error);
+  }
+}
+
 export async function trackDatafastGoal(
   goalName: string,
   metadata?: Record<string, string>
@@ -11,6 +26,8 @@ export async function trackDatafastGoal(
   } catch (error) {
     console.error('Error tracking Datafast goal:', error);
   }
+
+  await trackDatafastGoalServerSide(goalName, metadata);
 }
 
 // Specific goal tracking functions

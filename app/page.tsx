@@ -19,9 +19,9 @@ export default function Index() {
             <div>
                 <Hero />
                 <Services />
+                <Pricing />
                 <Stories />
                 <FAQ />
-                <Pricing />
                 <Sponsor />
                 <Contact />
             </div>

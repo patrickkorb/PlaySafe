@@ -195,6 +195,7 @@ function AngebotContent() {
           privacyConsent: formData.privacyConsent,
           contactConsent: formData.contactConsent,
           riskExclusionConsent: formData.riskExclusionConsent,
+          discount: discount ?? 0,
         }),
       });
 

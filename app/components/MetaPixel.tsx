@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import { getConsent } from './CookieBanner'
 
 declare global {
   interface Window {
@@ -64,40 +65,51 @@ async function sendDualEvent(
   return eventId;
 }
 
+function initPixel() {
+  if (typeof window === 'undefined' || window.fbq) return;
+  (function(f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
+    if (f.fbq) return;
+    n = f.fbq = function() {
+      n.callMethod ?
+        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+    };
+    if (!f._fbq) f._fbq = n;
+    n.push = n;
+    n.loaded = !0;
+    n.version = '2.0';
+    n.queue = [];
+    t = b.createElement(e);
+    t.async = !0;
+    t.src = v;
+    s = b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t, s)
+  })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
+  window.fbq('init', process.env.NEXT_PUBLIC_META_PIXEL_ID);
+  sendDualEvent('PageView');
+}
+
 export default function MetaPixel() {
   const pathname = usePathname()
+  const initialized = useRef(false)
 
   useEffect(() => {
-    // Initialisiere Meta Pixel
-    if (typeof window !== 'undefined' && !window.fbq) {
-      (function(f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
-        if (f.fbq) return;
-        n = f.fbq = function() {
-          n.callMethod ?
-            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s)
-      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-
-      window.fbq('init', process.env.NEXT_PUBLIC_META_PIXEL_ID);
-
-      // Initiales PageView mit CAPI
-      sendDualEvent('PageView');
+    if (getConsent() === 'granted') {
+      initPixel();
+      initialized.current = true;
     }
+
+    const handler = () => {
+      initPixel();
+      initialized.current = true;
+    };
+
+    window.addEventListener('cookieConsentGranted', handler);
+    return () => window.removeEventListener('cookieConsentGranted', handler);
   }, [])
 
   useEffect(() => {
-    // Track PageView bei Seitenwechsel mit CAPI
-    if (window.fbq) {
+    if (initialized.current && window.fbq) {
       sendDualEvent('PageView');
     }
   }, [pathname])

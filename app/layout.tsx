@@ -5,6 +5,7 @@ import Navigation from "@/app/sections/Navigation";
 import Footer from "@/app/sections/Footer";
 import MetaPixel from "@/app/components/MetaPixel";
 import DatafastProvider from "@/app/components/DatafastProvider";
+import CookieBanner from "@/app/components/CookieBanner";
 import {Analytics} from "@vercel/analytics/next";
 
 const geistSans = Geist({
@@ -93,6 +94,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang="de">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -103,6 +105,7 @@ export default function RootLayout({
       <Navigation />
         {children}
       <Footer />
+      <CookieBanner />
       </body>
     </html>
   );
