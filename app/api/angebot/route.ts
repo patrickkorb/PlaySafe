@@ -183,6 +183,7 @@ export async function POST(request: NextRequest) {
           <h3 style="color: #1a3691;">Versicherungsbeginn & Tarif:</h3>
           <p><strong>Beginn:</strong> ${insuranceStartSection}</p>
           <p><strong>Tarif:</strong> ${tarif}</p>
+          ${finalPrice !== null && !(discount && discount > 0) ? `<p><strong>Monatsbeitrag:</strong> ${formatPrice(finalPrice)}/Monat</p>` : ''}
           ${discountSection}
           <hr style="margin: 24px 0; border: none; border-top: 1px solid #ddd;" />
           <h3 style="color: #1a3691;">Einwilligungen:</h3>
