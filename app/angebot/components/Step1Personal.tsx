@@ -461,7 +461,18 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
               <select
                 value={formData.job}
                 onChange={(e) => {
-                  onUpdate({ job: e.target.value });
+                  const newJob = e.target.value;
+                  const updates: Partial<typeof formData> = { job: newJob };
+                  if (newJob === 'Arbeitslos') {
+                    if (formData.tarif === 'Small') updates.tarif = 'Small Kids';
+                    else if (formData.tarif === 'Medium') updates.tarif = 'Medium Kids';
+                    else if (formData.tarif === 'Large') updates.tarif = 'Large Kids';
+                  } else if (formData.job === 'Arbeitslos') {
+                    if (formData.tarif === 'Small Kids') updates.tarif = 'Small';
+                    else if (formData.tarif === 'Medium Kids') updates.tarif = 'Medium';
+                    else if (formData.tarif === 'Large Kids') updates.tarif = 'Large';
+                  }
+                  onUpdate(updates);
                   if (errors.job) setErrors({ ...errors, job: '' });
                 }}
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
@@ -475,6 +486,13 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
               </select>
               {errors.job && (
                 <p className="text-red-500 text-sm mt-1">{errors.job}</p>
+              )}
+              {formData.job === 'Arbeitslos' && (
+                <div className="mt-2 bg-amber-50 border border-amber-300 rounded-lg p-3">
+                  <p className="text-amber-800 text-sm">
+                    <span className="font-semibold">Hinweis:</span> Für arbeitslose Personen kann nur der <span className="font-semibold">24/7 Versicherungsschutz</span> angeboten werden.
+                  </p>
+                </div>
               )}
             </div>
 
@@ -590,9 +608,19 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                 }`}
               >
                 <option value="">Bitte wählen</option>
-                <option value="Small">Small</option>
-                <option value="Medium">Medium</option>
-                <option value="Large">Large</option>
+                {formData.job === 'Arbeitslos' ? (
+                  <>
+                    <option value="Small Kids">Small</option>
+                    <option value="Medium Kids">Medium</option>
+                    <option value="Large Kids">Large</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                  </>
+                )}
               </select>
               {errors.tarif && (
                 <p className="text-red-500 text-sm mt-1">{errors.tarif}</p>

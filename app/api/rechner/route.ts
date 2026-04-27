@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [
                     { email: 'korbpatrick@web.de' },
-                    { email: 'mike.allmendinger@signal-iduna.net' },
+
 
                 ],
                 subject: `Neue Angebotsanfrage von ${name}`,
@@ -268,7 +268,39 @@ export async function POST(request: NextRequest) {
             // Kein Return hier - Lead-Fehler soll den Rest nicht blockieren
         }
 
-        // 5. Meta Conversion API Lead Event (server-seitig, zuverlässig)
+        // 5. n8n Webhook (fire-and-forget)
+        const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+        if (n8nWebhookUrl) {
+            fetch(n8nWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    source: 'rechner',
+                    timestamp: new Date().toISOString(),
+                    name,
+                    firstName,
+                    lastName,
+                    email,
+                    phone: normalizedPhone,
+                    tarif,
+                    price: finalPrice,
+                    invaliditaet: tariffInfo.invaliditaet,
+                    gipsgeld: tariffInfo.gipsgeld,
+                    schwerverletzung: tariffInfo.schwerverletzung,
+                    krankenhaus: tariffInfo.krankenhaus,
+                    zahnersatz: tariffInfo.zahnersatz,
+                    insuranceFor: insuranceFor || 'self',
+                    insuranceForLabel,
+                    birthDate,
+                    gender,
+                    sport: sport || null,
+                    frequency: frequency || null,
+                    ctaLink,
+                }),
+            }).catch((err) => console.error('n8n Webhook Fehler:', err));
+        }
+
+        // 6. Meta Conversion API Lead Event (server-seitig, zuverlässig)
         const leadEventId = generateEventId();
         const nameParts2 = name.trim().split(' ');
         const leadValue = parseInt(finalPrice) || 10;
