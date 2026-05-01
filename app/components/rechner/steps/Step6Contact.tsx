@@ -195,9 +195,9 @@ export default function Step6Contact() {
                   target="_blank"
                   className="text-primary underline hover:text-primary/80"
                 >
-                  Datenschutzerklärung
+                   Datenschutzerklärung
                 </Link>{' '}
-                zu und bin damit einverstanden, dass PlaySafe mich per E-Mail und Telefon kontaktieren darf.
+                zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherunsangebot kontaktieren darf.
               </span>
             </label>
             {privacyError && (

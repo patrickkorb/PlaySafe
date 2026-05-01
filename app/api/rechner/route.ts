@@ -271,31 +271,72 @@ export async function POST(request: NextRequest) {
         // 5. n8n Webhook (fire-and-forget)
         const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
         if (n8nWebhookUrl) {
+            // wa_id: Telefonnummer mit 0 statt +49
+            const waId = normalizedPhone.replace(/^\+49/, '0');
+
+            // geburtsdatum: DD.MM.YYYY → YYYY-MM-DD
+            let geburtsdatum: string | null = null;
+            if (birthDate && birthDate.length === 10) {
+                const [day, month, year] = birthDate.split('.');
+                if (day && month && year) geburtsdatum = `${year}-${month}-${day}`;
+            }
+
+            // geschlecht → Supabase Enum
+            const geschlechtMap: { [key: string]: string } = {
+                'Männlich': 'male',
+                'Weiblich': 'female',
+                'Divers': 'diverse',
+            };
+            const geschlecht = geschlechtMap[gender] ?? 'not_specified';
+
+            // Client-IP für DSGVO
+            const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+                ?? request.headers.get('x-real-ip')
+                ?? null;
+
+            const optInText = 'Ich stimme der Datenschutzerklärung zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherungsangebot kontaktieren darf.';
+
             fetch(n8nWebhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    source: 'rechner',
-                    timestamp: new Date().toISOString(),
-                    name,
-                    firstName,
-                    lastName,
+                    // Stammdaten
+                    vorname: firstName,
+                    nachname: lastName || null,
+                    geburtsdatum,
                     email,
-                    phone: normalizedPhone,
-                    tarif,
-                    price: finalPrice,
-                    invaliditaet: tariffInfo.invaliditaet,
-                    gipsgeld: tariffInfo.gipsgeld,
-                    schwerverletzung: tariffInfo.schwerverletzung,
-                    krankenhaus: tariffInfo.krankenhaus,
-                    zahnersatz: tariffInfo.zahnersatz,
-                    insuranceFor: insuranceFor || 'self',
-                    insuranceForLabel,
-                    birthDate,
-                    gender,
-                    sport: sport || null,
-                    frequency: frequency || null,
-                    ctaLink,
+                    telefonnummer: normalizedPhone,
+                    wa_id: waId,
+                    geschlecht,
+
+                    // Lead-Infos (für Chatbot)
+                    infos: {
+                        sportart: sport || null,
+                        haeufigkeit: frequency || null,
+                        versicherung_fuer: insuranceForLabel,
+                        tarif,
+                        monatsbeitrag: finalPrice,
+                        leistungen: {
+                            invaliditaet: tariffInfo.invaliditaet,
+                            gipsgeld: tariffInfo.gipsgeld,
+                            schwerverletzung: tariffInfo.schwerverletzung,
+                            krankenhaus_tagegeld: tariffInfo.krankenhaus,
+                            zahnersatz: tariffInfo.zahnersatz,
+                        },
+                    },
+
+                    // Lead-Lifecycle
+                    status: 'new',
+                    lead_source: 'playsafe.fit',
+
+                    // DSGVO
+                    opt_in_text: optInText,
+                    opt_in_ip: clientIp,
+                    opt_in_source_url: 'https://playsafe.fit/rechner',
+                    data_processing_consent_version: null,
+
+                    // Für n8n-interne Nutzung (nicht in Supabase)
+                    cta_link: ctaLink,
                 }),
             }).catch((err) => console.error('n8n Webhook Fehler:', err));
         }
