@@ -274,20 +274,9 @@ export async function POST(request: NextRequest) {
             // wa_id: Telefonnummer mit 0 statt +49
             const waId = normalizedPhone.replace(/^\+49/, '0');
 
-            // geburtsdatum: DD.MM.YYYY → YYYY-MM-DD
-            let geburtsdatum: string | null = null;
-            if (birthDate && birthDate.length === 10) {
-                const [day, month, year] = birthDate.split('.');
-                if (day && month && year) geburtsdatum = `${year}-${month}-${day}`;
-            }
+            const geburtsdatum: string | null = (birthDate && birthDate.length === 10) ? birthDate : null;
 
-            // geschlecht → Supabase Enum
-            const geschlechtMap: { [key: string]: string } = {
-                'Männlich': 'male',
-                'Weiblich': 'female',
-                'Divers': 'diverse',
-            };
-            const geschlecht = geschlechtMap[gender] ?? 'not_specified';
+            const geschlecht = gender || 'Nicht angegeben';
 
             // Client-IP für DSGVO
             const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
