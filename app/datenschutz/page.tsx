@@ -1,390 +1,482 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "Datenschutzerklärung | PlaySafe",
     description:
         "Informationen zum Datenschutz bei PlaySafe – wie wir personenbezogene Daten verarbeiten, insbesondere bei Nutzung des Versicherungsrechners und der WhatsApp-Kommunikation.",
-    robots: {
-        index: true,
-        follow: true,
-    },
+    robots: { index: true, follow: true },
 };
+
+function InfoBox({ label, children }: { label: string; children: React.ReactNode }) {
+    return (
+        <div className="flex gap-3 bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 my-2 text-sm">
+            <span className="font-semibold text-secondary shrink-0">{label}:</span>
+            <span className="text-gray-700">{children}</span>
+        </div>
+    );
+}
+
+function Section({ id, number, title, children }: { id: string; number: string; title: string; children: React.ReactNode }) {
+    return (
+        <section id={id} className="scroll-mt-24">
+            <div className="flex items-center gap-3 mb-4">
+                <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold shrink-0">
+                    {number}
+                </span>
+                <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+            </div>
+            <div className="pl-11 space-y-3 text-gray-700 leading-relaxed">
+                {children}
+            </div>
+        </section>
+    );
+}
+
+function SubSection({ id, title, children }: { id?: string; title: string; children: React.ReactNode }) {
+    return (
+        <div id={id} className="mt-5">
+            <h3 className="font-semibold text-gray-900 mb-2 text-base">{title}</h3>
+            <div className="space-y-2">{children}</div>
+        </div>
+    );
+}
+
+const toc = [
+    { id: "verantwortlicher", label: "Verantwortlicher" },
+    { id: "erhebung", label: "Erhebung personenbezogener Daten" },
+    { id: "weitergabe", label: "Weitergabe von Daten" },
+    { id: "cookies", label: "Cookies und lokaler Speicher" },
+    { id: "meta-pixel", label: "Meta Pixel & Conversion API" },
+    { id: "google-fonts", label: "Google Fonts" },
+    { id: "youtube", label: "YouTube-Videos" },
+    { id: "rechte", label: "Betroffenenrechte" },
+    { id: "widerspruch", label: "Widerspruchsrecht" },
+    { id: "datensicherheit", label: "Datensicherheit" },
+    { id: "aktualitaet", label: "Aktualität" },
+];
+
+const processors = [
+    {
+        name: "Supabase Inc.",
+        detail: "Datenbank-Hosting · Region Frankfurt, Deutschland · AVV nach Art. 28 DSGVO liegt vor",
+    },
+    {
+        name: "n8n GmbH",
+        detail: "Automatisierungsplattform (E-Mail-Versand, Lead-Verarbeitung) · Bürgerstraße 1, 10317 Berlin · Hosting: n8n Cloud (EU) · AVV nach Art. 28 DSGVO liegt vor",
+    },
+    {
+        name: "Brevo (Sendinblue SAS)",
+        detail: "E-Mail-Versand · 7 rue de Madrid, 75008 Paris · AVV nach Art. 28 DSGVO liegt vor",
+    },
+];
 
 export default function DatenschutzPage() {
     return (
-        <main className="mx-auto max-w-3xl px-4 py-16 md:py-24">
-            <article className="prose prose-neutral max-w-none prose-headings:scroll-mt-24 prose-a:text-blue-600 hover:prose-a:underline">
-                <h1>Datenschutzerklärung</h1>
-                <p className="text-sm text-neutral-500">Stand: Mai 2026</p>
+        <main>
+            <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-1">Datenschutzerklärung</h1>
+                    <p className="text-sm text-gray-400">Stand: Mai 2026</p>
+                </div>
 
-                <p>
-                    Wir freuen uns über Ihr Interesse an unserem Versicherungsangebot. Der
-                    Schutz Ihrer personenbezogenen Daten ist uns wichtig. Nachfolgend
-                    informieren wir Sie ausführlich über den Umgang mit Ihren Daten.
-                </p>
+                {/* Inhaltsverzeichnis */}
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Inhalt</p>
+                    <ol className="space-y-1.5">
+                        {toc.map((item, i) => (
+                            <li key={item.id}>
+                                <a
+                                    href={`#${item.id}`}
+                                    className="flex items-center gap-2 text-sm text-gray-600 hover:text-primary transition-colors group"
+                                >
+                                    <span className="text-gray-400 group-hover:text-primary w-5 text-right shrink-0">{i + 1}.</span>
+                                    <span>{item.label}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
 
-                {/* 1. Verantwortlicher */}
-                <h2 id="verantwortlicher">1. Verantwortlicher</h2>
-                <p>
-                    Mike Allmendinger
-                    <br />
-                    Generalagentur der SIGNAL IDUNA
-                    <br />
-                    Friedrichsplatz 6
-                    <br />
-                    76133 Karlsruhe
-                </p>
-                <p>
-                    Telefon: 0721 / 981010
-                    <br />
-                    E-Mail:{" "}
-                    <a href="mailto:mike.allmendinger@signal-iduna.net">
-                        mike.allmendinger@signal-iduna.net
-                    </a>
-                </p>
-
-                {/* 2. Erhebung */}
-                <h2 id="erhebung">2. Erhebung und Speicherung personenbezogener Daten</h2>
-
-                <h3 id="logfiles">a) Beim Besuch der Website</h3>
-                <p>
-                    Beim Aufrufen unserer Website werden durch den auf Ihrem Endgerät zum
-                    Einsatz kommenden Browser automatisch Informationen an den Server
-                    unserer Website gesendet. Diese Informationen werden temporär in einem
-                    sogenannten Logfile gespeichert:
-                </p>
-                <ul>
-                    <li>IP-Adresse des anfragenden Rechners</li>
-                    <li>Datum und Uhrzeit des Zugriffs</li>
-                    <li>Name und URL der abgerufenen Datei</li>
-                    <li>Website, von der aus der Zugriff erfolgt (Referrer-URL)</li>
-                    <li>
-                        Verwendeter Browser, ggf. Betriebssystem sowie der Name Ihres
-                        Access-Providers
-                    </li>
-                </ul>
-                <p>Diese Daten werden zu folgenden Zwecken verarbeitet:</p>
-                <ul>
-                    <li>Sicherstellung eines reibungslosen Verbindungsaufbaus</li>
-                    <li>Komfortable Nutzung unserer Website</li>
-                    <li>Auswertung der Systemsicherheit und -stabilität</li>
-                    <li>Weitere administrative Zwecke</li>
-                </ul>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
-                    (berechtigtes Interesse).
-                </p>
-                <p>
-                    <strong>Speicherdauer:</strong> Die Logfiles werden nach 7 Tagen
-                    automatisch gelöscht, sofern sie nicht zur Aufklärung
-                    sicherheitsrelevanter Vorfälle benötigt werden.
+                <p className="text-gray-600 leading-relaxed">
+                    Wir freuen uns über Ihr Interesse an unserem Versicherungsangebot. Der Schutz Ihrer
+                    personenbezogenen Daten ist uns wichtig. Nachfolgend informieren wir Sie ausführlich
+                    über den Umgang mit Ihren Daten.
                 </p>
 
-                <h3 id="kontaktformular">b) Bei Nutzung des Kontaktformulars oder E-Mail-Kontakts</h3>
-                <p>
-                    Wenn Sie uns per Kontaktformular oder E-Mail Anfragen zukommen lassen,
-                    werden Ihre Angaben zwecks Bearbeitung der Anfrage und für den Fall
-                    von Anschlussfragen gespeichert. Diese Daten geben wir nicht ohne Ihre
-                    Einwilligung weiter.
-                </p>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. b DSGVO
-                    (Vertragsanbahnung) bzw. Art. 6 Abs. 1 lit. f DSGVO bei sonstigen
-                    Anfragen.
-                </p>
+                <div className="space-y-10 divide-y divide-gray-100">
 
-                <h3 id="rechner">c) Versicherungsrechner und Lead-Generierung</h3>
-                <p>
-                    Auf unserer Website bieten wir einen Versicherungsrechner an, mit dem
-                    Sie ein unverbindliches Angebot für eine Unfallversicherung erstellen
-                    können. Dabei verarbeiten wir die von Ihnen eingegebenen Daten:
-                </p>
-                <ul>
-                    <li>Vorname, ggf. Nachname</li>
-                    <li>Geburtsdatum</li>
-                    <li>Telefonnummer</li>
-                    <li>E-Mail-Adresse</li>
-                    <li>Geschlecht</li>
-                    <li>
-                        Angaben zu Sportart, Sport-Häufigkeit, gewähltem Tarif und weiteren
-                        Eingaben aus dem Rechner
-                    </li>
-                </ul>
-                <p>
-                    <strong>Zweck:</strong> Erstellung eines individuellen
-                    Versicherungsangebots, Kontaktaufnahme zur Angebotsbesprechung sowie
-                    ggf. Vermittlung des Versicherungsvertrags an die SIGNAL IDUNA
-                    Allgemeine Versicherung AG.
-                </p>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO
-                    (Einwilligung) für die Kontaktaufnahme; Art. 6 Abs. 1 lit. b DSGVO
-                    (Vertragsanbahnung) für die Angebotserstellung.
-                </p>
-                <p>
-                    <strong>Speicherdauer:</strong> Ihre Lead-Daten werden gelöscht,
-                    sobald der Zweck der Verarbeitung entfällt, spätestens jedoch nach 24
-                    Monaten ab Ihrer Einwilligung. Im Falle eines Vertragsabschlusses
-                    gelten die gesetzlichen Aufbewahrungsfristen (insbesondere § 257 HGB,
-                    § 147 AO – bis zu 10 Jahre).
-                </p>
-                <p>
-                    <strong>Auftragsverarbeiter:</strong> Ihre Daten werden in einer
-                    Datenbank des Anbieters Supabase Inc. (Hosting-Region Frankfurt,
-                    Deutschland) gespeichert. Mit Supabase besteht ein
-                    Auftragsverarbeitungsvertrag nach Art. 28 DSGVO.
-                </p>
+                    {/* 1 */}
+                    <Section id="verantwortlicher" number="1" title="Verantwortlicher">
+                        <div className="bg-white border border-gray-200 rounded-lg p-4 text-sm space-y-1">
+                            <p className="font-semibold text-gray-900">Mike Allmendinger</p>
+                            <p>Generalagentur der SIGNAL IDUNA</p>
+                            <p>Friedrichsplatz 6, 76133 Karlsruhe</p>
+                            <p className="pt-1">Telefon: 0721 / 981010</p>
+                            <p>
+                                E-Mail:{" "}
+                                <a href="mailto:mike.allmendinger@signal-iduna.net" className="text-primary hover:underline">
+                                    mike.allmendinger@signal-iduna.net
+                                </a>
+                            </p>
+                        </div>
+                    </Section>
 
-                <h3 id="whatsapp-bot">d) Kommunikation per WhatsApp und KI-gestützter Chatbot</h3>
-                <p>
-                    Wenn Sie bei der Anfrage über unseren Versicherungsrechner Ihre
-                    Einwilligung erteilt haben, kontaktieren wir Sie auf der Telefonnummer,
-                    die Sie angegeben haben, per WhatsApp. Die Kommunikation auf WhatsApp
-                    erfolgt teilweise automatisiert durch einen KI-gestützten Chatbot, der
-                    auf Basis Ihrer Eingaben passende Antworten zu unseren
-                    Versicherungsangeboten generiert.
-                </p>
-                <p>
-                    <strong>Zweck:</strong> Beantwortung Ihrer Fragen zum
-                    Versicherungsangebot, Qualifizierung Ihres Interesses, Vereinbarung
-                    eines persönlichen Beratungstermins.
-                </p>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. a DSGVO
-                    (Einwilligung).
-                </p>
-                <p>
-                    <strong>Verarbeitete Daten:</strong> Name, Telefonnummer
-                    (WhatsApp-ID), Inhalt der WhatsApp-Nachrichten, von Ihnen im Rechner
-                    angegebene Daten (z. B. Sportart, gewählter Tarif).
-                </p>
-                <p>
-                    <strong>Empfänger und Drittlandtransfer:</strong>
-                </p>
-                <ul>
-                    <li>
-                        <strong>Meta Platforms Ireland Ltd.</strong> (WhatsApp Business
-                        Platform), Merrion Road, Dublin 4, Irland. Die Nachrichten werden
-                        über die Server von Meta verarbeitet, wobei eine Datenübertragung in
-                        die USA stattfinden kann. Rechtsgrundlage für die Übermittlung:
-                        Angemessenheitsbeschluss der EU-Kommission (EU-US Data Privacy
-                        Framework, Art. 45 DSGVO).
-                    </li>
-                    <li>
-                        <strong>OpenAI Ireland Ltd.</strong>, 1st Floor, The Liffey Trust
-                        Centre, 117–126 Sheriff Street Upper, Dublin 1, Irland. OpenAI
-                        stellt das KI-Modell zur Verfügung, das Antworten unseres Chatbots
-                        generiert. Eine Datenverarbeitung in den USA findet statt;
-                        Rechtsgrundlage wie oben.
-                    </li>
-                </ul>
-                <p>
-                    Mit allen genannten Empfängern bestehen Auftragsverarbeitungsverträge
-                    nach Art. 28 DSGVO.
-                </p>
-                <p>
-                    <strong>Hinweis zu KI-generierten Inhalten:</strong> Antworten unseres
-                    Chatbots werden teilweise automatisiert durch ein KI-Sprachmodell
-                    erzeugt. Sie können jederzeit das Gespräch mit einem menschlichen
-                    Berater anfordern. Eine verbindliche Versicherungsberatung erfolgt
-                    ausschließlich durch unseren menschlichen Berater im persönlichen
-                    Gespräch.
-                </p>
-                <p>
-                    <strong>Widerruf:</strong> Sie können Ihre Einwilligung jederzeit ohne
-                    Angabe von Gründen widerrufen. Der einfachste Weg: Antworten Sie auf
-                    WhatsApp mit „Stopp". Alternativ per E-Mail an{" "}
-                    <a href="mailto:mike.allmendinger@signal-iduna.net">
-                        mike.allmendinger@signal-iduna.net
-                    </a>
-                    . Nach Widerruf werden Sie nicht mehr kontaktiert; Ihre Daten werden
-                    nach Ablauf einer Beweissicherungsfrist von 30 Tagen gelöscht.
-                </p>
-                <p>
-                    <strong>Speicherdauer Chatverläufe:</strong> Chatverläufe werden für
-                    die Dauer der aktiven Geschäftsanbahnung, längstens 24 Monate nach
-                    letzter Kommunikation, gespeichert.
-                </p>
+                    {/* 2 */}
+                    <Section id="erhebung" number="2" title="Erhebung und Speicherung personenbezogener Daten">
+                        <SubSection id="logfiles" title="a) Beim Besuch der Website">
+                            <p>
+                                Beim Aufrufen unserer Website werden automatisch Informationen an unseren Server
+                                gesendet und temporär in Logfiles gespeichert:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1 text-sm pl-2">
+                                <li>IP-Adresse des anfragenden Rechners</li>
+                                <li>Datum und Uhrzeit des Zugriffs</li>
+                                <li>Name und URL der abgerufenen Datei</li>
+                                <li>Referrer-URL (Website, von der der Zugriff erfolgt)</li>
+                                <li>Verwendeter Browser, Betriebssystem, Access-Provider</li>
+                            </ul>
+                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse)</InfoBox>
+                            <InfoBox label="Speicherdauer">Logfiles werden nach 7 Tagen automatisch gelöscht.</InfoBox>
+                        </SubSection>
 
-                {/* 3. Weitergabe */}
-                <h2 id="weitergabe">3. Weitergabe von Daten</h2>
-                <p>
-                    Eine Übermittlung Ihrer persönlichen Daten an Dritte findet nur statt,
-                    wenn:
-                </p>
-                <ul>
-                    <li>
-                        Sie Ihre ausdrückliche Einwilligung erteilt haben (Art. 6 Abs. 1
-                        lit. a DSGVO),
-                    </li>
-                    <li>
-                        die Verarbeitung für die Vertragsabwicklung erforderlich ist (Art. 6
-                        Abs. 1 lit. b DSGVO),
-                    </li>
-                    <li>
-                        eine rechtliche Verpflichtung besteht (Art. 6 Abs. 1 lit. c DSGVO),
-                        oder
-                    </li>
-                    <li>
-                        die Weitergabe zur Wahrung berechtigter Interessen erforderlich ist
-                        (Art. 6 Abs. 1 lit. f DSGVO).
-                    </li>
-                </ul>
-                <p>
-                    Im Falle eines Vertragsabschlusses werden Ihre Daten an die{" "}
-                    <strong>SIGNAL IDUNA Allgemeine Versicherung AG</strong>,
-                    Joseph-Scherer-Straße 3, 44139 Dortmund, übermittelt. Rechtsgrundlage
-                    ist Art. 6 Abs. 1 lit. b DSGVO (Vertragsabwicklung). Die
-                    Datenschutzhinweise der SIGNAL IDUNA finden Sie unter{" "}
-                    <a
-                        href="https://www.signal-iduna.de/datenschutz"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        signal-iduna.de/datenschutz
-                    </a>
-                    .
-                </p>
+                        <SubSection id="kontaktformular" title="b) Bei Nutzung des Kontaktformulars oder E-Mail-Kontakts">
+                            <p>
+                                Ihre Angaben werden zwecks Bearbeitung der Anfrage und für Anschlussfragen
+                                gespeichert. Eine Weitergabe ohne Ihre Einwilligung findet nicht statt.
+                            </p>
+                            <InfoBox label="Rechtsgrundlage">
+                                Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung) bzw. lit. f bei sonstigen Anfragen
+                            </InfoBox>
+                        </SubSection>
 
-                {/* 4. Cookies */}
-                <h2 id="cookies">4. Cookies</h2>
-                <p>
-                    Unsere Website verwendet ausschließlich technisch notwendige Cookies,
-                    die für den Betrieb der Seite erforderlich sind. Diese richten keinen
-                    Schaden an und enthalten keine Viren. Sie dienen dazu, unser Angebot
-                    nutzerfreundlicher, effektiver und sicherer zu machen.
-                </p>
-                <p>
-                    Sie können Ihren Browser so einstellen, dass Sie über das Setzen von
-                    Cookies informiert werden und Cookies nur im Einzelfall erlauben.
-                </p>
+                        <SubSection id="rechner" title="c) Versicherungsrechner und Lead-Generierung">
+                            <p>Im Rahmen unseres Versicherungsrechners verarbeiten wir folgende Daten:</p>
+                            <ul className="list-disc list-inside space-y-1 text-sm pl-2">
+                                <li>Vorname, ggf. Nachname</li>
+                                <li>Geburtsdatum &amp; Geschlecht</li>
+                                <li>Telefonnummer &amp; E-Mail-Adresse</li>
+                                <li>Sportart, Häufigkeit, gewählter Tarif</li>
+                                <li>Versicherung für (sich selbst, Kind, Partner etc.)</li>
+                            </ul>
+                            <InfoBox label="Zweck">
+                                Erstellung eines individuellen Versicherungsangebots und ggf. Vermittlung an SIGNAL IDUNA
+                            </InfoBox>
+                            <InfoBox label="Rechtsgrundlage">
+                                Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) für Kontaktaufnahme; lit. b (Vertragsanbahnung) für Angebotserstellung
+                            </InfoBox>
+                            <InfoBox label="Speicherdauer">
+                                Bis zu 24 Monate ab Einwilligung; bei Vertragsabschluss gelten gesetzliche Fristen (bis 10 Jahre)
+                            </InfoBox>
+                            <div className="text-sm space-y-2 mt-1">
+                                <p className="font-semibold text-gray-800">Auftragsverarbeiter:</p>
+                                <div className="border border-gray-200 rounded-lg divide-y divide-gray-100">
+                                    {processors.map((p) => (
+                                        <div key={p.name} className="px-4 py-3">
+                                            <p className="font-medium text-gray-900">{p.name}</p>
+                                            <p className="text-gray-500 text-xs mt-0.5">{p.detail}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </SubSection>
 
-                {/* 5. Google Fonts */}
-                <h2 id="google-fonts">5. Nutzung von Google Fonts</h2>
-                <p>
-                    Unsere Website verwendet Google Fonts, einen Dienst der Google Ireland
-                    Limited („Google"), Gordon House, Barrow Street, Dublin 4, Irland.
-                </p>
-                <p>
-                    Die Schriftarten werden beim Besuch unserer Website von den Servern
-                    von Google geladen, wodurch Google Kenntnis davon erlangt, dass über
-                    Ihre IP-Adresse unsere Website aufgerufen wurde.
-                </p>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
-                    (berechtigtes Interesse an einheitlicher Darstellung der Website).
-                </p>
-                <p>
-                    Weitere Informationen:{" "}
-                    <a
-                        href="https://developers.google.com/fonts/faq"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        developers.google.com/fonts/faq
-                    </a>{" "}
-                    und{" "}
-                    <a
-                        href="https://policies.google.com/privacy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        policies.google.com/privacy
-                    </a>
-                    .
-                </p>
+                        <SubSection id="angebot" title="d) Angebotsformular">
+                            <p>
+                                Wenn Sie über unser Angebotsformular einen Versicherungsantrag anfordern,
+                                verarbeiten wir umfangreichere Daten, da diese für die Antragserstellung
+                                bei SIGNAL IDUNA erforderlich sind:
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm mt-1">
+                                {[
+                                    "Anrede, Vor- &amp; Nachname",
+                                    "Geburtsdatum",
+                                    "Berufsstand &amp; Tätigkeit",
+                                    "E-Mail &amp; Telefonnummer",
+                                    "Vollständige Adresse (Straße, PLZ, Ort)",
+                                    "IBAN &amp; Kontoinhaber",
+                                    "Gewählter Tarif &amp; Versicherungsbeginn",
+                                    "Beziehung zur versicherten Person (bei Fremdversicherung)",
+                                    "Angaben zur versicherten Person (bei Fremdversicherung)",
+                                    "Einwilligungen (Datenschutz, Kontakt, Risikoausschluss)",
+                                ].map((item) => (
+                                    <div key={item} className="flex items-start gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
+                                        <span className="text-primary mt-0.5 shrink-0">✓</span>
+                                        <span className="text-gray-700" dangerouslySetInnerHTML={{ __html: item }} />
+                                    </div>
+                                ))}
+                            </div>
+                            <InfoBox label="Zweck">
+                                Erstellung und Übermittlung eines individuellen Versicherungsantrags an SIGNAL IDUNA
+                            </InfoBox>
+                            <InfoBox label="Rechtsgrundlage">
+                                Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung); lit. a (Einwilligung) für Kontaktaufnahme
+                            </InfoBox>
+                            <InfoBox label="Speicherdauer">
+                                Bis zu 24 Monate; bei Vertragsabschluss bis zu 10 Jahre (gesetzliche Aufbewahrungsfristen)
+                            </InfoBox>
+                            <div className="text-sm space-y-2 mt-1">
+                                <p className="font-semibold text-gray-800">Auftragsverarbeiter:</p>
+                                <div className="border border-gray-200 rounded-lg divide-y divide-gray-100">
+                                    {processors.map((p) => (
+                                        <div key={p.name} className="px-4 py-3">
+                                            <p className="font-medium text-gray-900">{p.name}</p>
+                                            <p className="text-gray-500 text-xs mt-0.5">{p.detail}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </SubSection>
 
-                {/* 6. YouTube */}
-                <h2 id="youtube">6. Einbindung von YouTube-Videos</h2>
-                <p>
-                    Wir haben YouTube-Videos in unser Online-Angebot eingebunden, die auf
-                    www.youtube.com gespeichert sind und von unserer Website aus direkt
-                    abspielbar sind. Wir nutzen den erweiterten Datenschutzmodus
-                    („youtube-nocookie"). Anbieter ist Google Ireland Limited, Gordon
-                    House, Barrow Street, Dublin 4, Irland.
-                </p>
-                <p>
-                    Beim Besuch unserer Website erhält YouTube die Information, dass Sie
-                    die entsprechende Unterseite aufgerufen haben. Zudem werden die unter
-                    Punkt 2 a) genannten Daten übermittelt. Dies erfolgt unabhängig davon,
-                    ob YouTube ein Nutzerkonto bereitstellt, über das Sie eingeloggt sind.
-                </p>
-                <p>
-                    Wenn Sie bei Google eingeloggt sind, werden Ihre Daten direkt Ihrem
-                    Konto zugeordnet. Wenn Sie die Zuordnung nicht wünschen, müssen Sie
-                    sich vorher ausloggen.
-                </p>
-                <p>
-                    <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO.
-                </p>
-                <p>
-                    Weitere Informationen:{" "}
-                    <a
-                        href="https://policies.google.com/privacy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        policies.google.com/privacy
-                    </a>
-                    .
-                </p>
+                        <SubSection id="whatsapp" title="e) Kommunikation per WhatsApp">
+                            <p>
+                                Nach Ihrer Einwilligung kontaktieren wir Sie auf der angegebenen Telefonnummer
+                                per WhatsApp, um Ihr Angebot zu besprechen.
+                            </p>
+                            <InfoBox label="Zweck">Angebotsbesprechung und Terminvereinbarung</InfoBox>
+                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</InfoBox>
+                            <InfoBox label="Verarbeitete Daten">Name, Telefonnummer (WhatsApp-ID), Nachrichteninhalte</InfoBox>
+                            <div className="text-sm space-y-2 mt-2">
+                                <p className="font-semibold text-gray-800">Empfänger:</p>
+                                <div className="border border-gray-200 rounded-lg px-4 py-3">
+                                    <p className="font-medium text-gray-900">Meta Platforms Ireland Ltd.</p>
+                                    <p className="text-gray-600 text-xs mt-0.5">WhatsApp Business Platform · Merrion Road, Dublin 4 · Datenübertragung in die USA möglich (EU-US Data Privacy Framework, Art. 45 DSGVO)</p>
+                                </div>
+                            </div>
+                            <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800 mt-2">
+                                <span className="font-semibold">Widerruf:</span> Antworten Sie auf WhatsApp mit „Stopp" oder schreiben Sie an{" "}
+                                <a href="mailto:mike.allmendinger@signal-iduna.net" className="underline">mike.allmendinger@signal-iduna.net</a>.
+                                Ihre Daten werden nach 30 Tagen gelöscht.
+                            </div>
+                        </SubSection>
+                    </Section>
 
-                {/* 7. Betroffenenrechte */}
-                <h2 id="rechte">7. Betroffenenrechte</h2>
-                <p>Sie haben das Recht auf:</p>
-                <ul>
-                    <li>
-                        Auskunft über Ihre von uns verarbeiteten personenbezogenen Daten
-                        (Art. 15 DSGVO),
-                    </li>
-                    <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO),</li>
-                    <li>Löschung (Art. 17 DSGVO),</li>
-                    <li>Einschränkung der Verarbeitung (Art. 18 DSGVO),</li>
-                    <li>Datenübertragbarkeit (Art. 20 DSGVO),</li>
-                    <li>Widerruf einer Einwilligung (Art. 7 Abs. 3 DSGVO),</li>
-                    <li>Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO).</li>
-                </ul>
-                <p>
-                    Zur Ausübung Ihrer Rechte genügt eine formlose Mitteilung an die unter
-                    Punkt 1 genannten Kontaktdaten.
-                </p>
+                    {/* 3 */}
+                    <Section id="weitergabe" number="3" title="Weitergabe von Daten">
+                        <p>Eine Übermittlung Ihrer Daten an Dritte findet nur statt, wenn:</p>
+                        <ul className="list-disc list-inside space-y-1 text-sm pl-2">
+                            <li>Sie Ihre ausdrückliche Einwilligung erteilt haben (Art. 6 Abs. 1 lit. a)</li>
+                            <li>die Verarbeitung für die Vertragsabwicklung erforderlich ist (lit. b)</li>
+                            <li>eine rechtliche Verpflichtung besteht (lit. c)</li>
+                            <li>die Weitergabe zur Wahrung berechtigter Interessen nötig ist (lit. f)</li>
+                        </ul>
+                        <div className="bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm mt-2">
+                            <p>
+                                Bei Vertragsabschluss werden Ihre Daten an die{" "}
+                                <strong>SIGNAL IDUNA Allgemeine Versicherung AG</strong>, Joseph-Scherer-Straße 3,
+                                44139 Dortmund übermittelt (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO).
+                            </p>
+                            <a
+                                href="https://www.signal-iduna.de/datenschutz"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary hover:underline text-xs mt-1 inline-block"
+                            >
+                                Datenschutzhinweise der SIGNAL IDUNA →
+                            </a>
+                        </div>
+                    </Section>
 
-                {/* 8. Widerspruch */}
-                <h2 id="widerspruch">8. Widerspruchsrecht</h2>
-                <p>
-                    Sofern Ihre Daten auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO
-                    verarbeitet werden, haben Sie das Recht, gemäß Art. 21 DSGVO
-                    Widerspruch einzulegen.
-                </p>
+                    {/* 4 */}
+                    <Section id="cookies" number="4" title="Cookies und lokaler Speicher">
+                        <p>Wir unterscheiden zwischen technisch notwendigen und optionalen Cookies:</p>
+                        <div className="space-y-2 mt-1">
+                            {[
+                                {
+                                    name: "cookie_consent",
+                                    type: "localStorage",
+                                    desc: "Speichert Ihre Cookie-Präferenz (akzeptiert/abgelehnt).",
+                                    badge: "Technisch notwendig",
+                                },
+                                {
+                                    name: "playsafe_rechner",
+                                    type: "localStorage",
+                                    desc: "Speichert den Rechner-Fortschritt für 14 Tage.",
+                                    badge: "Technisch notwendig",
+                                },
+                                {
+                                    name: "Analyse- & Marketing-Cookies",
+                                    type: "Meta Pixel, Datafast",
+                                    desc: "Nur nach ausdrücklicher Einwilligung aktiv. Siehe Abschnitt 5.",
+                                    badge: "Nur mit Einwilligung",
+                                    badgeColor: "bg-amber-100 text-amber-700",
+                                },
+                            ].map((c) => (
+                                <div key={c.name} className="bg-white border border-gray-200 rounded-lg px-4 py-3 text-sm">
+                                    <div className="flex items-start justify-between gap-2 flex-wrap">
+                                        <div>
+                                            <span className="font-mono font-semibold text-gray-900">{c.name}</span>
+                                            <span className="text-gray-400 ml-2 text-xs">{c.type}</span>
+                                        </div>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${c.badgeColor ?? "bg-green-100 text-green-700"}`}>
+                                            {c.badge}
+                                        </span>
+                                    </div>
+                                    <p className="text-gray-600 mt-1">{c.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-sm text-gray-600 mt-2">
+                            Sie können Ihren Browser so einstellen, dass Cookies nur im Einzelfall erlaubt werden.
+                        </p>
+                    </Section>
 
-                {/* 9. Datensicherheit */}
-                <h2 id="datensicherheit">9. Datensicherheit</h2>
-                <p>
-                    Wir verwenden innerhalb des Website-Besuchs eine SSL-Verschlüsselung
-                    (TLS) zum Schutz der Datenübertragung.
-                </p>
+                    {/* 5 */}
+                    <Section id="meta-pixel" number="5" title="Meta Pixel und Meta Conversion API">
+                        <p>
+                            Wir setzen den <strong>Meta Pixel</strong> (ehemals Facebook Pixel) sowie die{" "}
+                            <strong>Meta Conversion API (CAPI)</strong> ein, um den Erfolg unserer Werbeanzeigen zu
+                            messen und zu optimieren.
+                        </p>
 
-                {/* 10. Aktualität */}
-                <h2 id="aktualitaet">10. Aktualität und Änderung dieser Datenschutzerklärung</h2>
-                <p>
-                    Diese Datenschutzerklärung ist aktuell gültig und hat den Stand{" "}
-                    <strong>Mai 2026</strong>. Durch die Weiterentwicklung unserer
-                    Website und Angebote oder aufgrund geänderter gesetzlicher bzw.
-                    behördlicher Vorgaben kann es notwendig werden, diese
-                    Datenschutzerklärung zu ändern. Die jeweils aktuelle
-                    Datenschutzerklärung kann jederzeit auf dieser Seite abgerufen werden.
-                </p>
+                        <SubSection title="a) Meta Pixel (browser-seitig)">
+                            <p>
+                                Der Meta Pixel wird nach Ihrer Einwilligung in Ihrem Browser aktiviert und
+                                übermittelt Seitenaufrufe sowie bestimmte Aktionen an Meta. Dabei können Cookies
+                                gesetzt werden (<code className="bg-gray-100 px-1 rounded text-xs">_fbp</code>,{" "}
+                                <code className="bg-gray-100 px-1 rounded text-xs">_fbc</code>).
+                            </p>
+                            <InfoBox label="Einwilligung">
+                                Nur aktiv nach Klick auf „Alle akzeptieren" im Cookie-Banner. Widerruf durch „Ablehnen" oder Löschen der Browser-Cookies.
+                            </InfoBox>
+                        </SubSection>
 
-                <hr />
+                        <SubSection title="b) Meta Conversion API (server-seitig)">
+                            <p>
+                                Die CAPI übermittelt Conversion-Ereignisse direkt von unserem Server an Meta –
+                                ausschließlich wenn Sie durch Absenden eines Formulars Ihre Einwilligung erteilt haben.
+                            </p>
+                            <InfoBox label="Übermittelte Daten">
+                                Gehashte E-Mail &amp; Telefonnummer (SHA-256), IP-Adresse, Event-Typ (z. B. „Lead")
+                            </InfoBox>
+                            <InfoBox label="Zweck">Messung und Optimierung unserer Werbekampagnen auf Facebook und Instagram</InfoBox>
+                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</InfoBox>
+                            <InfoBox label="Empfänger">
+                                Meta Platforms Ireland Ltd., Merrion Road, Dublin 4 – Datenübertragung in USA möglich (EU-US Data Privacy Framework, Art. 45 DSGVO)
+                            </InfoBox>
+                            <InfoBox label="Speicherdauer">Bis zu 180 Tage bei Meta</InfoBox>
+                            <p className="text-sm">
+                                Opt-out:{" "}
+                                <a
+                                    href="https://www.facebook.com/settings?tab=ads"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary hover:underline"
+                                >
+                                    facebook.com/settings?tab=ads
+                                </a>{" "}
+                                &middot;{" "}
+                                <a
+                                    href="https://www.facebook.com/privacy/policy/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-primary hover:underline"
+                                >
+                                    Datenschutzrichtlinie Meta
+                                </a>
+                            </p>
+                        </SubSection>
+                    </Section>
 
-                <p className="text-sm text-neutral-500">
-                    Bei Fragen zum Datenschutz erreichen Sie uns unter{" "}
-                    <a href="mailto:mike.allmendinger@signal-iduna.net">
-                        mike.allmendinger@signal-iduna.net
-                    </a>
-                    .
-                </p>
-            </article>
+                    {/* 6 */}
+                    <Section id="google-fonts" number="6" title="Nutzung von Google Fonts">
+                        <p>
+                            Unsere Website verwendet Google Fonts (Google Ireland Limited, Gordon House, Barrow Street,
+                            Dublin 4). Die Schriftarten werden von Google-Servern geladen, wodurch Google Kenntnis von
+                            Ihrer IP-Adresse erlangt.
+                        </p>
+                        <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einheitlicher Darstellung)</InfoBox>
+                        <p className="text-sm">
+                            Mehr Infos:{" "}
+                            <a href="https://developers.google.com/fonts/faq" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                Google Fonts FAQ
+                            </a>{" "}
+                            &middot;{" "}
+                            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                Google Datenschutz
+                            </a>
+                        </p>
+                    </Section>
+
+                    {/* 7 */}
+                    <Section id="youtube" number="7" title="Einbindung von YouTube-Videos">
+                        <p>
+                            Wir binden YouTube-Videos im erweiterten Datenschutzmodus („youtube-nocookie") ein.
+                            Anbieter ist Google Ireland Limited, Dublin 4. YouTube erhält beim Besuch Ihrer Unterseite
+                            Ihre IP-Adresse. Wenn Sie bei Google eingeloggt sind, werden Daten Ihrem Konto zugeordnet.
+                        </p>
+                        <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO</InfoBox>
+                        <p className="text-sm">
+                            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                                Google Datenschutzrichtlinie →
+                            </a>
+                        </p>
+                    </Section>
+
+                    {/* 8 */}
+                    <Section id="rechte" number="8" title="Betroffenenrechte">
+                        <p>Sie haben folgende Rechte gegenüber uns:</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                            {[
+                                { right: "Auskunft", art: "Art. 15" },
+                                { right: "Berichtigung", art: "Art. 16" },
+                                { right: "Löschung", art: "Art. 17" },
+                                { right: "Einschränkung", art: "Art. 18" },
+                                { right: "Datenübertragbarkeit", art: "Art. 20" },
+                                { right: "Widerruf der Einwilligung", art: "Art. 7 Abs. 3" },
+                                { right: "Beschwerde bei Aufsichtsbehörde", art: "Art. 77" },
+                            ].map((r) => (
+                                <div key={r.right} className="flex items-center justify-between bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                                    <span className="text-gray-800">{r.right}</span>
+                                    <span className="text-xs text-gray-400 font-mono">{r.art} DSGVO</span>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-sm mt-2">
+                            Zur Ausübung Ihrer Rechte genügt eine formlose Mitteilung an die unter Punkt 1 genannten Kontaktdaten.
+                        </p>
+                    </Section>
+
+                    {/* 9 */}
+                    <Section id="widerspruch" number="9" title="Widerspruchsrecht">
+                        <p>
+                            Sofern Ihre Daten auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO verarbeitet werden,
+                            haben Sie das Recht, gemäß Art. 21 DSGVO Widerspruch einzulegen.
+                        </p>
+                    </Section>
+
+                    {/* 10 */}
+                    <Section id="datensicherheit" number="10" title="Datensicherheit">
+                        <div className="flex items-center gap-3 bg-green-50 border border-green-200 rounded-lg px-4 py-3 text-sm text-green-800">
+                            <span className="text-xl">🔒</span>
+                            <span>Alle Datenübertragungen auf unserer Website sind durch <strong>SSL/TLS-Verschlüsselung</strong> gesichert.</span>
+                        </div>
+                    </Section>
+
+                    {/* 11 */}
+                    <Section id="aktualitaet" number="11" title="Aktualität dieser Datenschutzerklärung">
+                        <p>
+                            Diese Datenschutzerklärung hat den Stand <strong>Mai 2026</strong>. Wir behalten uns
+                            vor, sie bei Bedarf zu aktualisieren. Die jeweils aktuelle Version ist stets auf dieser
+                            Seite abrufbar.
+                        </p>
+                    </Section>
+
+                </div>
+
+                {/* Footer */}
+                <div className="border-t border-gray-200 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-sm text-gray-500">
+                    <p>
+                        Fragen zum Datenschutz?{" "}
+                        <a href="mailto:mike.allmendinger@signal-iduna.net" className="text-primary hover:underline font-medium">
+                            mike.allmendinger@signal-iduna.net
+                        </a>
+                    </p>
+                    <Link href="/" className="text-primary hover:underline">
+                        ← Zurück zur Startseite
+                    </Link>
+                </div>
+            </div>
         </main>
     );
 }

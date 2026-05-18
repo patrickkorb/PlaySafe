@@ -6,7 +6,6 @@ import Footer from "@/app/sections/Footer";
 import MetaPixel from "@/app/components/MetaPixel";
 import DatafastProvider from "@/app/components/DatafastProvider";
 import CookieBanner from "@/app/components/CookieBanner";
-import {Analytics} from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,7 +100,6 @@ export default function RootLayout({
       >
       <DatafastProvider />
       <MetaPixel />
-      <Analytics/>
       <Navigation />
         {children}
       <Footer />

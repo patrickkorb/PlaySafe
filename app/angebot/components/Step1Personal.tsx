@@ -229,7 +229,17 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                   key={rel}
                   type="button"
                   onClick={() => {
-                    onUpdate({ relationshipToInsured: rel });
+                    const updates: Partial<typeof formData> = { relationshipToInsured: rel };
+                    if (rel === 'Kind') {
+                      if (formData.tarif === 'Small') updates.tarif = 'Small Kids';
+                      else if (formData.tarif === 'Medium') updates.tarif = 'Medium Kids';
+                      else if (formData.tarif === 'Large') updates.tarif = 'Large Kids';
+                    } else if (formData.relationshipToInsured === 'Kind') {
+                      if (formData.tarif === 'Small Kids') updates.tarif = 'Small';
+                      else if (formData.tarif === 'Medium Kids') updates.tarif = 'Medium';
+                      else if (formData.tarif === 'Large Kids') updates.tarif = 'Large';
+                    }
+                    onUpdate(updates);
                     if (errors.relationshipToInsured) setErrors({ ...errors, relationshipToInsured: '' });
                   }}
                   className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 ${
@@ -463,11 +473,12 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                 onChange={(e) => {
                   const newJob = e.target.value;
                   const updates: Partial<typeof formData> = { job: newJob };
+                  const isKind = formData.relationshipToInsured === 'Kind';
                   if (newJob === 'Arbeitslos') {
                     if (formData.tarif === 'Small') updates.tarif = 'Small Kids';
                     else if (formData.tarif === 'Medium') updates.tarif = 'Medium Kids';
                     else if (formData.tarif === 'Large') updates.tarif = 'Large Kids';
-                  } else if (formData.job === 'Arbeitslos') {
+                  } else if (formData.job === 'Arbeitslos' && !isKind) {
                     if (formData.tarif === 'Small Kids') updates.tarif = 'Small';
                     else if (formData.tarif === 'Medium Kids') updates.tarif = 'Medium';
                     else if (formData.tarif === 'Large Kids') updates.tarif = 'Large';
@@ -608,7 +619,7 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
                 }`}
               >
                 <option value="">Bitte wählen</option>
-                {formData.job === 'Arbeitslos' ? (
+                {(formData.job === 'Arbeitslos' || formData.relationshipToInsured === 'Kind') ? (
                   <>
                     <option value="Small Kids">Small</option>
                     <option value="Medium Kids">Medium</option>

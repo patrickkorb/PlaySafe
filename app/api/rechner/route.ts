@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import { sendConversionAPIEvent, generateEventId } from '@/app/lib/meta-capi';
 
-// Hilfsfunktion um Alter aus Geburtsdatum zu berechnen
 function getAgeFromBirthDate(birthDate: string): number | null {
     if (!birthDate || birthDate.length !== 10) return null;
 
@@ -29,66 +26,21 @@ function getAgeFromBirthDate(birthDate: string): number | null {
     return age;
 }
 
-// Tarif-Daten basierend auf den offiziellen Dokumenten
 const tariffData = {
-    Small: {
-        price: '10,00€',
-        invaliditaet: '500.000 EUR',
-        gipsgeld: '1.000 EUR',
-        schwerverletzung: '2.500 EUR',
-        krankenhaus: '10 EUR',
-        zahnersatz: '20.000 EUR',
-    },
-    Medium: {
-        price: '15,01€',
-        invaliditaet: '750.000 EUR',
-        gipsgeld: '1.500 EUR',
-        schwerverletzung: '7.000 EUR',
-        krankenhaus: '30 EUR',
-        zahnersatz: '20.000 EUR',
-    },
-    Large: {
-        price: '20,03€',
-        invaliditaet: '1.000.000 EUR',
-        gipsgeld: '2.000 EUR',
-        schwerverletzung: '12.000 EUR',
-        krankenhaus: '50 EUR',
-        zahnersatz: '20.000 EUR',
-    },
-    'Small Kids': {
-        price: '12,79€',
-        invaliditaet: '500.000 EUR',
-        gipsgeld: '1.000 EUR',
-        schwerverletzung: '2.500 EUR',
-        krankenhaus: '10 EUR',
-        zahnersatz: '20.000 EUR',
-    },
-    'Medium Kids': {
-        price: '19,39€',
-        invaliditaet: '750.000 EUR',
-        gipsgeld: '1.500 EUR',
-        schwerverletzung: '7.000 EUR',
-        krankenhaus: '30 EUR',
-        zahnersatz: '20.000 EUR',
-    },
-    'Large Kids': {
-        price: '26,03€',
-        invaliditaet: '1.000.000 EUR',
-        gipsgeld: '2.000 EUR',
-        schwerverletzung: '12.000 EUR',
-        krankenhaus: '50 EUR',
-        zahnersatz: '20.000 EUR',
-    },
+    Small: { price: '10,00€', invaliditaet: '500.000 EUR', gipsgeld: '1.000 EUR', schwerverletzung: '2.500 EUR', krankenhaus: '10 EUR', zahnersatz: '20.000 EUR' },
+    Medium: { price: '15,01€', invaliditaet: '750.000 EUR', gipsgeld: '1.500 EUR', schwerverletzung: '7.000 EUR', krankenhaus: '30 EUR', zahnersatz: '20.000 EUR' },
+    Large: { price: '20,03€', invaliditaet: '1.000.000 EUR', gipsgeld: '2.000 EUR', schwerverletzung: '12.000 EUR', krankenhaus: '50 EUR', zahnersatz: '20.000 EUR' },
+    'Small Kids': { price: '12,79€', invaliditaet: '500.000 EUR', gipsgeld: '1.000 EUR', schwerverletzung: '2.500 EUR', krankenhaus: '10 EUR', zahnersatz: '20.000 EUR' },
+    'Medium Kids': { price: '19,39€', invaliditaet: '750.000 EUR', gipsgeld: '1.500 EUR', schwerverletzung: '7.000 EUR', krankenhaus: '30 EUR', zahnersatz: '20.000 EUR' },
+    'Large Kids': { price: '26,03€', invaliditaet: '1.000.000 EUR', gipsgeld: '2.000 EUR', schwerverletzung: '12.000 EUR', krankenhaus: '50 EUR', zahnersatz: '20.000 EUR' },
 };
 
-// Günstigere Preise für Kinder unter 16 Jahren
 const childUnder16Prices: { [key: string]: string } = {
     'Small Kids': '10,42€',
     'Medium Kids': '15,78€',
     'Large Kids': '21,17€',
 };
 
-// Mapping für insuranceFor zur Anzeige
 const insuranceForLabels: { [key: string]: string } = {
     'self': 'Für sich selbst',
     'child': 'Für Kind',
@@ -107,28 +59,17 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const brevoApiKey = process.env.BREVO_API_KEY || '';
-
-        // Telefonnummer normalisieren: führende 0 → +49, 0049 → +49
         const normalizedPhone = phone
             .replace(/^0049/, '+49')
             .replace(/^0(?!0)/, '+49');
 
-        // Label für insuranceFor
         const insuranceForLabel = insuranceForLabels[insuranceFor] || insuranceFor || 'Nicht angegeben';
 
-        // 1. Lade das detaillierte Email-Template für Kunden
-        const templatePath = path.join(process.cwd(), 'emails', 'tariff-details.html');
-        let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
-
-        // Hole die Tarif-Daten
         const tariffInfo = tariffData[tarif as keyof typeof tariffData];
-
         if (!tariffInfo) {
             throw new Error(`Ungültiger Tarif: ${tarif}`);
         }
 
-        // Prüfe ob Kind unter 16 Jahre und passe den Preis an
         let finalPrice = tariffInfo.price;
         if (tarif.includes('Kids') && birthDate) {
             const age = getAgeFromBirthDate(birthDate);
@@ -137,159 +78,41 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Erstelle den CTA-Link
-        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
-
-        // Ersetze alle Platzhalter im Template
-        emailTemplate = emailTemplate
-            .replace(/{{NAME}}/g, name)
-            .replace(/{{TARIFF}}/g, tarif)
-            .replace(/{{PRICE}}/g, finalPrice)
-            .replace(/{{INVALIDITAET}}/g, tariffInfo.invaliditaet)
-            .replace(/{{GIPSGELD}}/g, tariffInfo.gipsgeld)
-            .replace(/{{SCHWERVERLETZUNG}}/g, tariffInfo.schwerverletzung)
-            .replace(/{{KRANKENHAUS}}/g, tariffInfo.krankenhaus)
-            .replace(/{{ZAHNERSATZ}}/g, tariffInfo.zahnersatz)
-            .replace(/{{CTA_LINK}}/g, ctaLink);
-
-        // 1. Kontakt in Brevo speichern (mit Telefon-Validierung)
         const nameParts = name.trim().split(' ');
         const lastName = nameParts[nameParts.length - 1];
         const firstName = nameParts.slice(0, -1).join(' ');
 
-        const contactRes = await fetch('https://api.brevo.com/v3/contacts', {
-            method: 'POST',
-            headers: {
-                'accept': 'application/json',
-                'api-key': brevoApiKey,
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                attributes: { FIRSTNAME: firstName, LASTNAME: lastName, SMS: normalizedPhone },
-                listIds: [3],
-                updateEnabled: true,
-            }),
-        });
+        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
 
-        if (!contactRes.ok) {
-            const contactError = await contactRes.json().catch(() => ({}));
-            const errorMessage: string = contactError?.message || '';
-            if (errorMessage.toLowerCase().includes('sms') || errorMessage.toLowerCase().includes('phone')) {
-                return NextResponse.json(
-                    { phoneError: 'Ungültige Telefonnummer. Bitte prüfe die Eingabe.' },
-                    { status: 400 }
-                );
-            }
-            // Anderer Brevo-Fehler – nicht blockierend, weiter machen
-            console.error('Brevo Kontakt-Fehler:', errorMessage);
-        }
-
-        // 2. Sende Admin-Mail via Brevo
-        const adminEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-                'accept': 'application/json',
-                'api-key': brevoApiKey,
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
-                to: [
-                    { email: 'korbpatrick@web.de' },
-                    { email: 'mike.allmendinger@signal-iduna.net' },
-
-                ],
-                subject: `Neue Angebotsanfrage von ${name}`,
-                htmlContent: `
-                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                      <h2 style="color: #1a3691;">Neue Angebotsanfrage - Playsafe</h2>
-                      <p><strong>Versicherung für:</strong> ${insuranceForLabel}</p>
-                      <p><strong>Name (Versicherungsnehmer):</strong> ${name}</p>
-                      <p><strong>E-Mail:</strong> ${email}</p>
-                      <p><strong>Telefon:</strong> ${phone}</p>
-                      <p><strong>Geschlecht (versicherte Person):</strong> ${gender}</p>
-                      <p><strong>Geburtsdatum (versicherte Person):</strong> ${birthDate}</p>
-                      <p><strong>Sport:</strong> ${sport || 'Nicht angegeben'}</p>
-                      <p><strong>Häufigkeit:</strong> ${frequency || 'Nicht angegeben'}</p>
-                      <p><strong>Tarif:</strong> ${tarif}</p>
-                      <p><strong>Angezeigter Preis:</strong> ${clientPrice || finalPrice}</p>
-                    </div>
-                `,
-            }),
-        });
-
-        if (!adminEmailRes.ok) {
-            throw new Error(`Brevo Admin-Email Fehler: ${await adminEmailRes.text()}`);
-        }
-
-        // 3. Sende Kunden-Mail via Brevo
-        const customerEmailRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-                'accept': 'application/json',
-                'api-key': brevoApiKey,
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
-                to: [{ email: email }],
-                subject: 'Ihre persönliche Versicherungsempfehlung - PlaySafe',
-                htmlContent: emailTemplate,
-            }),
-        });
-
-        if (!customerEmailRes.ok) {
-            console.error(`Brevo Kunden-Email Fehler: ${await customerEmailRes.text()}`);
-        }
-
-        console.log('Emails erfolgreich gesendet via Brevo');
-
-        //4. Lead im LeadTool speichern
-
-
-        const response = await fetch('https://leadtool.vercel.app/api/leads', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-API-Key': process.env.LEADTOOL_API_KEY || '',
-            },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                telefon: phone,
-                quelle: 'PlaySafe.fit',
-                notiz: sport + " für " + insuranceFor + " Tarif:" + tarif,
-            }),
-        });
-
-        if (!response.ok) {
-            console.error('LeadTool Fehler:', await response.text());
-            // Kein Return hier - Lead-Fehler soll den Rest nicht blockieren
-        }
-
-        // 5. n8n Webhook (fire-and-forget)
+        // n8n Webhook — übernimmt Emails, Kontakt-Speicherung etc.
         const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
         if (n8nWebhookUrl) {
-            // wa_id: Telefonnummer mit 0 statt +49
             const waId = normalizedPhone.replace(/^\+49/, '0');
 
-            const geburtsdatum: string | null = (birthDate && birthDate.length === 10) ? birthDate : null;
+            // Geburtsdatum sicherstellen: DD.MM.YYYY
+            const geburtsdatum: string | null = (birthDate && /^\d{2}\.\d{2}\.\d{4}$/.test(birthDate))
+                ? birthDate
+                : null;
 
-            const geschlecht = gender || 'Nicht angegeben';
+            // Gender auf Deutsch normalisieren
+            const geschlechtMap: Record<string, string> = {
+                'Männlich': 'Männlich',
+                'männlich': 'Männlich',
+                'male': 'Männlich',
+                'Weiblich': 'Weiblich',
+                'weiblich': 'Weiblich',
+                'female': 'Weiblich',
+            };
+            const geschlecht = geschlechtMap[gender] ?? 'Nicht angegeben';
 
-            // Client-IP für DSGVO
             const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
                 ?? request.headers.get('x-real-ip')
                 ?? null;
-
-            const optInText = 'Ich stimme der Datenschutzerklärung zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherungsangebot kontaktieren darf.';
 
             fetch(n8nWebhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    // Stammdaten
                     vorname: firstName,
                     nachname: lastName || null,
                     geburtsdatum,
@@ -297,8 +120,6 @@ export async function POST(request: NextRequest) {
                     telefonnummer: normalizedPhone,
                     wa_id: waId,
                     geschlecht,
-
-                    // Lead-Infos (für Chatbot)
                     infos: {
                         sportart: sport || null,
                         haeufigkeit: frequency || null,
@@ -313,26 +134,19 @@ export async function POST(request: NextRequest) {
                             zahnersatz: tariffInfo.zahnersatz,
                         },
                     },
-
-                    // Lead-Lifecycle
                     status: 'new',
                     lead_source: 'playsafe.fit',
-
-                    // DSGVO
-                    opt_in_text: optInText,
+                    opt_in_text: 'Ich stimme der Datenschutzerklärung zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherungsangebot kontaktieren darf.',
                     opt_in_ip: clientIp,
                     opt_in_source_url: 'https://playsafe.fit/rechner',
                     data_processing_consent_version: null,
-
-                    // Für n8n-interne Nutzung (nicht in Supabase)
                     cta_link: ctaLink,
                 }),
             }).catch((err) => console.error('n8n Webhook Fehler:', err));
         }
 
-        // 6. Meta Conversion API Lead Event (server-seitig, zuverlässig)
+        // Meta Conversion API
         const leadEventId = generateEventId();
-        const nameParts2 = name.trim().split(' ');
         const leadValue = parseInt(finalPrice) || 10;
         try {
             await sendConversionAPIEvent(
@@ -344,8 +158,8 @@ export async function POST(request: NextRequest) {
                     userData: {
                         email,
                         phone,
-                        firstName: nameParts2.slice(0, -1).join(' ') || nameParts2[0],
-                        lastName: nameParts2[nameParts2.length - 1],
+                        firstName: nameParts.slice(0, -1).join(' ') || nameParts[0],
+                        lastName: nameParts[nameParts.length - 1],
                     },
                     customData: {
                         currency: 'EUR',
@@ -371,6 +185,4 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         );
     }
-
-
 }
