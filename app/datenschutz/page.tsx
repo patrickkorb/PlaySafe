@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
     title: "Datenschutzerklärung | PlaySafe",
     description:
-        "Informationen zum Datenschutz bei PlaySafe – wie wir personenbezogene Daten verarbeiten, insbesondere bei Nutzung des Versicherungsrechners und der WhatsApp-Kommunikation.",
+        "Informationen zum Datenschutz bei PlaySafe – wie wir personenbezogene Daten verarbeiten, insbesondere bei Nutzung des Versicherungsrechners und der Angebotsanfrage.",
     robots: { index: true, follow: true },
 };
 
@@ -45,11 +45,11 @@ function SubSection({ id, title, children }: { id?: string; title: string; child
 const toc = [
     { id: "verantwortlicher", label: "Verantwortlicher" },
     { id: "erhebung", label: "Erhebung personenbezogener Daten" },
+    { id: "gesundheitsdaten", label: "Besondere Datenkategorien (Gesundheitsdaten)" },
     { id: "weitergabe", label: "Weitergabe von Daten" },
     { id: "cookies", label: "Cookies und lokaler Speicher" },
     { id: "meta-pixel", label: "Meta Pixel & Conversion API" },
-    { id: "google-fonts", label: "Google Fonts" },
-    { id: "youtube", label: "YouTube-Videos" },
+    { id: "datafast", label: "Reichweitenmessung (Datafast)" },
     { id: "rechte", label: "Betroffenenrechte" },
     { id: "widerspruch", label: "Widerspruchsrecht" },
     { id: "datensicherheit", label: "Datensicherheit" },
@@ -69,6 +69,10 @@ const processors = [
         name: "Brevo (Sendinblue SAS)",
         detail: "E-Mail-Versand · 7 rue de Madrid, 75008 Paris · AVV nach Art. 28 DSGVO liegt vor",
     },
+    {
+        name: "SIGNAL IDUNA Gruppe",
+        detail: "Versicherer · Joseph-Scherer-Straße 3, 44139 Dortmund · Empfänger der Angebots-/Antragsdaten zur Erstellung des Versicherungsangebots",
+    },
 ];
 
 export default function DatenschutzPage() {
@@ -77,7 +81,7 @@ export default function DatenschutzPage() {
             <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900 mb-1">Datenschutzerklärung</h1>
-                    <p className="text-sm text-gray-400">Stand: Mai 2026</p>
+                    <p className="text-sm text-gray-400">Stand: Juni 2026</p>
                 </div>
 
                 {/* Inhaltsverzeichnis */}
@@ -120,6 +124,12 @@ export default function DatenschutzPage() {
                                 </a>
                             </p>
                         </div>
+                        <p className="text-sm text-gray-600">
+                            „PlaySafe" ist eine Marke bzw. ein Online-Angebot der oben genannten
+                            Generalagentur Mike Allmendinger und wird unter der Domain playsafe.fit
+                            betrieben. Verantwortlicher im Sinne der DSGVO ist ausschließlich der
+                            oben Genannte.
+                        </p>
                     </Section>
 
                     {/* 2 */}
@@ -228,31 +238,43 @@ export default function DatenschutzPage() {
                             </div>
                         </SubSection>
 
-                        <SubSection id="whatsapp" title="e) Kommunikation per WhatsApp">
+                        <SubSection id="benachrichtigung" title="e) Interne Benachrichtigung">
                             <p>
-                                Nach Ihrer Einwilligung kontaktieren wir Sie auf der angegebenen Telefonnummer
-                                per WhatsApp, um Ihr Angebot zu besprechen.
+                                Zur technischen Überwachung des Eingangs von Anfragen versenden wir eine
+                                interne Benachrichtigung an den Betreiber der Website. Diese enthält
+                                <strong> keine Kundendaten</strong>, sondern lediglich Eckdaten wie den
+                                gewählten Tarif und den gewünschten Versicherungsbeginn.
                             </p>
-                            <InfoBox label="Zweck">Angebotsbesprechung und Terminvereinbarung</InfoBox>
-                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</InfoBox>
-                            <InfoBox label="Verarbeitete Daten">Name, Telefonnummer (WhatsApp-ID), Nachrichteninhalte</InfoBox>
-                            <div className="text-sm space-y-2 mt-2">
-                                <p className="font-semibold text-gray-800">Empfänger:</p>
-                                <div className="border border-gray-200 rounded-lg px-4 py-3">
-                                    <p className="font-medium text-gray-900">Meta Platforms Ireland Ltd.</p>
-                                    <p className="text-gray-600 text-xs mt-0.5">WhatsApp Business Platform · Merrion Road, Dublin 4 · Datenübertragung in die USA möglich (EU-US Data Privacy Framework, Art. 45 DSGVO)</p>
-                                </div>
-                            </div>
-                            <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800 mt-2">
-                                <span className="font-semibold">Widerruf:</span> Antworten Sie auf WhatsApp mit „Stopp" oder schreiben Sie an{" "}
-                                <a href="mailto:mike.allmendinger@signal-iduna.net" className="underline">mike.allmendinger@signal-iduna.net</a>.
-                                Ihre Daten werden nach 30 Tagen gelöscht.
-                            </div>
+                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem funktionierenden Betrieb)</InfoBox>
                         </SubSection>
                     </Section>
 
+                    {/* Gesundheitsdaten / Art. 9 */}
+                    <Section id="gesundheitsdaten" number="3" title="Besondere Kategorien personenbezogener Daten (Gesundheitsdaten)">
+                        <p>
+                            Im Zusammenhang mit der Vermittlung einer Unfall-/Sportversicherung verarbeiten
+                            wir ggf. Angaben, die als Gesundheitsdaten im Sinne des Art. 9 DSGVO einzuordnen
+                            sind – etwa Ihre Bestätigung zu Risikoausschlüssen (z. B. dass keine
+                            Pflegebedürftigkeit und kein erhöhtes gesundheitliches Risiko besteht) sowie
+                            Angaben zu Sportart und -häufigkeit.
+                        </p>
+                        <InfoBox label="Rechtsgrundlage">
+                            Art. 9 Abs. 2 lit. a DSGVO (ausdrückliche Einwilligung). Sie erteilen diese
+                            Einwilligung durch das Absenden des Formulars und die Bestätigung der
+                            entsprechenden Erklärungen.
+                        </InfoBox>
+                        <InfoBox label="Zweck">
+                            Beurteilung der Versicherbarkeit und Erstellung eines passenden Angebots durch
+                            die SIGNAL IDUNA
+                        </InfoBox>
+                        <InfoBox label="Widerruf">
+                            Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen
+                            (Kontaktdaten siehe Punkt 1).
+                        </InfoBox>
+                    </Section>
+
                     {/* 3 */}
-                    <Section id="weitergabe" number="3" title="Weitergabe von Daten">
+                    <Section id="weitergabe" number="4" title="Weitergabe von Daten">
                         <p>Eine Übermittlung Ihrer Daten an Dritte findet nur statt, wenn:</p>
                         <ul className="list-disc list-inside space-y-1 text-sm pl-2">
                             <li>Sie Ihre ausdrückliche Einwilligung erteilt haben (Art. 6 Abs. 1 lit. a)</li>
@@ -278,7 +300,7 @@ export default function DatenschutzPage() {
                     </Section>
 
                     {/* 4 */}
-                    <Section id="cookies" number="4" title="Cookies und lokaler Speicher">
+                    <Section id="cookies" number="5" title="Cookies und lokaler Speicher">
                         <p>Wir unterscheiden zwischen technisch notwendigen und optionalen Cookies:</p>
                         <div className="space-y-2 mt-1">
                             {[
@@ -297,7 +319,7 @@ export default function DatenschutzPage() {
                                 {
                                     name: "Analyse- & Marketing-Cookies",
                                     type: "Meta Pixel, Datafast",
-                                    desc: "Nur nach ausdrücklicher Einwilligung aktiv. Siehe Abschnitt 5.",
+                                    desc: "Nur nach ausdrücklicher Einwilligung aktiv. Siehe Abschnitt 6 und 7.",
                                     badge: "Nur mit Einwilligung",
                                     badgeColor: "bg-amber-100 text-amber-700",
                                 },
@@ -319,10 +341,17 @@ export default function DatenschutzPage() {
                         <p className="text-sm text-gray-600 mt-2">
                             Sie können Ihren Browser so einstellen, dass Cookies nur im Einzelfall erlaubt werden.
                         </p>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm text-blue-800 mt-2">
+                            <span className="font-semibold">Widerruf:</span> Ihre einmal getroffene
+                            Cookie-Entscheidung können Sie jederzeit über den Link
+                            <strong> „Cookie-Einstellungen"</strong> im Footer der Website ändern oder
+                            widerrufen – ebenso einfach, wie Sie die Einwilligung erteilt haben (Art. 7
+                            Abs. 3 DSGVO).
+                        </div>
                     </Section>
 
                     {/* 5 */}
-                    <Section id="meta-pixel" number="5" title="Meta Pixel und Meta Conversion API">
+                    <Section id="meta-pixel" number="6" title="Meta Pixel und Meta Conversion API">
                         <p>
                             Wir setzen den <strong>Meta Pixel</strong> (ehemals Facebook Pixel) sowie die{" "}
                             <strong>Meta Conversion API (CAPI)</strong> ein, um den Erfolg unserer Werbeanzeigen zu
@@ -344,15 +373,28 @@ export default function DatenschutzPage() {
                         <SubSection title="b) Meta Conversion API (server-seitig)">
                             <p>
                                 Die CAPI übermittelt Conversion-Ereignisse direkt von unserem Server an Meta –
-                                ausschließlich wenn Sie durch Absenden eines Formulars Ihre Einwilligung erteilt haben.
+                                <strong> ausschließlich dann</strong>, wenn Sie hierfür im Lead-Formular die
+                                gesonderte, freiwillige Marketing-Einwilligung erteilt haben. Ohne diese
+                                Einwilligung findet keine Übermittlung an Meta statt.
                             </p>
                             <InfoBox label="Übermittelte Daten">
-                                Gehashte E-Mail &amp; Telefonnummer (SHA-256), IP-Adresse, Event-Typ (z. B. „Lead")
+                                Gehashte E-Mail &amp; Telefonnummer (SHA-256), gehashter Vor-/Nachname, IP-Adresse,
+                                Browser-Kennung sowie ggf. die Cookies _fbp/_fbc, Event-Typ (z. B. „Lead")
                             </InfoBox>
                             <InfoBox label="Zweck">Messung und Optimierung unserer Werbekampagnen auf Facebook und Instagram</InfoBox>
-                            <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</InfoBox>
+                            <InfoBox label="Rechtsgrundlage">
+                                Art. 6 Abs. 1 lit. a DSGVO (Einwilligung); für die Übermittlung in die USA
+                                zusätzlich Art. 49 Abs. 1 lit. a DSGVO (ausdrückliche Einwilligung in die
+                                Datenübermittlung in ein Drittland)
+                            </InfoBox>
                             <InfoBox label="Empfänger">
-                                Meta Platforms Ireland Ltd., Merrion Road, Dublin 4 – Datenübertragung in USA möglich (EU-US Data Privacy Framework, Art. 45 DSGVO)
+                                Meta Platforms Ireland Ltd., Merrion Road, Dublin 4 – Datenübertragung in die USA.
+                                Meta ist unter dem EU-US Data Privacy Framework zertifiziert; ergänzend bestehen
+                                EU-Standardvertragsklauseln.
+                            </InfoBox>
+                            <InfoBox label="Widerruf">
+                                Jederzeit mit Wirkung für die Zukunft möglich – über „Cookie-Einstellungen" im
+                                Footer oder per Nachricht an die unter Punkt 1 genannten Kontaktdaten.
                             </InfoBox>
                             <InfoBox label="Speicherdauer">Bis zu 180 Tage bei Meta</InfoBox>
                             <p className="text-sm">
@@ -378,40 +420,33 @@ export default function DatenschutzPage() {
                         </SubSection>
                     </Section>
 
-                    {/* 6 */}
-                    <Section id="google-fonts" number="6" title="Nutzung von Google Fonts">
+                    {/* 7 */}
+                    <Section id="datafast" number="7" title="Reichweitenmessung mit Datafast">
                         <p>
-                            Unsere Website verwendet Google Fonts (Google Ireland Limited, Gordon House, Barrow Street,
-                            Dublin 4). Die Schriftarten werden von Google-Servern geladen, wodurch Google Kenntnis von
-                            Ihrer IP-Adresse erlangt.
+                            Zur statistischen Auswertung der Nutzung unserer Website setzen wir den
+                            Analysedienst <strong>Datafast</strong> ein. Datafast wird – ebenso wie der
+                            Meta Pixel – ausschließlich nach Ihrer Einwilligung über das Cookie-Banner
+                            geladen.
                         </p>
-                        <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einheitlicher Darstellung)</InfoBox>
-                        <p className="text-sm">
-                            Mehr Infos:{" "}
-                            <a href="https://developers.google.com/fonts/faq" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                Google Fonts FAQ
-                            </a>{" "}
-                            &middot;{" "}
-                            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                Google Datenschutz
-                            </a>
-                        </p>
+                        <InfoBox label="Übermittelte Daten">
+                            Anonymisierte Nutzungsdaten (z. B. aufgerufene Seiten, Funnel-Schritte, Tarif).
+                            Es werden <strong>keine</strong> Klardaten wie Name, E-Mail oder Telefonnummer
+                            an Datafast übermittelt.
+                        </InfoBox>
+                        <InfoBox label="Zweck">Statistische Auswertung und Verbesserung unseres Angebots</InfoBox>
+                        <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. a DSGVO (Einwilligung)</InfoBox>
+                        <InfoBox label="Widerruf">
+                            Jederzeit über „Cookie-Einstellungen" im Footer möglich.
+                        </InfoBox>
                     </Section>
 
-                    {/* 7 */}
-                    <Section id="youtube" number="7" title="Einbindung von YouTube-Videos">
-                        <p>
-                            Wir binden YouTube-Videos im erweiterten Datenschutzmodus („youtube-nocookie") ein.
-                            Anbieter ist Google Ireland Limited, Dublin 4. YouTube erhält beim Besuch Ihrer Unterseite
-                            Ihre IP-Adresse. Wenn Sie bei Google eingeloggt sind, werden Daten Ihrem Konto zugeordnet.
-                        </p>
-                        <InfoBox label="Rechtsgrundlage">Art. 6 Abs. 1 lit. f DSGVO</InfoBox>
-                        <p className="text-sm">
-                            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                                Google Datenschutzrichtlinie →
-                            </a>
-                        </p>
-                    </Section>
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-600">
+                        <span className="font-semibold text-gray-800">Hinweis zu Schriftarten &amp; Videos:</span>{" "}
+                        Verwendete Schriftarten werden lokal von unserem Server ausgeliefert; es erfolgt
+                        keine Verbindung zu Google. Auf der Website eingebundene Videos werden direkt von
+                        unserem eigenen Server bereitgestellt – es findet keine Übermittlung an Dritte
+                        (z. B. YouTube/Google) statt.
+                    </div>
 
                     {/* 8 */}
                     <Section id="rechte" number="8" title="Betroffenenrechte">
@@ -456,7 +491,7 @@ export default function DatenschutzPage() {
                     {/* 11 */}
                     <Section id="aktualitaet" number="11" title="Aktualität dieser Datenschutzerklärung">
                         <p>
-                            Diese Datenschutzerklärung hat den Stand <strong>Mai 2026</strong>. Wir behalten uns
+                            Diese Datenschutzerklärung hat den Stand <strong>Juni 2026</strong>. Wir behalten uns
                             vor, sie bei Bedarf zu aktualisieren. Die jeweils aktuelle Version ist stets auf dieser
                             Seite abrufbar.
                         </p>

@@ -203,25 +203,31 @@ function AngebotContent() {
         throw new Error('Fehler beim Senden');
       }
 
-      // Split name for tracking
-      const nameParts = formData.name.split(' ');
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(' ') || '';
-
-      // Track Datafast goal: offer_form_submitted
+      // Track Datafast goal: offer_form_submitted (ohne personenbezogene Daten)
       const tarif = searchParams.get('tarif');
-      trackOfferFormSubmitted(formData.name, formData.email, tarif || '');
+      trackOfferFormSubmitted(tarif || '');
 
-      // Track Lead Event
-      await trackLead(
-        {
-          email: formData.email,
-          phone: formData.phone,
-          firstName: firstName,
-          lastName: lastName,
-        },
-        50 // Höherer Wert für vollständige Angebotsanfrage
-      );
+      // Meta-Lead-Event nur bei ausdrücklicher Marketing-Einwilligung (aus dem Rechner)
+      const marketingConsent =
+        typeof window !== 'undefined' &&
+        localStorage.getItem('marketing_consent') === 'granted';
+
+      if (marketingConsent) {
+        // Split name for tracking
+        const nameParts = formData.name.split(' ');
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        await trackLead(
+          {
+            email: formData.email,
+            phone: formData.phone,
+            firstName: firstName,
+            lastName: lastName,
+          },
+          50 // Höherer Wert für vollständige Angebotsanfrage
+        );
+      }
 
       // Redirect to success page
       router.push('/angebot/erfolg');

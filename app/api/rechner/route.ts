@@ -50,7 +50,7 @@ const insuranceForLabels: { [key: string]: string } = {
 
 export async function POST(request: NextRequest) {
     try {
-        const { name, email, phone, birthDate, gender, tarif, price: clientPrice, insuranceFor, sport, frequency } = await request.json();
+        const { name, email, phone, birthDate, gender, tarif, price: clientPrice, insuranceFor, sport, frequency, marketingConsent } = await request.json();
 
         if (!name || !email || !phone) {
             return NextResponse.json(
@@ -87,8 +87,6 @@ export async function POST(request: NextRequest) {
         // n8n Webhook — übernimmt Emails, Kontakt-Speicherung etc.
         const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
         if (n8nWebhookUrl) {
-            const waId = normalizedPhone.replace(/^\+49/, '0');
-
             // Geburtsdatum sicherstellen: DD.MM.YYYY
             const geburtsdatum: string | null = (birthDate && /^\d{2}\.\d{2}\.\d{4}$/.test(birthDate))
                 ? birthDate
@@ -118,7 +116,6 @@ export async function POST(request: NextRequest) {
                     geburtsdatum,
                     email,
                     telefonnummer: normalizedPhone,
-                    wa_id: waId,
                     geschlecht,
                     infos: {
                         sportart: sport || null,
@@ -136,19 +133,22 @@ export async function POST(request: NextRequest) {
                     },
                     status: 'new',
                     lead_source: 'playsafe.fit',
-                    opt_in_text: 'Ich stimme der Datenschutzerklärung zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherungsangebot kontaktieren darf.',
+                    opt_in_text: 'Ich stimme der Datenschutzerklärung zu und bin damit einverstanden, dass mich PlaySafe per E-Mail und Telefon zu meinem Versicherungsangebot kontaktiert und meine Angaben zur Erstellung des Angebots an die SIGNAL IDUNA übermittelt werden.',
                     opt_in_ip: clientIp,
                     opt_in_source_url: 'https://playsafe.fit/rechner',
-                    data_processing_consent_version: null,
+                    opt_in_timestamp: new Date().toISOString(),
+                    data_processing_consent_version: '2026-06',
+                    marketing_consent: marketingConsent === true,
                     cta_link: ctaLink,
                 }),
             }).catch((err) => console.error('n8n Webhook Fehler:', err));
         }
 
-        // Meta Conversion API
+        // Meta Conversion API – nur bei ausdrücklicher Marketing-Einwilligung
         const leadEventId = generateEventId();
         const leadValue = parseInt(finalPrice) || 10;
-        try {
+        if (marketingConsent === true) {
+          try {
             await sendConversionAPIEvent(
                 {
                     eventName: 'Lead',
@@ -168,8 +168,9 @@ export async function POST(request: NextRequest) {
                 },
                 request
             );
-        } catch (metaError) {
+          } catch (metaError) {
             console.error('Meta CAPI Lead Fehler:', metaError);
+          }
         }
 
         return NextResponse.json({

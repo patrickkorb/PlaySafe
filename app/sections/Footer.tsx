@@ -89,11 +89,12 @@ export default function Footer() {
                                 <button
                                     onClick={() => {
                                         localStorage.removeItem(CONSENT_KEY);
+                                        localStorage.removeItem('marketing_consent');
                                         window.location.reload();
                                     }}
                                     className="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
                                 >
-                                    Cookie zurücksetzen
+                                    Cookie-Einstellungen
                                 </button>
                             </li>
                         </ul>
@@ -136,18 +137,11 @@ export default function Footer() {
                             {new Date().getFullYear()} PlaySafe - PlaySafe.fit. Alle Rechte vorbehalten.
                         </p>
                         <div className="flex items-center gap-6">
-                            <Link 
+                            <Link
                                 href="https://instagram.com/playsafe.fit"
                                 className="text-gray-400 hover:text-white transition-colors duration-200"
                             >
                                 Instagram
-                            </Link>
-                            <Link 
-                                href="https://api.whatsapp.com/send/?phone=491629436375&text=Hallo+Mike%2C+ich+habe+Interesse+an+PlaySafe.+Lass+uns+bitte+einen+Termin+vereinbaren.+Viele+Gr%C3%BC%C3%9Fe&type=phone_number&app_absent=0"
-                                className="text-gray-400 hover:text-white transition-colors duration-200"
-                                target={"_blank"}
-                            >
-                                WhatsApp
                             </Link>
                         </div>
                     </div>

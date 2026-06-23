@@ -81,16 +81,10 @@ export const trackInjuryStatusSelected = async (hasInjury?: string) => {
 };
 
 // Rechner-specific tracking functions
-export const trackContactDataSubmitted = async (
-  name?: string,
-  email?: string,
-  phone?: string
-) => {
-  return await trackDatafastGoal('contact_data_submitted', {
-    name: name || '',
-    email: email || '',
-    phone: phone || '',
-  });
+export const trackContactDataSubmitted = async () => {
+  // Keine personenbezogenen Daten (Name/E-Mail/Telefon) an Datafast übermitteln
+  // – Datenminimierung (Art. 5 Abs. 1 lit. c DSGVO).
+  return await trackDatafastGoal('contact_data_submitted');
 };
 
 export const trackOfferPageVisited = async (tariff?: string) => {
@@ -99,14 +93,9 @@ export const trackOfferPageVisited = async (tariff?: string) => {
   });
 };
 
-export const trackOfferFormSubmitted = async (
-  name?: string,
-  email?: string,
-  tariff?: string
-) => {
+export const trackOfferFormSubmitted = async (tariff?: string) => {
+  // Keine personenbezogenen Daten an Datafast – nur anonyme Funnel-Information.
   return await trackDatafastGoal('offer_form_submitted', {
-    name: name || '',
-    email: email || '',
     tariff: tariff || '',
   });
 };

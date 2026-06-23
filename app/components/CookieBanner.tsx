@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export const CONSENT_KEY = 'cookie_consent';
+export const CONSENT_VERSION = '2026-06';
 export type ConsentValue = 'granted' | 'denied';
 
 export function getConsent(): ConsentValue | null {
@@ -22,6 +23,11 @@ export default function CookieBanner() {
 
   const handleConsent = (value: ConsentValue) => {
     localStorage.setItem(CONSENT_KEY, value);
+    // Nachweis der Einwilligung (Art. 7 Abs. 1 DSGVO): Zeitpunkt + Version speichern
+    localStorage.setItem(
+      `${CONSENT_KEY}_meta`,
+      JSON.stringify({ value, version: CONSENT_VERSION, timestamp: new Date().toISOString() })
+    );
     setVisible(false);
     if (value === 'granted') {
       window.dispatchEvent(new Event('cookieConsentGranted'));
@@ -36,8 +42,10 @@ export default function CookieBanner() {
         <div className="flex-1 text-sm">
           <p className="font-semibold text-foreground mb-1">Cookies🍪</p>
           <p className="text-muted-foreground">
-            Wir verwenden Analyse-Cookies, um unsere Website zu verbessern
-            und Werbung zu optimieren. Du kannst der Nutzung zustimmen oder sie ablehnen.{' '}
+            Wir verwenden Analyse- und Marketing-Cookies bzw. -Dienste (Meta, Datafast),
+            um unsere Website zu verbessern und Werbung zu optimieren. Sie werden nur mit
+            Deiner Einwilligung geladen. Du kannst zustimmen oder ablehnen und Deine
+            Entscheidung jederzeit über „Cookie-Einstellungen" im Footer ändern.{' '}
             <Link href="/datenschutz" className="underline hover:text-primary transition-colors">
               Datenschutzerklärung
             </Link>

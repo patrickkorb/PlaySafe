@@ -21,6 +21,7 @@ export default function Step6Contact() {
   const [phoneError, setPhoneError] = useState('');
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [privacyError, setPrivacyError] = useState('');
+  const [marketingAccepted, setMarketingAccepted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +58,7 @@ export default function Step6Contact() {
           insuranceFor: data.insuranceFor,
           sport: data.sport,
           frequency: data.frequency,
+          marketingConsent: marketingAccepted,
         }),
       });
 
@@ -71,10 +73,16 @@ export default function Step6Contact() {
 
       const responseData = await response.json();
 
-      trackContactDataSubmitted(data.name, data.email, data.phone);
+      // Marketing-Einwilligung für Folgeseiten (z. B. /angebot) merken
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('marketing_consent', marketingAccepted ? 'granted' : 'denied');
+      }
 
-      // Browser-Pixel mit der server-seitig generierten Event-ID feuern (Deduplizierung mit CAPI)
-      if (typeof window !== 'undefined' && window.fbq) {
+      trackContactDataSubmitted();
+
+      // Browser-Pixel nur bei erteilter Marketing-Einwilligung feuern
+      // (Deduplizierung mit der server-seitigen CAPI über die Event-ID)
+      if (marketingAccepted && typeof window !== 'undefined' && window.fbq) {
         const leadValue = parseInt(tariff.price) || 10;
         window.fbq('track', 'Lead', {
           value: leadValue,
@@ -177,6 +185,7 @@ export default function Step6Contact() {
             </div>
           )}
 
+          {/* Pflicht-Einwilligung: für die Leistung erforderlich */}
           <div className="mt-2">
             <label className="flex items-start gap-3 cursor-pointer">
               <input
@@ -195,14 +204,33 @@ export default function Step6Contact() {
                   target="_blank"
                   className="text-primary underline hover:text-primary/80"
                 >
-                   Datenschutzerklärung
+                  Datenschutzerklärung
                 </Link>{' '}
-                zu und bin damit einverstanden, dass PlaySafe mich per E-Mail, WhatsApp und Telefon zu meinem Versicherunsangebot kontaktieren darf.
+                zu und bin damit einverstanden, dass mich PlaySafe per E-Mail und Telefon zu meinem
+                Versicherungsangebot kontaktieren darf.
+                <span className="text-error">*</span>
               </span>
             </label>
             {privacyError && (
               <p className="text-error text-sm mt-1 ml-8">{privacyError}</p>
             )}
+          </div>
+
+          {/* Optionale Einwilligung: Werbedaten-Übermittlung an Meta */}
+          <div className="mt-1">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={marketingAccepted}
+                onChange={(e) => setMarketingAccepted(e.target.checked)}
+                className="mt-1 w-5 h-5 rounded border-2 border-border text-primary focus:ring-primary focus:ring-offset-0 cursor-pointer"
+              />
+              <span className="text-sm text-muted-foreground leading-relaxed">
+                Ich willige ein, dass meine Kontaktdaten in anonymisierter
+                Form an Meta Platforms zur Messung und Optimierung von
+                Werbeanzeigen übermittelt werden.
+              </span>
+            </label>
           </div>
 
           <button

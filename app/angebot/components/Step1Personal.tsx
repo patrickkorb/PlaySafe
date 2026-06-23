@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateBirthDate } from '@/lib/validation';
@@ -29,6 +29,32 @@ const JOBS_REQUIRING_FIELD = [
   'Beamter',
   'Selbsständiger',
 ];
+
+// Deutsche Monatsnamen
+const MONTH_NAMES = [
+  'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
+];
+
+// Erzeugt die auswählbaren Versicherungsbeginn-Monate (jeweils zum Monatsanfang),
+// beginnend mit dem nächsten Monat.
+function getStartMonthOptions(count = 12): { value: string; label: string }[] {
+  const now = new Date();
+  const options: { value: string; label: string }[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const mm = String(month + 1).padStart(2, '0');
+    options.push({
+      value: `01.${mm}.${year}`,
+      label: `${MONTH_NAMES[month]} ${year}`,
+    });
+  }
+
+  return options;
+}
 
 export default function Step1Personal({ formData, onUpdate, onNext }: FormStepProps) {
   const [errors, setErrors] = useState<FormErrors>({});
@@ -59,24 +85,19 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
     }
   };
 
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, '');
+  // Auswählbare Versicherungsbeginn-Monate (immer zum Monatsanfang)
+  const startMonthOptions = useMemo(() => getStartMonthOptions(), []);
 
-    if (value.length >= 2) {
-      value = value.slice(0, 2) + '.' + value.slice(2);
+  // Standardmäßig den nächsten Monat vorschlagen, falls noch nichts gewählt wurde
+  useEffect(() => {
+    if (!formData.insuranceStartDate || formData.insuranceStartType !== 'date') {
+      onUpdate({
+        insuranceStartType: 'date',
+        insuranceStartDate: startMonthOptions[0].value,
+      });
     }
-    if (value.length >= 5) {
-      value = value.slice(0, 5) + '.' + value.slice(5);
-    }
-    if (value.length > 10) {
-      value = value.slice(0, 10);
-    }
-
-    onUpdate({ insuranceStartDate: value });
-    if (errors.insuranceStartDate) {
-      setErrors({ ...errors, insuranceStartDate: '' });
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -140,15 +161,8 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
     }
 
     // Validate insurance start
-    if (!formData.insuranceStartType) {
-      newErrors.insuranceStartType = 'Bitte wähle den Versicherungsbeginn';
-    }
-
-    if (formData.insuranceStartType === 'date') {
-      const startDateValidation = validateBirthDate(formData.insuranceStartDate);
-      if (!startDateValidation.valid) {
-        newErrors.insuranceStartDate = 'Bitte gib ein gültiges Datum ein';
-      }
+    if (!formData.insuranceStartDate) {
+      newErrors.insuranceStartDate = 'Bitte wähle den Versicherungsbeginn';
     }
 
     // Validate tarif
@@ -538,70 +552,34 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
           <div className="space-y-4 mt-6">
             <h3 className="text-lg font-semibold text-gray-900 border-b-2 border-gray-300 pb-2">Versicherungsdetails</h3>
 
-            {/* Start Type Selection */}
+            {/* Start Month Selection - Versicherungsbeginn immer zum Monatsanfang */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Wann soll die Versicherung beginnen? <span className="text-red-500">*</span>
               </label>
-              <div className="flex flex-col md:flex-row gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    onUpdate({ insuranceStartType: 'immediate', insuranceStartDate: '' });
-                    if (errors.insuranceStartType) setErrors({ ...errors, insuranceStartType: '' });
-                  }}
-                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
-                    formData.insuranceStartType === 'immediate'
-                      ? 'border-primary bg-primary text-white'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'
-                  }`}
-                >
-                  Sofort
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onUpdate({ insuranceStartType: 'date' });
-                    if (errors.insuranceStartType) setErrors({ ...errors, insuranceStartType: '' });
-                  }}
-                  className={`py-3 px-4 rounded-lg border-2 font-medium transition-all duration-200 flex-1 ${
-                    formData.insuranceStartType === 'date'
-                      ? 'border-primary bg-primary text-white'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-primary/50'
-                  }`}
-                >
-                  Zu einem bestimmten Datum
-                </button>
-              </div>
-              {errors.insuranceStartType && (
-                <p className="text-red-500 text-sm mt-2">{errors.insuranceStartType}</p>
+              <select
+                value={formData.insuranceStartDate}
+                onChange={(e) => {
+                  onUpdate({ insuranceStartType: 'date', insuranceStartDate: e.target.value });
+                  if (errors.insuranceStartDate) setErrors({ ...errors, insuranceStartDate: '' });
+                }}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                  errors.insuranceStartDate ? 'border-red-500' : 'border-gray-300'
+                }`}
+              >
+                {startMonthOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              {errors.insuranceStartDate && (
+                <p className="text-red-500 text-sm mt-1">{errors.insuranceStartDate}</p>
               )}
+              <p className="text-gray-500 text-xs mt-1">
+                Der Versicherungsschutz beginnt jeweils zum Monatsanfang.
+              </p>
             </div>
-
-            {/* Start Date - Only shown when date is selected */}
-            {formData.insuranceStartType === 'date' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gewünschtes Startdatum <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={formData.insuranceStartDate}
-                  onChange={handleStartDateChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
-                    errors.insuranceStartDate ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                  placeholder="TT.MM.JJJJ"
-                  inputMode="numeric"
-                />
-                {errors.insuranceStartDate && (
-                  <p className="text-red-500 text-sm mt-1">{errors.insuranceStartDate}</p>
-                )}
-                <p className="text-gray-500 text-xs mt-1">
-                  Der Versicherungsschutz beginnt zum gewählten Datum
-                </p>
-              </div>
-            )}
 
             {/* Tarif Selection */}
             <div>
