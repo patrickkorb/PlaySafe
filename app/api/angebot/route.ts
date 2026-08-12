@@ -65,7 +65,14 @@ export async function POST(request: NextRequest) {
             contactConsent,
             riskExclusionConsent,
             discount,
+            source,
         } = await request.json();
+
+        // SVH-Sponsoring-Kennzeichnung für die internen Mails / den Lead-Datensatz
+        const isSvhLead = source === 'svh';
+        const svhBadge = isSvhLead
+            ? `<p style="background: #16a34a; color: #ffffff; padding: 10px 14px; border-radius: 8px; font-weight: bold; margin: 0 0 16px 0;">🟢 Herkunft: SVH-Kooperation (Sponsoring)</p>`
+            : '';
 
         // Basic validation
         if (!insuranceFor || !name || !email || !birthDate || !job || !phone || !street || !houseNumber || !postalCode || !city || !iban || !accountHolder || !privacyConsent || !contactConsent || !riskExclusionConsent || !insuranceStartType || !tarif) {
@@ -159,10 +166,11 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [{ email: 'mike.allmendinger@signal-iduna.net' }],
-                subject: discount && discount > 0 ? `🎁 Neue Antragsanfrage von ${name} (${discount}% Rabatt)` : `Neue Antragsanfrage von ${name}`,
+                subject: `${isSvhLead ? '[SVH] ' : ''}${discount && discount > 0 ? `🎁 Neue Antragsanfrage von ${name} (${discount}% Rabatt)` : `Neue Antragsanfrage von ${name}`}`,
                 htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neue Antragsanfrage - PlaySafe - Individuellen Antrag schicken</h2>
+          ${svhBadge}
           <p><strong>Versicherung für:</strong> ${insuranceFor === 'self' ? 'Sich selbst' : 'Jemand anderen'}</p>
           ${policyHolderSection}
           <p><strong>Anrede:</strong> ${salutation}</p>
@@ -210,10 +218,11 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [{ email: 'korbpatrick@web.de' }],
-                subject: discount && discount > 0 ? `🎁 Neuer Antrag eingegangen (${discount}% Rabatt)` : `Neuer Antrag eingegangen`,
+                subject: `${isSvhLead ? '[SVH] ' : ''}${discount && discount > 0 ? `🎁 Neuer Antrag eingegangen (${discount}% Rabatt)` : `Neuer Antrag eingegangen`}`,
                 htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neuer Antrag eingegangen</h2>
+          ${svhBadge}
           <p><strong>Tarif:</strong> ${tarif}</p>
           <p><strong>Versicherungsbeginn:</strong> ${insuranceStartSection}</p>
           ${discountSection}
@@ -293,6 +302,32 @@ export async function POST(request: NextRequest) {
         const nameParts = name.trim().split(' ');
         const lastName = nameParts[nameParts.length - 1];
         const firstName = nameParts.slice(0, -1).join(' ');
+
+        // n8n Webhook — Antragsanfrage (zusätzlich zu den Emails)
+        const n8nWebhookUrl = process.env.N8N_ANTRAG_WEBHOOK_URL;
+        if (n8nWebhookUrl) {
+            fetch(n8nWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    anrede: salutation ?? null,
+                    vorname: firstName || null,
+                    nachname: lastName || null,
+                    geburtsdatum: birthDate ?? null,
+                    berufsstand: job ?? null,
+                    email: email ?? null,
+                    telefon: phone ?? null,
+                    strasse: [street, houseNumber].filter(Boolean).join(' ') || null,
+                    plz: postalCode ?? null,
+                    ort: city ?? null,
+                    iban: iban ?? null,
+                    beginn: insuranceStartSection,
+                    tarif: tarif ?? null,
+                    monatsbeitrag: finalPrice,
+                    quelle: isSvhLead ? 'SVH' : null,
+                }),
+            }).catch((err) => console.error('n8n Antrag-Webhook Fehler:', err));
+        }
 
         try {
             const contactRes = await fetch('https://api.brevo.com/v3/contacts', {

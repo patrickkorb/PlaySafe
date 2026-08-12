@@ -229,12 +229,22 @@ export function buildOfferUrl(params: {
   gender: string;
   tarif: string;
   insuranceFor: string;
+  discount?: number;
+  ref?: string;
 }): string {
+  const { discount, ref, ...rest } = params;
   const searchParams = new URLSearchParams();
 
-  Object.entries(params).forEach(([key, value]) => {
+  Object.entries(rest).forEach(([key, value]) => {
     searchParams.set(key, value);
   });
+
+  if (discount && discount > 0) {
+    searchParams.set('discount', String(discount));
+  }
+  if (ref) {
+    searchParams.set('ref', ref);
+  }
 
   return `/angebot?${searchParams.toString()}`;
 }

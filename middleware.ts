@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { waitUntil } from '@vercel/functions'
+import { SVH_COOKIE_NAME, SVH_COOKIE_MAX_AGE, SVH_REF_VALUE } from '@/app/lib/svh'
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
@@ -8,6 +9,19 @@ export const config = {
 export function middleware(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const fbclid = searchParams.get('fbclid')
+  const ref = searchParams.get('ref')
+
+  const response = NextResponse.next()
+
+  // SVH-Sponsoring: Besucher, die über /rechner?ref=svh kommen, werden per Cookie
+  // für die ganze Session markiert (Logo in der Navbar, Rabatt, Mail-Kennzeichnung).
+  if (ref === SVH_REF_VALUE) {
+    response.cookies.set(SVH_COOKIE_NAME, SVH_REF_VALUE, {
+      maxAge: SVH_COOKIE_MAX_AGE,
+      path: '/',
+      sameSite: 'lax',
+    })
+  }
 
   if (fbclid) {
     const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
@@ -62,5 +76,5 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next()
+  return response
 }

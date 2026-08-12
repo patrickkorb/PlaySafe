@@ -5,12 +5,14 @@ import { motion } from 'framer-motion';
 import { Check, Info } from 'lucide-react';
 import { TariffInfo, SportOption } from '../../types';
 import Button from '@/app/components/ui/Button';
+import { applySvhDiscount } from '@/app/lib/svh';
 
 interface TariffCardProps {
   tariff: TariffInfo;
   sport: SportOption | undefined;
   offerUrl: string;
   onCtaClick: () => void;
+  discountPercent?: number;
 }
 
 function formatPrice(price: string): { main: string; decimal: string } {
@@ -27,11 +29,18 @@ function formatPrice(price: string): { main: string; decimal: string } {
   return { main: cleanPrice, decimal: '00' };
 }
 
-export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: TariffCardProps) {
+export default function TariffCard({ tariff, sport, offerUrl, onCtaClick, discountPercent }: TariffCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false);
 
-  const { main: priceMain, decimal: priceDecimal } = formatPrice(tariff.price);
+  const hasDiscount = !!discountPercent && discountPercent > 0;
+  const { original: originalPrice, discounted: discountedPrice } = applySvhDiscount(
+    tariff.price,
+    discountPercent ?? 0
+  );
+  const { main: priceMain, decimal: priceDecimal } = formatPrice(
+    hasDiscount ? discountedPrice : tariff.price
+  );
 
   return (
     <motion.div
@@ -47,6 +56,16 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick }: Tari
             <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
               {tariff.title}
             </h3>
+            {hasDiscount && (
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <span className="text-xl text-muted-foreground line-through">
+                  {originalPrice}
+                </span>
+                <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                  SVH-Partnerrabatt −{discountPercent}%
+                </span>
+              </div>
+            )}
             <div className="flex items-baseline justify-center gap-1">
               <span className="text-4xl md:text-5xl font-bold text-foreground">
                 {priceMain}

@@ -11,6 +11,8 @@ import Step3Bank from './components/Step3Bank';
 import Step4Confirmation from './components/Step4Confirmation';
 import { trackLead } from '@/app/components/MetaPixel';
 import { trackOfferFormSubmitted, trackOfferPageVisited } from '@/app/components/Datafast';
+import { useSvhMode } from '@/app/lib/useSvhMode';
+import { SVH_REF_VALUE } from '@/app/lib/svh';
 
 const initialFormData: AngebotFormData = {
   insuranceFor: '',
@@ -48,6 +50,7 @@ function AngebotContent() {
   const [formData, setFormData] = useState<AngebotFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [discount, setDiscount] = useState<number | null>(null);
+  const isSvh = useSvhMode();
 
   // Track page visit
   useEffect(() => {
@@ -196,6 +199,7 @@ function AngebotContent() {
           contactConsent: formData.contactConsent,
           riskExclusionConsent: formData.riskExclusionConsent,
           discount: discount ?? 0,
+          source: isSvh ? SVH_REF_VALUE : null,
         }),
       });
 
@@ -256,7 +260,7 @@ function AngebotContent() {
               <Gift className="w-6 h-6" />
               <div className="text-center">
                 <p className="font-bold text-lg">
-                  {discount}% Rabatt aktiviert!
+                  {isSvh ? `SVH-Partnerrabatt: ${discount}% aktiviert!` : `${discount}% Rabatt aktiviert!`}
                 </p>
                 <p className="text-sm text-green-100">
                   Dein exklusiver Rabatt wird automatisch angewendet
