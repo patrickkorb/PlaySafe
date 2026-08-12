@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendConversionAPIEvent, generateEventId } from '@/app/lib/meta-capi';
+import { SVH_COOKIE_NAME, SVH_REF_VALUE, getSvhDiscount, applySvhDiscount } from '@/app/lib/svh';
 
 function getAgeFromBirthDate(birthDate: string): number | null {
     if (!birthDate || birthDate.length !== 10) return null;
@@ -78,11 +79,24 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // SVH-Sponsoring: Cookie wird von der Middleware bei /rechner?ref=svh gesetzt und
+        // vom Browser mit dieser Anfrage automatisch mitgeschickt.
+        const isSvh = request.cookies.get(SVH_COOKIE_NAME)?.value === SVH_REF_VALUE;
+        const svhDiscount = isSvh ? getSvhDiscount(tarif) : 0;
+        // Was an n8n geht: Tarif mit [SVH]-Kennzeichnung und der reduzierte Monatsbeitrag.
+        const n8nTarif = isSvh ? `${tarif} [SVH]` : tarif;
+        const n8nMonatsbeitrag = svhDiscount > 0
+            ? applySvhDiscount(finalPrice, svhDiscount).discounted
+            : finalPrice;
+
         const nameParts = name.trim().split(' ');
         const lastName = nameParts[nameParts.length - 1];
         const firstName = nameParts.slice(0, -1).join(' ');
 
-        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}`;
+        // CTA-Link so aufbauen, dass SVH-Rabatt & -Kennung erhalten bleiben, wenn der
+        // Lead später aus der n8n-Mail auf das Angebot klickt.
+        const svhLinkParams = svhDiscount > 0 ? `&discount=${svhDiscount}&ref=${SVH_REF_VALUE}` : '';
+        const ctaLink = `https://playsafe.fit/angebot?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&birthDate=${encodeURIComponent(birthDate)}&tarif=${encodeURIComponent(tarif)}&gender=${encodeURIComponent(gender)}&insuranceFor=${encodeURIComponent(insuranceFor || 'self')}${svhLinkParams}`;
 
         // n8n Webhook — übernimmt Emails, Kontakt-Speicherung etc.
         const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
@@ -121,8 +135,8 @@ export async function POST(request: NextRequest) {
                         sportart: sport || null,
                         haeufigkeit: frequency || null,
                         versicherung_fuer: insuranceForLabel,
-                        tarif,
-                        monatsbeitrag: finalPrice,
+                        tarif: n8nTarif,
+                        monatsbeitrag: n8nMonatsbeitrag,
                         leistungen: {
                             invaliditaet: tariffInfo.invaliditaet,
                             gipsgeld: tariffInfo.gipsgeld,
