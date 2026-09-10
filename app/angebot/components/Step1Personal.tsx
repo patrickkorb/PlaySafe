@@ -4,31 +4,11 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateBirthDate } from '@/lib/validation';
+import { JOB_OPTIONS, JOBS_REQUIRING_FIELD } from '@/lib/berufe';
 import { trackOfferStep1Completed } from '@/app/components/Datafast';
 
-// Berufsstand-Optionen
-const JOB_OPTIONS = [
-  'Arbeitnehmer',
-  'Arbeitslos',
-  'Auszubildender',
-  'Beamter auf Widerruf/Probe',
-  'Beamter',
-  'Hausfrau',
-  'Pensionär',
-  'Rentner',
-  'Schüler',
-  'Student',
-  'Selbsständiger',
-];
-
-// Berufe, die ein Tätigkeitsfeld erfordern
-const JOBS_REQUIRING_FIELD = [
-  'Arbeitnehmer',
-  'Auszubildender',
-  'Beamter auf Widerruf/Probe',
-  'Beamter',
-  'Selbsständiger',
-];
+// Anrede-Optionen. Der Antrag beim Versicherer kennt nur diese beiden.
+const SALUTATIONS = ['Herr', 'Frau'];
 
 // Deutsche Monatsnamen
 const MONTH_NAMES = [
@@ -282,8 +262,8 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Anrede <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-3 gap-3">
-                {['Herr', 'Frau', 'Divers'].map((sal) => (
+              <div className="grid grid-cols-2 gap-3">
+                {SALUTATIONS.map((sal) => (
                   <button
                     key={sal}
                     type="button"
@@ -411,8 +391,8 @@ export default function Step1Personal({ formData, onUpdate, onNext }: FormStepPr
               <label className="block text-sm font-medium text-gray-700 mb-3">
                 Anrede <span className="text-red-500">*</span>
               </label>
-              <div className="grid grid-cols-3 gap-3">
-                {['Herr', 'Frau', 'Divers'].map((sal) => (
+              <div className="grid grid-cols-2 gap-3">
+                {SALUTATIONS.map((sal) => (
                   <button
                     key={sal}
                     type="button"

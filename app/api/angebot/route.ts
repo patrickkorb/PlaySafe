@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { baueAbschlussDaten, istQuelleId } from '@/lib/abschluss-daten';
+import { schreibeAbschluss } from '@/lib/abschluesse';
 
 // Preise in € pro Monat
 const TARIFF_PRICES: Record<string, number> = {
@@ -66,6 +68,7 @@ export async function POST(request: NextRequest) {
             riskExclusionConsent,
             discount,
             source,
+            quelle_id,
         } = await request.json();
 
         // SVH-Sponsoring-Kennzeichnung für die internen Mails / den Lead-Datensatz
@@ -98,6 +101,62 @@ export async function POST(request: NextRequest) {
                 { error: 'Bitte gib ein Startdatum an' },
                 { status: 400 }
             );
+        }
+
+        // --- Eingang fuer die Antrags-Automation ---------------------------
+        // Die Automation fuellt damit unbeaufsichtigt einen Antrag aus und
+        // verschickt eine verbindliche Signatureinladung. Deshalb wird hier
+        // hart geprueft und im Fehlerfall gar nichts verschickt: solange der
+        // Kunde noch vor dem Formular sitzt, kann er nachbessern.
+        if (!istQuelleId(quelle_id)) {
+            return NextResponse.json(
+                { error: 'Ungültige Formularsitzung', fehler: ['Bitte lade die Seite neu und sende das Formular erneut ab'] },
+                { status: 400 }
+            );
+        }
+
+        const abschluss = baueAbschlussDaten({
+            insuranceFor,
+            policyHolderSalutation,
+            policyHolderName,
+            policyHolderBirthDate,
+            policyHolderJob,
+            policyHolderJobField,
+            relationshipToInsured,
+            salutation,
+            name,
+            birthDate,
+            job,
+            jobField,
+            insuranceStartType,
+            insuranceStartDate,
+            tarif,
+            email,
+            phone,
+            street,
+            houseNumber,
+            postalCode,
+            city,
+            iban,
+            accountHolder,
+        });
+
+        if (!abschluss.daten) {
+            return NextResponse.json(
+                { error: 'Angaben unvollständig', fehler: abschluss.fehler },
+                { status: 400 }
+            );
+        }
+
+        const { duplikat } = await schreibeAbschluss({
+            daten: abschluss.daten,
+            quelleId: quelle_id,
+        });
+
+        // Derselbe Antrag liegt bereits — kein Fehler fuer den Kunden. Er sieht
+        // die Erfolgsseite, aber niemand bekommt die Mails ein zweites Mal.
+        if (duplikat) {
+            return NextResponse.json({ success: true, message: 'Antrag liegt bereits vor' });
         }
 
         // Preisberechnung
@@ -255,7 +314,7 @@ export async function POST(request: NextRequest) {
 
       <h2 style="color: #1a3691;">Vielen Dank für Dein Interesse an einer Sportversicherung!</h2>
 
-      <p><strong>Hallo ${policyHolderName}</strong>,</p>
+      <p><strong>Hallo ${policyHolderName || name}</strong>,</p>
 
       <p>
         wir bestätigen dir hiermit, dass wir deine Angaben erfolgreich und sicher erhalten haben.
@@ -264,13 +323,20 @@ export async function POST(request: NextRequest) {
       </p>
 
       <p>
-        Aktuell prüfen wir deine Angaben sorgfältig und erstellen auf dieser Basis deinen
-        individuellen Antrag. In der Regel erhältst du diesen
-        <strong>innerhalb von 24 Stunden</strong> per E-Mail.
+        Wir bereiten deinen Antrag jetzt vor. Anschließend bekommst du eine
+        <strong>E-Mail von der SIGNAL IDUNA</strong> mit deinen Unterlagen und einem Link,
+        über den du direkt digital unterschreiben kannst. Schau bitte auch in deinem
+        Spam-Ordner nach.
       </p>
 
       <p>
-        Sollten während der Prüfung Rückfragen entstehen, melden wir uns direkt bei dir.
+        Wenn du dich für die Versicherung entscheidest, hast du dafür
+        <strong>14 Tage Zeit</strong>. Verbindlich wird der Vertrag erst mit deiner
+        Unterschrift — bis dahin ist für dich nichts entschieden.
+      </p>
+
+      <p>
+        Sollten Rückfragen entstehen, melden wir uns direkt bei dir.
       </p>
 
       <p>

@@ -15,7 +15,7 @@ export interface AngebotFormData {
   relationshipToInsured: string; // Verheiratet, Lebensgemeinschaft, Kind, Sonstige
 
   // Step 1: Personal Data (Insured Person)
-  salutation: string; // Herr, Frau, Divers
+  salutation: string; // Herr oder Frau — der Antrag beim Versicherer kennt nur diese beiden
   name: string;
   birthDate: string; // DD.MM.YYYY format
   job: string; // Beruf

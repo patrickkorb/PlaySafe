@@ -52,7 +52,7 @@ export default function AngebotErfolg() {
             Vielen Dank für deine Anfrage!
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Deine Angebotsanfrage wurde erfolgreich übermittelt.
+            Deine Angaben sind bei uns angekommen.
           </p>
         </motion.div>
 
@@ -74,10 +74,11 @@ export default function AngebotErfolg() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 mb-1">
-                  Prüfung deiner Angaben
+                  Dein Antrag wird vorbereitet
                 </h3>
                 <p className="text-gray-600">
-                  Unser Team prüft deine Daten und erstellt ein maßgeschneidertes Angebot für dich.
+                  Deine Angaben gehen jetzt in deinen Antrag. Das passiert im Hintergrund,
+                  du musst nichts weiter tun.
                 </p>
               </div>
             </div>
@@ -88,10 +89,11 @@ export default function AngebotErfolg() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 mb-1">
-                  Dein individuelles Angebot
+                  E-Mail von der SIGNAL IDUNA
                 </h3>
                 <p className="text-gray-600">
-                  Du erhältst dein detailliertes Angebot, perfekt abgestimmt auf deinen Sport und deine Bedürfnisse, per Email zugeschickt.
+                  Du bekommst deine Unterlagen per E-Mail zugeschickt — mit einem Link,
+                  über den du direkt digital unterschreiben kannst.
                 </p>
               </div>
             </div>
@@ -102,10 +104,11 @@ export default function AngebotErfolg() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 mb-1">
-                  Vertragsabschluss ganz bequem
+                  Du entscheidest — 14 Tage Zeit
                 </h3>
                 <p className="text-gray-600">
-                  Du kannst dein Angebot in Ruhe durchlesen. Wenn du dich für die Versicherung entscheidest, kannst du einfach online unterschreiben und der Vertrag wird automatisch abgeschlossen. Ganz ohne Papierkram!
+                  Lies alles in Ruhe durch. Erst mit deiner Unterschrift wird der Vertrag
+                  verbindlich — bis dahin ist für dich nichts entschieden. Ganz ohne Papierkram!
                 </p>
               </div>
             </div>
@@ -120,8 +123,9 @@ export default function AngebotErfolg() {
           className="bg-primary/10 border-l-4 border-primary p-6 rounded-lg mb-8"
         >
           <p className="text-gray-700">
-            <strong>💡 Tipp:</strong> Schau in deinem E-Mail-Postfach nach unserer Bestätigungsmail.
-            Falls du keine E-Mail erhalten hast, überprüfe bitte auch deinen Spam-Ordner.
+            <strong>💡 Tipp:</strong> Von uns kommt gleich eine Bestätigung, kurz darauf die
+            Unterlagen der SIGNAL IDUNA. Falls nichts ankommt, schau bitte auch in deinen
+            Spam-Ordner.
           </p>
         </motion.div>
 

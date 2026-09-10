@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FormStepProps, FormErrors } from '@/types/angebot';
 import { validateEmail, validatePhone, validatePLZ } from '@/lib/validation';
@@ -8,6 +8,49 @@ import { trackOfferStep2Completed } from '@/app/components/Datafast';
 
 export default function Step2Contact({ formData, onUpdate, onNext, onBack }: FormStepProps) {
   const [errors, setErrors] = useState<FormErrors>({});
+  const [orte, setOrte] = useState<string[]>([]);
+
+  // Der aktuelle Ort ohne ihn in die Abhaengigkeiten des Effekts zu ziehen —
+  // sonst laedt jeder Tastendruck den Katalog neu.
+  const ortRef = useRef(formData.city);
+  ortRef.current = formData.city;
+
+  // Die Antrags-Automation prueft den Ort gegen einen Katalog. Statt den Kunden
+  // tippen zu lassen, holen wir die Orte zur PLZ und lassen ihn auswaehlen.
+  useEffect(() => {
+    const plz = formData.postalCode;
+
+    if (!/^\d{5}$/.test(plz)) {
+      setOrte([]);
+      return;
+    }
+
+    let abgebrochen = false;
+
+    fetch(`/api/plz?plz=${plz}`)
+      .then((antwort) => antwort.json())
+      .then((ergebnis: { orte?: string[] }) => {
+        if (abgebrochen) return;
+
+        const gefunden = ergebnis.orte ?? [];
+        setOrte(gefunden);
+
+        if (gefunden.length === 1) {
+          onUpdate({ city: gefunden[0] });
+        } else if (gefunden.length > 1 && !gefunden.includes(ortRef.current)) {
+          onUpdate({ city: '' });
+        }
+      })
+      .catch(() => {
+        // Katalog nicht erreichbar: der Kunde tippt den Ort wie bisher selbst.
+        if (!abgebrochen) setOrte([]);
+      });
+
+    return () => {
+      abgebrochen = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.postalCode]);
 
   const validateForm = () => {
     const newErrors: FormErrors = {};
@@ -184,20 +227,45 @@ export default function Step2Contact({ formData, onUpdate, onNext, onBack }: For
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Ort <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              value={formData.city}
-              onChange={(e) => {
-                onUpdate({ city: e.target.value });
-                if (errors.city) setErrors({ ...errors, city: '' });
-              }}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
-                errors.city ? 'border-red-500' : 'border-gray-300'
-              }`}
-              placeholder="Musterstadt"
-            />
+
+            {orte.length > 1 ? (
+              // Mehrere Orte teilen sich die PLZ — der Kunde waehlt aus.
+              <select
+                value={formData.city}
+                onChange={(e) => {
+                  onUpdate({ city: e.target.value });
+                  if (errors.city) setErrors({ ...errors, city: '' });
+                }}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                  errors.city ? 'border-red-500' : 'border-gray-300'
+                }`}
+              >
+                <option value="">Bitte wählen</option>
+                {orte.map((ort) => (
+                  <option key={ort} value={ort}>{ort}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={formData.city}
+                onChange={(e) => {
+                  onUpdate({ city: e.target.value });
+                  if (errors.city) setErrors({ ...errors, city: '' });
+                }}
+                readOnly={orte.length === 1}
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
+                  orte.length === 1 ? 'bg-gray-50 text-gray-700' : ''
+                } ${errors.city ? 'border-red-500' : 'border-gray-300'}`}
+                placeholder="Musterstadt"
+              />
+            )}
+
             {errors.city && (
               <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+            )}
+            {orte.length > 0 && (
+              <p className="text-gray-500 text-xs mt-1">Automatisch zur PLZ ermittelt</p>
             )}
           </div>
         </div>

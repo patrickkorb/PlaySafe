@@ -50,7 +50,33 @@ function AngebotContent() {
   const [formData, setFormData] = useState<AngebotFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [discount, setDiscount] = useState<number | null>(null);
+  const [quelleId, setQuelleId] = useState('');
   const isSvh = useSvhMode();
+
+  // Idempotenz-Schluessel der Formularsitzung. Er entsteht beim Oeffnen des
+  // Formulars, nicht beim Absenden: Doppelklick, Netzwerk-Wiederholung und
+  // Zurueck-und-nochmal-Absenden schicken damit dieselbe ID, und die
+  // unique-Bedingung in der Datenbank macht daraus statt eines zweiten
+  // Antrags einen Fehlschlag.
+  useEffect(() => {
+    const SCHLUESSEL = 'abschluss_quelle_id';
+
+    try {
+      const gespeichert = sessionStorage.getItem(SCHLUESSEL);
+      if (gespeichert) {
+        setQuelleId(gespeichert);
+        return;
+      }
+
+      const neu = crypto.randomUUID();
+      sessionStorage.setItem(SCHLUESSEL, neu);
+      setQuelleId(neu);
+    } catch {
+      // Kein sessionStorage (Privatmodus, gesperrte Site-Daten): die ID lebt
+      // dann nur so lange wie die Seite. Schuetzt weiterhin vor Doppelklick.
+      setQuelleId(crypto.randomUUID());
+    }
+  }, []);
 
   // Track page visit
   useEffect(() => {
@@ -200,11 +226,23 @@ function AngebotContent() {
           riskExclusionConsent: formData.riskExclusionConsent,
           discount: discount ?? 0,
           source: isSvh ? SVH_REF_VALUE : null,
+          quelle_id: quelleId,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Fehler beim Senden');
+        // Die Antragsdaten werden serverseitig noch einmal hart geprueft.
+        // Beanstandungen zeigen wir dem Kunden, solange er noch vor dem
+        // Formular sitzt — danach muesste er per Mail nachgefasst werden.
+        const antwort = await response.json().catch(() => null);
+        const beanstandungen: string[] = Array.isArray(antwort?.fehler) ? antwort.fehler : [];
+
+        alert(
+          beanstandungen.length > 0
+            ? `Bitte prüfe noch diese Angaben:\n\n• ${beanstandungen.join('\n• ')}`
+            : 'Es ist ein Fehler aufgetreten. Bitte versuche es erneut.'
+        );
+        return;
       }
 
       // Track Datafast goal: offer_form_submitted (ohne personenbezogene Daten)
@@ -288,7 +326,8 @@ function AngebotContent() {
         >
           <p className="text-blue-800 text-sm text-center">
             <span className="font-semibold">Hinweis:</span> Mit dem Ausfüllen dieses Formulars schließt du noch keinen Vertrag ab.
-            Deine Angaben dienen ausschließlich zur Erstellung eines unverbindlichen Angebots.
+            Deine Angaben dienen zur Erstellung deines Antrags — verbindlich wird er erst,
+            wenn du ihn unterschreibst.
           </p>
         </motion.div>
 
