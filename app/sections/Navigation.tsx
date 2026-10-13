@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Instagram, MapPin, Menu, X } from "lucide-react";
-import { useSvhMode } from "@/app/lib/useSvhMode";
+import { usePartner } from "@/app/lib/usePartner";
 
 export default function Navigation() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const isSvh = useSvhMode();
+    const partner = usePartner();
 
     const navItems = [
         { title: "Home", href: "/#hero" },
@@ -39,10 +39,10 @@ export default function Navigation() {
                     <div className="flex items-center gap-2 md:gap-4">
                         <Image src="/images/logo.png" alt="Logo" width={40} height={40} className="md:w-[50px] md:h-[50px]" />
                         <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2"}/>
-                        {isSvh && (
+                        {partner && (
                             <>
                                 <span className="w-px h-8 bg-gray-300" aria-hidden="true" />
-                                <Image src="/images/sponsoring/Logo_SVH.png" alt="SVH Logo" width={100} height={40} className="w-auto h-8 object-contain" />
+                                <Image src={partner.partner.logo} alt={`${partner.partner.name} Logo`} width={100} height={40} className="w-auto h-8 object-contain" />
                             </>
                         )}
                     </div>
@@ -64,10 +64,10 @@ export default function Navigation() {
                         <div className="flex flex-row items-center gap-1">
                             <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
                             <Image src="/images/partner2.svg" alt="signal iduna partner logo" width={140} height={140} className={"-ml-2 mt-0"}/>
-                            {isSvh && (
+                            {partner && (
                                 <>
                                     <span className="w-px h-10 bg-gray-300 mx-1" aria-hidden="true" />
-                                    <Image src="/images/sponsoring/Logo_SVH.png" alt="SVH Logo" width={120} height={48} className="w-auto h-10 object-contain" />
+                                    <Image src={partner.partner.logo} alt={`${partner.partner.name} Logo`} width={120} height={48} className="w-auto h-10 object-contain" />
                                 </>
                             )}
                         </div>

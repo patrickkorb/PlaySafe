@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { baueAbschlussDaten, istQuelleId } from '@/lib/abschluss-daten';
 import { schreibeAbschluss } from '@/lib/abschluesse';
+import { getPartner } from '@/app/lib/partners';
 
 // Preise in € pro Monat
 const TARIFF_PRICES: Record<string, number> = {
@@ -71,11 +72,12 @@ export async function POST(request: NextRequest) {
             quelle_id,
         } = await request.json();
 
-        // SVH-Sponsoring-Kennzeichnung für die internen Mails / den Lead-Datensatz
-        const isSvhLead = source === 'svh';
-        const svhBadge = isSvhLead
-            ? `<p style="background: #16a34a; color: #ffffff; padding: 10px 14px; border-radius: 8px; font-weight: bold; margin: 0 0 16px 0;">🟢 Herkunft: SVH-Kooperation (Sponsoring)</p>`
+        // Partner-Kennzeichnung für die internen Mails / den Lead-Datensatz
+        const partner = getPartner(source);
+        const partnerBadge = partner
+            ? `<p style="background: #16a34a; color: #ffffff; padding: 10px 14px; border-radius: 8px; font-weight: bold; margin: 0 0 16px 0;">🟢 Herkunft: ${partner.mailLabel}</p>`
             : '';
+        const partnerSubjectPrefix = partner ? `[${partner.quelle}] ` : '';
 
         // Basic validation
         if (!insuranceFor || !name || !email || !birthDate || !job || !phone || !street || !houseNumber || !postalCode || !city || !iban || !accountHolder || !privacyConsent || !contactConsent || !riskExclusionConsent || !insuranceStartType || !tarif) {
@@ -225,11 +227,11 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [{ email: 'mike.allmendinger@signal-iduna.net' }],
-                subject: `${isSvhLead ? '[SVH] ' : ''}${discount && discount > 0 ? `🎁 Neue Antragsanfrage von ${name} (${discount}% Rabatt)` : `Neue Antragsanfrage von ${name}`}`,
+                subject: `${partnerSubjectPrefix}${discount && discount > 0 ? `🎁 Neue Antragsanfrage von ${name} (${discount}% Rabatt)` : `Neue Antragsanfrage von ${name}`}`,
                 htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neue Antragsanfrage - PlaySafe - Individuellen Antrag schicken</h2>
-          ${svhBadge}
+          ${partnerBadge}
           <p><strong>Versicherung für:</strong> ${insuranceFor === 'self' ? 'Sich selbst' : 'Jemand anderen'}</p>
           ${policyHolderSection}
           <p><strong>Anrede:</strong> ${salutation}</p>
@@ -277,11 +279,11 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 sender: { name: 'PlaySafe', email: 'info@playsafe.fit' },
                 to: [{ email: 'korbpatrick@web.de' }],
-                subject: `${isSvhLead ? '[SVH] ' : ''}${discount && discount > 0 ? `🎁 Neuer Antrag eingegangen (${discount}% Rabatt)` : `Neuer Antrag eingegangen`}`,
+                subject: `${partnerSubjectPrefix}${discount && discount > 0 ? `🎁 Neuer Antrag eingegangen (${discount}% Rabatt)` : `Neuer Antrag eingegangen`}`,
                 htmlContent: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1a3691;">Neuer Antrag eingegangen</h2>
-          ${svhBadge}
+          ${partnerBadge}
           <p><strong>Tarif:</strong> ${tarif}</p>
           <p><strong>Versicherungsbeginn:</strong> ${insuranceStartSection}</p>
           ${discountSection}
@@ -390,7 +392,7 @@ export async function POST(request: NextRequest) {
                     beginn: insuranceStartSection,
                     tarif: tarif ?? null,
                     monatsbeitrag: finalPrice,
-                    quelle: isSvhLead ? 'SVH' : null,
+                    quelle: partner?.quelle ?? null,
                 }),
             }).catch((err) => console.error('n8n Antrag-Webhook Fehler:', err));
         }

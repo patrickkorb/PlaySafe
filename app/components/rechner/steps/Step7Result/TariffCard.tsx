@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Check, Info } from 'lucide-react';
 import { TariffInfo, SportOption } from '../../types';
 import Button from '@/app/components/ui/Button';
-import { applySvhDiscount } from '@/app/lib/svh';
+import { applyDiscount } from '@/app/lib/partners';
 
 interface TariffCardProps {
   tariff: TariffInfo;
@@ -13,6 +13,7 @@ interface TariffCardProps {
   offerUrl: string;
   onCtaClick: () => void;
   discountPercent?: number;
+  partnerName?: string;
 }
 
 function formatPrice(price: string): { main: string; decimal: string } {
@@ -29,12 +30,12 @@ function formatPrice(price: string): { main: string; decimal: string } {
   return { main: cleanPrice, decimal: '00' };
 }
 
-export default function TariffCard({ tariff, sport, offerUrl, onCtaClick, discountPercent }: TariffCardProps) {
+export default function TariffCard({ tariff, sport, offerUrl, onCtaClick, discountPercent, partnerName }: TariffCardProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showSicherheitsTooltip, setShowSicherheitsTooltip] = useState(false);
 
   const hasDiscount = !!discountPercent && discountPercent > 0;
-  const { original: originalPrice, discounted: discountedPrice } = applySvhDiscount(
+  const { original: originalPrice, discounted: discountedPrice } = applyDiscount(
     tariff.price,
     discountPercent ?? 0
   );
@@ -62,7 +63,7 @@ export default function TariffCard({ tariff, sport, offerUrl, onCtaClick, discou
                   {originalPrice}
                 </span>
                 <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
-                  SVH-Partnerrabatt −{discountPercent}%
+                  {partnerName}-Partnerrabatt −{discountPercent}%
                 </span>
               </div>
             )}

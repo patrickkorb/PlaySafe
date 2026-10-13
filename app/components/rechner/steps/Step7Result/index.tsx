@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRechner } from '../../RechnerProvider';
 import { calculateTariff, getSportByName, buildOfferUrl } from '../../utils';
-import { useSvhMode } from '@/app/lib/useSvhMode';
-import { getSvhDiscount, SVH_REF_VALUE } from '@/app/lib/svh';
+import { usePartner } from '@/app/lib/usePartner';
+import { getPartnerDiscount } from '@/app/lib/partners';
 import { trackOfferPageVisited } from '@/app/components/Datafast';
 import Button from '@/app/components/ui/Button';
 import Footer from '@/app/sections/Footer';
@@ -19,14 +19,14 @@ import GoogleReviewBadge from './GoogleReviewBadge';
 
 export default function Step7Result() {
   const { data, resetRechner } = useRechner();
-  const isSvh = useSvhMode();
+  const active = usePartner();
 
   const tariff = calculateTariff(data.frequency, data.insuranceFor, data.birthDate);
   const sport = getSportByName(data.sport);
 
-  // SVH-Sponsoring: tarifabhängiger Rabatt, der direkt im Preis angezeigt und
+  // Partner-Sponsoring: tarifabhängiger Rabatt, der direkt im Preis angezeigt und
   // an alle CTAs weitergereicht wird (statt des normalen 10%-Timer-Rabatts).
-  const svhDiscount = isSvh ? getSvhDiscount(tariff.title) : 0;
+  const partnerDiscount = getPartnerDiscount(active?.partner ?? null, tariff.title);
 
   const offerUrl = buildOfferUrl({
     name: data.name,
@@ -36,11 +36,11 @@ export default function Step7Result() {
     gender: data.gender,
     tarif: tariff.title,
     insuranceFor: data.insuranceFor,
-    discount: svhDiscount || undefined,
-    ref: isSvh ? SVH_REF_VALUE : undefined,
+    discount: partnerDiscount || undefined,
+    ref: active?.key,
   });
 
-  // URL mit Rabatt-Parameter für den UrgencyTimer (nur im Nicht-SVH-Fall relevant)
+  // URL mit Rabatt-Parameter für den UrgencyTimer (nur im Nicht-Partner-Fall relevant)
   const discountOfferUrl = `${offerUrl}&discount=10`;
 
   const handleCtaClick = () => {
@@ -63,10 +63,11 @@ export default function Step7Result() {
           sport={sport}
           offerUrl={offerUrl}
           onCtaClick={handleCtaClick}
-          discountPercent={svhDiscount}
+          discountPercent={partnerDiscount}
+          partnerName={active?.partner.name}
         />
 
-        {!isSvh && (
+        {!active && (
           <UrgencyTimer initialMinutes={5} discountPercent={10} offerUrl={discountOfferUrl} />
         )}
 

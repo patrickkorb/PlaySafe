@@ -11,8 +11,7 @@ import Step3Bank from './components/Step3Bank';
 import Step4Confirmation from './components/Step4Confirmation';
 import { trackLead } from '@/app/components/MetaPixel';
 import { trackOfferFormSubmitted, trackOfferPageVisited } from '@/app/components/Datafast';
-import { useSvhMode } from '@/app/lib/useSvhMode';
-import { SVH_REF_VALUE } from '@/app/lib/svh';
+import { usePartner } from '@/app/lib/usePartner';
 
 const initialFormData: AngebotFormData = {
   insuranceFor: '',
@@ -51,7 +50,7 @@ function AngebotContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [discount, setDiscount] = useState<number | null>(null);
   const [quelleId, setQuelleId] = useState('');
-  const isSvh = useSvhMode();
+  const activePartner = usePartner();
 
   // Idempotenz-Schluessel der Formularsitzung. Er entsteht beim Oeffnen des
   // Formulars, nicht beim Absenden: Doppelklick, Netzwerk-Wiederholung und
@@ -225,7 +224,7 @@ function AngebotContent() {
           contactConsent: formData.contactConsent,
           riskExclusionConsent: formData.riskExclusionConsent,
           discount: discount ?? 0,
-          source: isSvh ? SVH_REF_VALUE : null,
+          source: activePartner?.key ?? null,
           quelle_id: quelleId,
         }),
       });
@@ -298,7 +297,7 @@ function AngebotContent() {
               <Gift className="w-6 h-6" />
               <div className="text-center">
                 <p className="font-bold text-lg">
-                  {isSvh ? `SVH-Partnerrabatt: ${discount}% aktiviert!` : `${discount}% Rabatt aktiviert!`}
+                  {activePartner ? `${activePartner.partner.name}-Partnerrabatt: ${discount}% aktiviert!` : `${discount}% Rabatt aktiviert!`}
                 </p>
                 <p className="text-sm text-green-100">
                   Dein exklusiver Rabatt wird automatisch angewendet

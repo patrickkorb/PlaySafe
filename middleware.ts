@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { waitUntil } from '@vercel/functions'
-import { SVH_COOKIE_NAME, SVH_COOKIE_MAX_AGE, SVH_REF_VALUE } from '@/app/lib/svh'
+import { PARTNER_COOKIE_NAME, PARTNER_COOKIE_MAX_AGE, getPartner } from '@/app/lib/partners'
 
 export const config = {
   matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
@@ -13,11 +13,11 @@ export function middleware(request: NextRequest) {
 
   const response = NextResponse.next()
 
-  // SVH-Sponsoring: Besucher, die über /rechner?ref=svh kommen, werden per Cookie
-  // für die ganze Session markiert (Logo in der Navbar, Rabatt, Mail-Kennzeichnung).
-  if (ref === SVH_REF_VALUE) {
-    response.cookies.set(SVH_COOKIE_NAME, SVH_REF_VALUE, {
-      maxAge: SVH_COOKIE_MAX_AGE,
+  // Partner-Sponsoring: Besucher, die über /rechner?ref=<partner> kommen, werden per Cookie
+  // markiert (Logo in der Navbar, Rabatt, Mail-Kennzeichnung). Nur bekannte Partner.
+  if (ref && getPartner(ref)) {
+    response.cookies.set(PARTNER_COOKIE_NAME, ref, {
+      maxAge: PARTNER_COOKIE_MAX_AGE,
       path: '/',
       sameSite: 'lax',
     })
